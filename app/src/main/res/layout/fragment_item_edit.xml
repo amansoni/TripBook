@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_marginTop="5dp"
+    android:clickable="false"
+    android:focusable="false"
+    android:orientation="vertical"
+    android:padding="5dp"
+    android:weightSum="1">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/item_header_height"
+        android:layout_marginTop="5dp"
+        android:clickable="false"
+        android:focusable="false"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:weightSum="1">
+
+        <ImageView
+            android:id="@+id/item_image"
+            android:layout_width="@dimen/detail_image_height"
+            android:layout_height="@dimen/detail_image_height"
+            android:padding="5dp"
+            android:src="@drawable/ic_action_edit" />
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/item_header_height"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+        <EditText
+            android:id="@+id/item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Birmingham Library Main"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <EditText
+            android:id="@+id/item_createdAt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
+
+
+</LinearLayout>
+
+<TextView
+android:id="@+id/item_trip"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="Description"
+android:textAppearance="?android:attr/textAppearanceLarge" />
+
+<TextView
+android:id="@+id/item_place"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="Description"
+android:textAppearance="?android:attr/textAppearanceLarge" />
+
+<TextView
+android:id="@+id/item_social"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="Description"
+android:textAppearance="?android:attr/textAppearanceLarge" /><TextView
+android:id="@+id/item_images"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="Description"
+android:textAppearance="?android:attr/textAppearanceLarge" /></LinearLayout>
