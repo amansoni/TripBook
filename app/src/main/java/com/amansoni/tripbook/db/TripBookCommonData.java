@@ -19,7 +19,7 @@ public abstract class TripBookCommonData {
 
     public TripBookCommonData(Context context) {
         mContext = context;
-        dbHelper = new DatabaseHelper(context);
+        dbHelper = DatabaseHelper.getInstance(context);
     }
 
     public void open() throws SQLException {

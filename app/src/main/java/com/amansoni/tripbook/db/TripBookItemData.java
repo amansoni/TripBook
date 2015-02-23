@@ -150,7 +150,11 @@ public class TripBookItemData extends TripBookCommonData {
     }
 
     public void createTestData() {
-        add(new TripBookItem("Birmingham 2015", TripBookItem.TYPE_TRIP));
+        // create trips
+        TripBookItem loader =  add(new TripBookItem("Birmingham 2015", TripBookItem.TYPE_TRIP));
+        add(new TripBookItem("Vicki", TripBookItem.TYPE_FRIENDS));
+        add(new TripBookItem("Farhaan", TripBookItem.TYPE_FRIENDS));
+
         add(new TripBookItem("Lake District", TripBookItem.TYPE_TRIP));
         add(new TripBookItem("Peak District Camping", TripBookItem.TYPE_TRIP));
         add(new TripBookItem("London Attractions", TripBookItem.TYPE_TRIP));
@@ -159,6 +163,25 @@ public class TripBookItemData extends TripBookCommonData {
         add(new TripBookItem("London SuperTechies", TripBookItem.TYPE_TRIP));
         add(new TripBookItem("Cheltenham Weekend away", TripBookItem.TYPE_TRIP));
         add(new TripBookItem("Cannon Hill Park", TripBookItem.TYPE_TRIP));
+
+        // create places for trips
+//        add(new TripBookItem("Birmingham 2015", TripBookItem.TYPE_TRIP));
+        add(new TripBookItem("Bullring", TripBookItem.TYPE_PLACE));
+        add(new TripBookItem("City Library", TripBookItem.TYPE_PLACE));
+        add(new TripBookItem("Chinese Quarter", TripBookItem.TYPE_PLACE));
+        add(new TripBookItem("Jewellery Quarter", TripBookItem.TYPE_PLACE));
+//        add(new TripBookItem("Lake District", TripBookItem.TYPE_TRIP));
+//        add(new TripBookItem("Peak District Camping", TripBookItem.TYPE_TRIP));
+//        add(new TripBookItem("London Attractions", TripBookItem.TYPE_TRIP));
+//        add(new TripBookItem("Birmingham 2014", TripBookItem.TYPE_TRIP));
+        add(new TripBookItem("Bullring", TripBookItem.TYPE_PLACE));
+        add(new TripBookItem("Sealife Centre", TripBookItem.TYPE_PLACE));
+        add(new TripBookItem("The Mailbox", TripBookItem.TYPE_PLACE));
+//        add(new TripBookItem("South Africa Summer 2014", TripBookItem.TYPE_TRIP));
+//        add(new TripBookItem("London SuperTechies", TripBookItem.TYPE_TRIP));
+//        add(new TripBookItem("Cheltenham Weekend away", TripBookItem.TYPE_TRIP));
+//        add(new TripBookItem("Cannon Hill Park", TripBookItem.TYPE_TRIP));
+
     }
 }
 //    add("test 1 ", "desc 1", null, null);

@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by Aman on 11/02/2015.
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
+    private static DatabaseHelper mInstance = null;     // instance for singleton pattern
+    private Context mContext;
     private static final String LOG = "DatabaseHelper"; // Logcat tag
     private static final int DATABASE_VERSION = 1; // Database Version
     private static final String DATABASE_NAME = "tripBook"; // Database Name
@@ -75,8 +77,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COLUMN_ITEM_TYPE + " TEXT,"
             + COLUMN_CREATED_AT + " DATETIME" + ")";
 
-    public DatabaseHelper(Context context) {
+    public static DatabaseHelper getInstance(Context ctx) {
+        /**
+         * use the application context as suggested by CommonsWare.
+         * this will ensure that you dont accidentally leak an Activitys
+         * context (see this article for more information:
+         * http://android-developers.blogspot.nl/2009/01/avoiding-memory-leaks.html)
+         */
+        if (mInstance == null) {
+            mInstance = new DatabaseHelper(ctx.getApplicationContext());
+        }
+        return mInstance;
+    }
+
+    /**
+     * constructor should be private to prevent direct instantiation.
+     * make call to static factory method "getInstance()" instead.
+     */
+    private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.mContext = context;
     }
 
     @Override
