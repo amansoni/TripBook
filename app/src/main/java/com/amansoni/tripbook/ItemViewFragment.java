@@ -43,7 +43,7 @@ public class ItemViewFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         if (args != null) {
-            tripBookItem = new TripBookItemData(getActivity()).getItem(args.getLong("itemKey"));
+            tripBookItem = new TripBookItemData().getItem(args.getLong("itemKey"));
             Log.d(TAG, tripBookItem.toString());
         }
         setHasOptionsMenu(true);
@@ -58,7 +58,7 @@ public class ItemViewFragment extends Fragment {
         if (args == null) {
             Log.d(TAG, "No itemKey passed in bundle args");
         }
-        tripBookItem = new TripBookItemData(getActivity()).getItem(args.getLong("itemKey"));
+        tripBookItem = new TripBookItemData().getItem(args.getLong("itemKey"));
         // TextView:title
         ((TextView) view.findViewById(R.id.item_title)).setText(tripBookItem.getTitle());
         // TextView:description

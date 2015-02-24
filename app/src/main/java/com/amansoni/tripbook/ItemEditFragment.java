@@ -48,7 +48,7 @@ public class ItemEditFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         if (args != null) {
-            tripBookItem = new TripBookItemData(getActivity()).getItem(args.getLong("itemKey"));
+            tripBookItem = new TripBookItemData().getItem(args.getLong("itemKey"));
             Log.d(TAG, "Got tripBookItem:" + tripBookItem.toString());
         }
         setHasOptionsMenu(true);
@@ -68,7 +68,7 @@ public class ItemEditFragment extends Fragment implements View.OnClickListener {
         if (args == null) {
             Log.d(TAG, "No itemkey passe in bundle args");
         }
-        tripBookItem = new TripBookItemData(getActivity()).getItem(args.getLong("itemKey"));
+        tripBookItem = new TripBookItemData().getItem(args.getLong("itemKey"));
         // TextView:title
         imageTitle = ((EditText) view.findViewById(R.id.item_title));
         imageTitle.setText(tripBookItem.getTitle());
@@ -115,7 +115,7 @@ public class ItemEditFragment extends Fragment implements View.OnClickListener {
             List<TripBookImage> temp = new ArrayList<TripBookImage>();
             temp.add(tripBookImage);
             tripBookItem.setTripBookImages(temp);
-            new TripBookItemData(getActivity()).update(tripBookItem);
+            new TripBookItemData().update(tripBookItem);
         }
         Bundle args = new Bundle();
         args.putLong("itemKey", tripBookItem.getId());

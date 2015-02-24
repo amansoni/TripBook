@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.amansoni.tripbook.MainActivity;
+
 /**
  * Created by Aman on 11/02/2015.
  */
@@ -77,15 +79,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COLUMN_ITEM_TYPE + " TEXT,"
             + COLUMN_CREATED_AT + " DATETIME" + ")";
 
-    public static DatabaseHelper getInstance(Context ctx) {
-        /**
-         * use the application context as suggested by CommonsWare.
-         * this will ensure that you dont accidentally leak an Activitys
-         * context (see this article for more information:
-         * http://android-developers.blogspot.nl/2009/01/avoiding-memory-leaks.html)
-         */
+    /**
+     * use the application context as suggested by CommonsWare.
+     * this will ensure that you dont accidentally leak an Activitys
+     * context (see this article for more information:
+     * http://android-developers.blogspot.nl/2009/01/avoiding-memory-leaks.html)
+     */
+    public static DatabaseHelper getInstance() {
         if (mInstance == null) {
-            mInstance = new DatabaseHelper(ctx.getApplicationContext());
+            mInstance = new DatabaseHelper(MainActivity.getContext().getApplicationContext());
         }
         return mInstance;
     }

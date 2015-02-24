@@ -11,15 +11,13 @@ import java.util.List;
 /**
  * Created by Aman on 15/02/2015.
  */
-public abstract class TripBookCommonData {
-    protected Context mContext;
+public abstract class TripBookAbstractData {
     // Database fields
     protected SQLiteDatabase database;
     protected DatabaseHelper dbHelper;
 
-    public TripBookCommonData(Context context) {
-        mContext = context;
-        dbHelper = DatabaseHelper.getInstance(context);
+    public TripBookAbstractData() {
+        dbHelper = DatabaseHelper.getInstance();
     }
 
     public void open() throws SQLException {

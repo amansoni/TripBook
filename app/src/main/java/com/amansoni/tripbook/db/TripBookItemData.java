@@ -17,24 +17,23 @@ import com.amansoni.tripbook.model.TripBookLink;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TripBookItemData extends TripBookCommonData {
+public class TripBookItemData extends TripBookAbstractData {
     private static final String TAG = "TripBookItemData";
     private String mItemType = null;
     private String[] allColumns = {DatabaseHelper.COLUMN_ID, DatabaseHelper.COLUMN_ITEM_TITLE, DatabaseHelper.COLUMN_ITEM_TYPE,
             DatabaseHelper.COLUMN_CREATED_AT};
 
-    public TripBookItemData(Context context) {
-        super(context);
+    public TripBookItemData() {
+        super();
     }
 
     /**
      * Use this constructor for the DataAdaptor to only return lists of a particular itemType
      *
-     * @param context
      * @param itemType
      */
-    public TripBookItemData(Context context, String itemType) {
-        this(context);
+    public TripBookItemData(String itemType) {
+        this();
         mItemType = itemType;
     }
 
@@ -60,8 +59,8 @@ public class TripBookItemData extends TripBookCommonData {
     public TripBookCommon update(TripBookCommon tripBookCommon) {
         TripBookItem tripBookItem = (TripBookItem) tripBookCommon;
         // save images
-        TripBookImageData tripBookImageData = new TripBookImageData(mContext);
-        TripBookLinkData tripBookLinkData = new TripBookLinkData(mContext);
+        TripBookImageData tripBookImageData = new TripBookImageData();
+        TripBookLinkData tripBookLinkData = new TripBookLinkData();
         for (TripBookImage image : ((TripBookItem)tripBookCommon).getTripBookImages()) {
             TripBookImage tripBookImage = tripBookImageData.add(image);
             TripBookLink tripBookLink = new TripBookLink(tripBookCommon, tripBookImage);

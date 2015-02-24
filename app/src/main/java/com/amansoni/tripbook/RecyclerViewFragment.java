@@ -95,9 +95,9 @@ public class RecyclerViewFragment extends Fragment {
         // setup DataAdapter
         TripBookItemData ds;
         if (mItemType == null) {
-            ds = new TripBookItemData(getActivity());
+            ds = new TripBookItemData();
         }else {
-            ds = new TripBookItemData(getActivity(), mItemType);
+            ds = new TripBookItemData(mItemType);
         }
         mAdapter = new RecyclerViewAdapter(getActivity(), ds);
         mRecyclerView.setAdapter(mAdapter);

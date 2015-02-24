@@ -16,7 +16,7 @@ import com.amansoni.tripbook.model.TripBookLink;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TripBookLinkData extends TripBookCommonData {
+public class TripBookLinkData extends TripBookAbstractData {
     private static final String TAG = "TripBookLinkData";
     private Long mParentId;
     private String[] allColumns = {DatabaseHelper.COLUMN_ID,
@@ -25,18 +25,17 @@ public class TripBookLinkData extends TripBookCommonData {
             DatabaseHelper.COLUMN_ITEM_TYPE,
             DatabaseHelper.COLUMN_CREATED_AT};
 
-    public TripBookLinkData(Context context) {
-        super(context);
+    public TripBookLinkData() {
+        super();
     }
 
     /**
      * Use this constructor for the DataAdaptor to only return lists of a particular itemType
      *
-     * @param context
      * @param parentId
      */
-    public TripBookLinkData(Context context, Long parentId) {
-        this(context);
+    public TripBookLinkData(Long parentId) {
+        this();
         mParentId = parentId;
     }
 
@@ -97,7 +96,7 @@ public class TripBookLinkData extends TripBookCommonData {
     }
 
     private TripBookLink cursorToTripBookLink(Cursor cursor) {
-        TripBookItemData tripBookItemData = new TripBookItemData(mContext);
+        TripBookItemData tripBookItemData = new TripBookItemData();
         TripBookLink tripBookLink = new TripBookLink();
         tripBookLink.setId(cursor.getLong(0));
         tripBookLink.setParent(tripBookItemData.getItem(cursor.getLong(1)));

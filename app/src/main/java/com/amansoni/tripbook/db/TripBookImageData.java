@@ -15,13 +15,13 @@ import com.amansoni.tripbook.model.TripBookImage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TripBookImageData extends TripBookCommonData {
+public class TripBookImageData extends TripBookAbstractData {
     private static final String TAG = "TripBookImageData";
     private String[] allColumns = {DatabaseHelper.COLUMN_ID, DatabaseHelper.COLUMN_IMAGE_PATH, DatabaseHelper.COLUMN_IMAGE_THUMBNAIL,
             DatabaseHelper.COLUMN_CREATED_AT};
 
-    public TripBookImageData(Context context) {
-        super(context);
+    public TripBookImageData() {
+        super();
     }
 
     public TripBookImage add(TripBookCommon tripBookCommon) {

@@ -24,6 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Birmingham Library Main"
+            android:textColor="@color/cardview_text_"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -48,6 +49,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Description"
+                    android:textColor="@color/cardview_text_"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </LinearLayout>

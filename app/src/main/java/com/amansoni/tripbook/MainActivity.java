@@ -1,6 +1,7 @@
 package com.amansoni.tripbook;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,6 +27,7 @@ public class MainActivity extends ActionBarActivity
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
+    private static Context mContext;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -35,8 +37,8 @@ public class MainActivity extends ActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = this;
         setContentView(R.layout.activity_main);
-
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -47,6 +49,9 @@ public class MainActivity extends ActionBarActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
     }
 
+    public static Context getContext(){
+        return mContext;
+    }
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // first check for activities that are not fragments
@@ -79,7 +84,7 @@ public class MainActivity extends ActionBarActivity
                 case 0:
                     mTitle = getString(R.string.title_trip);
                     itemType = TripBookItem.TYPE_TRIP;
-                    TripBookItemData test = new TripBookItemData(this);
+                    TripBookItemData test = new TripBookItemData();
                     if (test.getAllRows().size() == 0) {
                         test.createTestData();
                     }
