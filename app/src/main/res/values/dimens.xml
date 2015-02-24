@@ -9,8 +9,8 @@
 
     <!-- Default list item height -->
     <dimen name="list_item_height">100dp</dimen>
-    <dimen name="list_image_width">60dp</dimen>
-    <dimen name="list_image_height">60dp</dimen>
+    <dimen name="list_image_width">40dp</dimen>
+    <dimen name="list_image_height">40dp</dimen>
 
     <!--Card padding-->
     <dimen name="seekbar_label_length">70dp</dimen>

@@ -1,6 +1,5 @@
-package com.amansoni.tripbook;
+package com.amansoni.tripbook.Navigation;
 
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
@@ -19,10 +18,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
+
+import com.amansoni.tripbook.R;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.

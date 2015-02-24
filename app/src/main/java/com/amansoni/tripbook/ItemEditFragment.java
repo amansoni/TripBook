@@ -94,7 +94,7 @@ public class ItemEditFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_item_discard) {
+        if (item.getItemId() == R.id.action_cancel) {
             saveItem(false);
             return true;
         }
@@ -110,11 +110,7 @@ public class ItemEditFragment extends Fragment implements View.OnClickListener {
     private void saveItem(boolean updateValues) {
         if (updateValues) {
             tripBookItem.setTitle(imageTitle.getText().toString());
-            tripBookImage.setFilePath("some string");
             tripBookItem.addImage(tripBookImage);
-            List<TripBookImage> temp = new ArrayList<TripBookImage>();
-            temp.add(tripBookImage);
-            tripBookItem.setTripBookImages(temp);
             new TripBookItemData().update(tripBookItem);
         }
         Bundle args = new Bundle();
@@ -152,7 +148,6 @@ public class ItemEditFragment extends Fragment implements View.OnClickListener {
                 tripBookImage = new TripBookImage();
                 tripBookImage.setImage(stream.toByteArray());
                 tripBookImage.setFilePath(selectedImageUri.getEncodedPath());
-
             }
         }
     }

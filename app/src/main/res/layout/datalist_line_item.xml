@@ -12,24 +12,15 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/list_item_height"
-        android:layout_marginTop="5dp"
         android:clickable="false"
         android:focusable="false"
         android:orientation="vertical"
-        android:padding="5dp"
+        android:elevation="2dp"
         android:weightSum="1">
-
-        <TextView
-            android:id="@+id/list_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Birmingham Library Main"
-            android:textColor="@color/cardview_text_"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
-            android:layout_height="@dimen/list_item_height"
+            android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:clickable="false"
             android:focusable="false"
@@ -38,19 +29,48 @@
             android:weightSum="1">
 
             <ImageView
+                android:id="@+id/imageStar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="5dp"
+                android:src="@drawable/ic_action_not_important"
+                android:contentDescription="@string/title_starred" />
+
+            <TextView
+                android:id="@+id/list_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Birmingham Library Main"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/cardview_text_" />
+
+
+        </LinearLayout>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/list_item_height"
+            android:layout_marginTop="0dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:orientation="horizontal"
+            android:padding="0dp"
+            android:weightSum="1">
+
+            <ImageView
                 android:id="@+id/list_image"
                 android:layout_width="@dimen/list_image_width"
                 android:layout_height="@dimen/list_image_height"
-                android:padding="5dp"
+                android:padding="2dp"
                 android:src="@drawable/ic_action_edit" />
 
-                <TextView
-                    android:id="@+id/list_description"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Description"
-                    android:textColor="@color/cardview_text_"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:id="@+id/list_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Description"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/cardview_text_" />
 
         </LinearLayout>
 

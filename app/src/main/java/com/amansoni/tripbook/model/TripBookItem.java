@@ -29,6 +29,13 @@ public class TripBookItem extends TripBookCommon {
         mItemType = itemType;
     }
 
+    public TripBookItem(String title, String itemType, boolean starred) {
+        this();
+        mTitle = title;
+        mItemType = itemType;
+        isStarred = starred;
+    }
+
     public String getItemType() {
         return mItemType;
     }

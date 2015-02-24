@@ -21,8 +21,8 @@
         android:layout_height="wrap_content"
         android:paddingLeft="12dp"
         android:paddingTop="4dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/title_trip"
         android:id="@+id/rowText"/>
 
 </LinearLayout>

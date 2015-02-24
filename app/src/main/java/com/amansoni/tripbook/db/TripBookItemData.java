@@ -21,8 +21,8 @@ public class TripBookItemData extends TripBookAbstractData {
     private static final String TAG = "TripBookItemData";
     private String mItemType = null;
     private String[] allColumns = {DatabaseHelper.COLUMN_ID, DatabaseHelper.COLUMN_ITEM_TITLE, DatabaseHelper.COLUMN_ITEM_TYPE,
-            DatabaseHelper.COLUMN_CREATED_AT};
-
+            DatabaseHelper.COLUMN_ITEM_STARRED, DatabaseHelper.COLUMN_CREATED_AT};
+    private List<TripBookCommon> mList = null;
     public TripBookItemData() {
         super();
     }
@@ -42,6 +42,7 @@ public class TripBookItemData extends TripBookAbstractData {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_ITEM_TITLE, tripBookItem.getTitle());
         values.put(DatabaseHelper.COLUMN_ITEM_TYPE, tripBookItem.getItemType());
+        values.put(DatabaseHelper.COLUMN_ITEM_STARRED, tripBookItem.isStarred());
         values.put(DatabaseHelper.COLUMN_CREATED_AT, tripBookItem.getCreatedAt());
         open();
         long insertId = database.insert(DatabaseHelper.TABLE_NAME_ITEM, null,
@@ -53,6 +54,7 @@ public class TripBookItemData extends TripBookAbstractData {
         TripBookItem TripBookItem = cursorToTripBookItem(cursor);
         cursor.close();
         close();
+        mList = null;
         return TripBookItem;
     }
 
@@ -69,6 +71,7 @@ public class TripBookItemData extends TripBookAbstractData {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_ITEM_TITLE, tripBookItem.getTitle());
         values.put(DatabaseHelper.COLUMN_ITEM_TYPE, tripBookItem.getItemType());
+        values.put(DatabaseHelper.COLUMN_ITEM_STARRED, tripBookItem.isStarred());
         open();
         long updateId = database.update(DatabaseHelper.TABLE_NAME_ITEM, values, DatabaseHelper.COLUMN_ID + " = ?", new String[]{String.valueOf(tripBookItem.getId())});
         Cursor cursor = database.query(DatabaseHelper.TABLE_NAME_ITEM,
@@ -78,6 +81,7 @@ public class TripBookItemData extends TripBookAbstractData {
         tripBookItem = cursorToTripBookItem(cursor);
         cursor.close();
         close();
+        mList = null;
         return tripBookItem;
     }
 
@@ -88,30 +92,33 @@ public class TripBookItemData extends TripBookAbstractData {
         database.delete(DatabaseHelper.TABLE_NAME_ITEM, DatabaseHelper.COLUMN_ID
                 + " = " + id, null);
         close();
+        mList.remove(tripBookCommon);
     }
 
     public List<TripBookCommon> getAllRows() {
-        List<TripBookCommon> list = new ArrayList<>();
-        open();
+        if (mList == null) {
+            mList = new ArrayList<>();
+            open();
 
-        Cursor cursor = null;
-        if (mItemType == null) {
-            cursor = database.query(DatabaseHelper.TABLE_NAME_ITEM,
-                    allColumns, null, null, null, null, null);
-        } else {
-            cursor = database.query(DatabaseHelper.TABLE_NAME_ITEM,
-                    allColumns, DatabaseHelper.COLUMN_ITEM_TYPE + " = ?", new String[]{mItemType}, null, null, null);
+            Cursor cursor = null;
+            if (mItemType == null) {
+                cursor = database.query(DatabaseHelper.TABLE_NAME_ITEM,
+                        allColumns, null, null, null, null, null);
+            } else {
+                cursor = database.query(DatabaseHelper.TABLE_NAME_ITEM,
+                        allColumns, DatabaseHelper.COLUMN_ITEM_TYPE + " = ?", new String[]{mItemType}, null, null, null);
+            }
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                TripBookItem TripBookItem = cursorToTripBookItem(cursor);
+                mList.add(TripBookItem);
+                cursor.moveToNext();
+            }
+            // make sure to close the cursor
+            cursor.close();
+            close();
         }
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            TripBookItem TripBookItem = cursorToTripBookItem(cursor);
-            list.add(TripBookItem);
-            cursor.moveToNext();
-        }
-        // make sure to close the cursor
-        cursor.close();
-        close();
-        return list;
+        return mList;
     }
 
     private TripBookItem cursorToTripBookItem(Cursor cursor) {
@@ -119,7 +126,8 @@ public class TripBookItemData extends TripBookAbstractData {
         TripBookItem.setId(cursor.getLong(0));
         TripBookItem.setTitle(cursor.getString(1));
         TripBookItem.setItemType(cursor.getString(2));
-        TripBookItem.setCreatedAt(cursor.getString(3));
+        TripBookItem.setStarred((cursor.getInt(3) == 0 ? false : true));
+        TripBookItem.setCreatedAt(cursor.getString(4));
 //        Log.d(TAG, "cursorToTripBookItem" + TripBookItem.toString());
         return TripBookItem;
     }
@@ -151,17 +159,17 @@ public class TripBookItemData extends TripBookAbstractData {
     public void createTestData() {
         // create trips
         TripBookItem loader =  add(new TripBookItem("Birmingham 2015", TripBookItem.TYPE_TRIP));
-        add(new TripBookItem("Vicki", TripBookItem.TYPE_FRIENDS));
+        add(new TripBookItem("Vicki", TripBookItem.TYPE_FRIENDS, true));
         add(new TripBookItem("Farhaan", TripBookItem.TYPE_FRIENDS));
         add(new TripBookItem("Hugh", TripBookItem.TYPE_FRIENDS));
         add(new TripBookItem("Joshua", TripBookItem.TYPE_FRIENDS));
         add(new TripBookItem("Ryan", TripBookItem.TYPE_FRIENDS));
         add(new TripBookItem("Marcus", TripBookItem.TYPE_FRIENDS));
-        add(new TripBookItem("Sonya", TripBookItem.TYPE_FRIENDS));
+        add(new TripBookItem("Sonya", TripBookItem.TYPE_FRIENDS, true));
 
-        add(new TripBookItem("Lake District", TripBookItem.TYPE_TRIP));
+        add(new TripBookItem("Lake District", TripBookItem.TYPE_TRIP, true));
         add(new TripBookItem("Peak District Camping", TripBookItem.TYPE_TRIP));
-        add(new TripBookItem("London Attractions", TripBookItem.TYPE_TRIP));
+        add(new TripBookItem("London Attractions", TripBookItem.TYPE_TRIP, true));
         add(new TripBookItem("Birmingham 2014", TripBookItem.TYPE_TRIP));
         add(new TripBookItem("South Africa Summer 2014", TripBookItem.TYPE_TRIP));
         add(new TripBookItem("London SuperTechies", TripBookItem.TYPE_TRIP));
@@ -171,7 +179,7 @@ public class TripBookItemData extends TripBookAbstractData {
         // create places for trips
 //        add(new TripBookItem("Birmingham 2015", TripBookItem.TYPE_TRIP));
         add(new TripBookItem("Bullring", TripBookItem.TYPE_PLACE));
-        add(new TripBookItem("City Library", TripBookItem.TYPE_PLACE));
+        add(new TripBookItem("City Library", TripBookItem.TYPE_PLACE, true));
         add(new TripBookItem("Chinese Quarter", TripBookItem.TYPE_PLACE));
         add(new TripBookItem("Jewellery Quarter", TripBookItem.TYPE_PLACE));
 //        add(new TripBookItem("Lake District", TripBookItem.TYPE_TRIP));
@@ -188,23 +196,3 @@ public class TripBookItemData extends TripBookAbstractData {
 
     }
 }
-//    add("test 1 ", "desc 1", null, null);
-//    add("test 2 ", "desc 2", null, null);
-//    add("test 3 ", "desc 3", null, null);
-//    add("test 4 ", "desc 4", null, null);
-//    add("test 11 ", "desc 1", null, null);
-//    add("test 12 ", "desc 2", null, null);
-//    add("test 13 ", "desc 3", null, null);
-//    add("test 14 ", "desc 4", null, null);
-//    add("test 21 ", "desc 1", null, null);
-//    add("test 22 ", "desc 2", null, null);
-//    add("test 23 ", "desc 3", null, null);
-//    add("test 24 ", "desc 4", null, null);
-//    add("test 31 ", "desc 1", null, null);
-//    add("test 32 ", "desc 2", null, null);
-//    add("test 33 ", "desc 3", null, null);
-//    add("test 34 ", "desc 4", null, null);
-//    add("test 41 ", "desc 1", null, null);
-//    add("test 42 ", "desc 2", null, null);
-//    add("test 43 ", "desc 3", null, null);
-//    add("test 44 ", "desc 4", null, null);

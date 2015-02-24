@@ -1,6 +1,5 @@
 package com.amansoni.tripbook;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.amansoni.tripbook.db.TripBookItemData;
+import com.amansoni.tripbook.model.TripBookCommon;
+import com.amansoni.tripbook.model.TripBookItem;
 
 /**
  * RecyclerView list fragment. Adds options to change the list view style
@@ -25,7 +26,7 @@ public class RecyclerViewFragment extends Fragment {
 
     private static final String TAG = "RecyclerViewFragment";
     private static final String KEY_LAYOUT_MANAGER = "layoutManager";
-    private static final int GRID_COLUMNS = 3;
+    private static final int GRID_COLUMNS = 2;
     private static final int STAGGERED_ROWS = 4;
     protected LayoutManagerType mCurrentLayoutManagerType;
     protected RecyclerView mRecyclerView;
@@ -96,26 +97,27 @@ public class RecyclerViewFragment extends Fragment {
         TripBookItemData ds;
         if (mItemType == null) {
             ds = new TripBookItemData();
-        }else {
+        } else {
             ds = new TripBookItemData(mItemType);
         }
         mAdapter = new RecyclerViewAdapter(getActivity(), ds);
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener((Context) getActivity(),mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        Toast.makeText(view.getContext(), "click", Toast.LENGTH_SHORT).show();
+        registerForContextMenu(container);
 
-                    }
-                    @Override
-                    public void onItemLongClick(View view, int position) {
-                        // do whatever
-                        Toast.makeText(view.getContext(), "long click", Toast.LENGTH_SHORT).show();
-                    }
-
-                })
-        );
+//        mRecyclerView.addOnItemTouchListener(
+//                new RecyclerItemClickListener((Context) getActivity(),mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(View view, int position) {
+//                        Toast.makeText(view.getContext(), "click" + view.getClass(), Toast.LENGTH_SHORT).show();
+//                    }
+//                    @Override
+//                    public void onItemLongClick(View view, int position) {
+//                        // do whatever
+//                        Toast.makeText(view.getContext(), "long click"+ view.getClass(), Toast.LENGTH_SHORT).show();
+//                    }
+//
+//                })
+//        );
 
         return view;
     }
@@ -148,7 +150,7 @@ public class RecyclerViewFragment extends Fragment {
         }
 
         mRecyclerView.setLayoutManager(mLayoutManager);
-//        mRecyclerView.scrollToPosition(scrollPosition);
+        mRecyclerView.scrollToPosition(scrollPosition);
     }
 
     @Override
@@ -156,6 +158,43 @@ public class RecyclerViewFragment extends Fragment {
         // Save currently selected layout manager.
         savedInstanceState.putSerializable(KEY_LAYOUT_MANAGER, mCurrentLayoutManagerType);
         super.onSaveInstanceState(savedInstanceState);
+    }
+
+    public boolean onContextItemSelected(MenuItem item) {
+        int position = -1;
+        try {
+            position = RecyclerViewAdapter.getPosition();
+        } catch (Exception e) {
+            Log.d(TAG, e.getLocalizedMessage(), e);
+            return super.onContextItemSelected(item);
+        }
+        TripBookItem tripBookItem;
+        if (mItemType == null) {
+            tripBookItem = (TripBookItem) new TripBookItemData().getAllRows().get(position);
+        } else {
+            tripBookItem = (TripBookItem) new TripBookItemData(mItemType).getAllRows().get(position);
+        }
+
+        switch (item.getItemId()) {
+            case 1:
+                tripBookItem.star();
+                new TripBookItemData().update(tripBookItem);
+                mAdapter.notifyItemChanged(position);
+//                RecyclerViewAdapter.ListViewHolder view = (RecyclerViewAdapter.ListViewHolder)mRecyclerView.findViewHolderForPosition(position);
+//                if (view.mItem.isStarred())
+//                    view.imageStar.setImageResource(R.drawable.ic_action_important);
+//                else
+//                    view.imageStar.setImageResource(R.drawable.ic_action_not_important);
+
+                // do your stuff
+//                Toast.makeText(getActivity(), "star " + position, Toast.LENGTH_SHORT).show();
+                break;
+            case 2:
+                Toast.makeText(getActivity(), "star2 " + position, Toast.LENGTH_SHORT).show();
+                // do your stuff
+                break;
+        }
+        return super.onContextItemSelected(item);
     }
 
     public enum LayoutManagerType {

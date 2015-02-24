@@ -1,4 +1,4 @@
-package com.amansoni.tripbook;
+package com.amansoni.tripbook.Navigation;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.amansoni.tripbook.R;
 
 /**
  * Created by Aman on 24/02/2015.
