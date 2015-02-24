@@ -6,4 +6,8 @@
     <color name="grid_state_focused">#80000000</color>
     <color name="cardview_initial_background">#1F0F8A</color>
     <color name="cardview_text_">#AFAFAF</color>
+
+    <color name="navigation_row_selected">#000000</color>
+    <color name="navigation_row">#888888</color>
+
 </resources>

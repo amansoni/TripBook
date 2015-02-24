@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -95,23 +96,23 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                view.setBackgroundColor(getResources().getColor(R.color.navigation_row_selected));
                 selectItem(position);
             }
         });
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
-                getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                new String[]{
-                        getString(R.string.title_trip),
-                        getString(R.string.title_place),
-                        getString(R.string.title_social),
-                        getString(R.string.title_starred),
-                        getString(R.string.title_gallery),
-                        getString(R.string.title_map),
-                        getString(R.string.title_settings),
-                }));
+        String[] titles =  new String[]{
+                getString(R.string.title_trip),
+                getString(R.string.title_place),
+                getString(R.string.title_social),
+                getString(R.string.title_starred),
+                getString(R.string.title_gallery),
+                getString(R.string.title_map),
+                getString(R.string.title_settings),
+        };
+        DrawerArrayAdapter navAdapter = new DrawerArrayAdapter(getActionBar().getThemedContext(), titles);
+        mDrawerListView.setAdapter(navAdapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+        mDrawerListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         return mDrawerListView;
     }
 

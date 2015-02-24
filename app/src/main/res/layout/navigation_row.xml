@@ -4,16 +4,17 @@
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
     android:layout_height="wrap_content"
-    android:background="#ffffff"
-    android:orientation="horizontal">
-
+    android:orientation="horizontal"
+    android:id="@+id/navRow"
+    android:duplicateParentState="true"
+    android:backgroundTint="@drawable/drawer_row"
+    android:background="?android:attr/activatedBackgroundIndicator">
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/rowIcon"
-        android:paddingLeft="16dp"
-        android:src="@drawable/navigation_background"/>
+        android:paddingLeft="16dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -22,6 +23,6 @@
         android:paddingTop="4dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
-        android:id="@+id/rowText" />
+        android:id="@+id/rowText"/>
 
 </LinearLayout>

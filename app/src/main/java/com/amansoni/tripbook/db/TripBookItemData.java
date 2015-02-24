@@ -153,6 +153,11 @@ public class TripBookItemData extends TripBookAbstractData {
         TripBookItem loader =  add(new TripBookItem("Birmingham 2015", TripBookItem.TYPE_TRIP));
         add(new TripBookItem("Vicki", TripBookItem.TYPE_FRIENDS));
         add(new TripBookItem("Farhaan", TripBookItem.TYPE_FRIENDS));
+        add(new TripBookItem("Hugh", TripBookItem.TYPE_FRIENDS));
+        add(new TripBookItem("Joshua", TripBookItem.TYPE_FRIENDS));
+        add(new TripBookItem("Ryan", TripBookItem.TYPE_FRIENDS));
+        add(new TripBookItem("Marcus", TripBookItem.TYPE_FRIENDS));
+        add(new TripBookItem("Sonya", TripBookItem.TYPE_FRIENDS));
 
         add(new TripBookItem("Lake District", TripBookItem.TYPE_TRIP));
         add(new TripBookItem("Peak District Camping", TripBookItem.TYPE_TRIP));
