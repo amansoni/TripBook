@@ -8,6 +8,11 @@
 
     </style>
 
+    <!-- Navigation Drawer styling -->
+    <style name="NavDrawerItemSelected" parent="AppTheme">
+        <item name="android:activatedBackgroundIndicator">@drawable/drawer_row</item>
+    </style>
+
     <style name="AppThemeDark.FullScreen" parent="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
 
     <style name="PhotoGridLayout">
