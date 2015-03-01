@@ -89,8 +89,8 @@ public class ItemViewFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_item_edit) {
-            Toast.makeText(getActivity(), "Edit Item", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "Setting bundle:" + item.toString());
+//            Toast.makeText(getActivity(), "Edit Item", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "Setting bundle for itemEditFragment:" + item.toString());
             Bundle args = new Bundle();
             args.putLong("itemKey", tripBookItem.getId());
             ItemEditFragment itemEditFragment = new ItemEditFragment();
@@ -98,7 +98,7 @@ public class ItemViewFragment extends Fragment {
 
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, itemEditFragment)
-                    .addToBackStack("view")
+                    //.addToBackStack("view")
                     .commit();
 
             return true;

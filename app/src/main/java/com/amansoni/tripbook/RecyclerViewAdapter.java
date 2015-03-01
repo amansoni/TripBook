@@ -124,7 +124,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             fragmentManager.beginTransaction()
                     .replace(R.id.container, itemViewFragment)
-                    .addToBackStack("position = " + getPosition())
+                    //.addToBackStack("position = " + getPosition())
                     .commit();
         }
 

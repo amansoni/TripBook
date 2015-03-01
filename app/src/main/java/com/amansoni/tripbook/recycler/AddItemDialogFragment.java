@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.widget.Toast;
 
+import com.amansoni.tripbook.ItemEditFragment;
 import com.amansoni.tripbook.R;
 
 /**
@@ -19,7 +20,27 @@ public class AddItemDialogFragment extends DialogFragment {
         builder.setTitle(R.string.add_item_title)
                 .setItems(R.array.additems_array, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getActivity(), "select = " + which, Toast.LENGTH_SHORT).show();
+                        Bundle args = new Bundle();
+                        switch (which){
+                            case 0: // Friend
+                                args.putInt("itemType", R.string.title_social);
+                                break;
+                            case 1: // Trip
+                                args.putInt("itemType", R.string.title_trip);
+                                break;
+                            case 2: // Place
+                                args.putInt("itemType", R.string.title_place);
+                                break;
+                            case 3: // Photo
+                                args.putInt("itemType", R.string.title_gallery);
+                                break;
+                        }
+                        ItemEditFragment itemEditFragment = new ItemEditFragment();
+                        itemEditFragment.setArguments(args);
+
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.container, itemEditFragment)
+                                .commit();
                     }
                 });
         return builder.create();

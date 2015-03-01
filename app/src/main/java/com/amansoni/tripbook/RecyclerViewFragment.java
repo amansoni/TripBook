@@ -89,10 +89,7 @@ public class RecyclerViewFragment extends Fragment {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN){
-                    // Do what you want
-                    Toast.makeText(v.getContext(), "FAB click" + v.getClass(), Toast.LENGTH_SHORT).show();
-                    AddItemDialogFragment additem = new AddItemDialogFragment();
-                    additem.show(getFragmentManager(), "addnew");
+                    new AddItemDialogFragment().show(getFragmentManager(), "addnew");
                     return true;
                 }
                 return true; // consume the event

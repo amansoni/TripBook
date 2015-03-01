@@ -4,12 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,8 +26,6 @@ import com.amansoni.tripbook.model.TripBookImage;
 import com.amansoni.tripbook.model.TripBookItem;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Aman on 13/02/2015.
@@ -35,8 +33,8 @@ import java.util.List;
 public class ItemEditFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "ItemViewFragment";
     private static final int SELECT_PICTURE = 1;
-    private TripBookItem tripBookItem;
     TripBookImage tripBookImage;
+    private TripBookItem tripBookItem;
     private Uri selectedImageUri;
     private String selectedImagePath;
     private EditText imageTitle;
@@ -48,8 +46,13 @@ public class ItemEditFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         if (args != null) {
-            tripBookItem = new TripBookItemData().getItem(args.getLong("itemKey"));
-            Log.d(TAG, "Got tripBookItem:" + tripBookItem.toString());
+            if (args.containsKey("itemKey")) {
+                tripBookItem = new TripBookItemData().getItem(args.getLong("itemKey"));
+                Log.d(TAG, "Got tripBookItem:" + tripBookItem.toString());
+            } else if (args.containsKey("itemType")) {
+                tripBookItem = new TripBookItem("new", args.getString("itemType"));
+                Log.d(TAG, "Got tripBookItem:" + tripBookItem.toString());
+            }
         }
         setHasOptionsMenu(true);
     }
@@ -65,16 +68,22 @@ public class ItemEditFragment extends Fragment implements View.OnClickListener {
             Log.d(TAG, "setOnClickListener itemEdit.itemImage");
         }
         Bundle args = getArguments();
-        if (args == null) {
-            Log.d(TAG, "No itemkey passe in bundle args");
+        if (args != null) {
+            if (args.containsKey("itemKey")) {
+                tripBookItem = new TripBookItemData().getItem(args.getLong("itemKey"));
+                Log.d(TAG, "Got tripBookItem:" + tripBookItem.toString());
+                tripBookItem = new TripBookItemData().getItem(args.getLong("itemKey"));
+                // TextView:title
+                imageTitle = ((EditText) view.findViewById(R.id.item_title));
+                imageTitle.setText(tripBookItem.getTitle());
+                // TextView:description
+                imageDescription = ((EditText) view.findViewById(R.id.item_createdAt));
+                imageDescription.setText(tripBookItem.getCreatedAt());
+            } else if (args.containsKey("itemType")) {
+                tripBookItem = new TripBookItem("new", args.getString("itemType"));
+                Log.d(TAG, "Got tripBookItem:" + tripBookItem.toString());
+            }
         }
-        tripBookItem = new TripBookItemData().getItem(args.getLong("itemKey"));
-        // TextView:title
-        imageTitle = ((EditText) view.findViewById(R.id.item_title));
-        imageTitle.setText(tripBookItem.getTitle());
-        // TextView:description
-        imageDescription = ((EditText) view.findViewById(R.id.item_createdAt));
-        imageDescription.setText(tripBookItem.getCreatedAt());
         // ImageView:description
 //        if (tripBookItem.getImage() != null && tripBookItem.getImage().length() > 0) {
 //            ((ImageView) view.findViewById(R.id.item_image)).setImageURI(Uri.parse(tripBookItem.getImage()));
@@ -95,32 +104,41 @@ public class ItemEditFragment extends Fragment implements View.OnClickListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_cancel) {
-            saveItem(false);
+            // return to the list showing this item type
+            Fragment viewNow = new RecyclerViewFragment();
+            Bundle args = new Bundle();
+            // set the list to display
+            args.putString("itemType", tripBookItem.getItemType());
+            viewNow.setArguments(args);
+            // update the main content by replacing fragments
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, viewNow)
+                    .commit();
             return true;
         }
 
         if (item.getItemId() == R.id.action_item_save) {
-            saveItem(true);
-            Toast.makeText(getActivity(), "Save", Toast.LENGTH_SHORT).show();
+            saveItem();
+            Toast.makeText(getActivity(), "Item saved", Toast.LENGTH_SHORT).show();
+            Bundle args = new Bundle();
+            args.putLong("itemKey", tripBookItem.getId());
+            ItemViewFragment itemViewFragment = new ItemViewFragment();
+            itemViewFragment.setArguments(args);
+
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, itemViewFragment)
+                    .commit();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void saveItem(boolean updateValues) {
-        if (updateValues) {
+    private void saveItem() {
             tripBookItem.setTitle(imageTitle.getText().toString());
-            tripBookItem.addImage(tripBookImage);
+            if (tripBookImage != null)
+                tripBookItem.addImage(tripBookImage);
             new TripBookItemData().update(tripBookItem);
-        }
-        Bundle args = new Bundle();
-        args.putLong("itemKey", tripBookItem.getId());
-        ItemViewFragment itemViewFragment = new ItemViewFragment();
-        itemViewFragment.setArguments(args);
-
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, itemViewFragment)
-                .commit();
     }
 
     @Override

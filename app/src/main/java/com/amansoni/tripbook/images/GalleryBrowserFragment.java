@@ -76,7 +76,7 @@ public class GalleryBrowserFragment extends Fragment {
             Toast.makeText(getActivity(), "Edit Item", Toast.LENGTH_SHORT).show();
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, new ItemEditFragment())
-                    .addToBackStack("view")
+                    //.addToBackStack("view")
                     .commit();
 
             return true;
