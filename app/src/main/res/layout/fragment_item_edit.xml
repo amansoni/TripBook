@@ -32,46 +32,50 @@
             android:orientation="vertical"
             android:padding="5dp">
 
-        <EditText
-            android:id="@+id/item_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Birmingham Library Main"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            <EditText
+                android:id="@+id/item_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(enter new title)"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <EditText
-            android:id="@+id/item_createdAt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Description"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            <EditText
+                android:id="@+id/item_createdAt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(set date)"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </LinearLayout>
+
+
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/item_trip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/item_place"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/item_social"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/item_images"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </LinearLayout>
-
-<TextView
-android:id="@+id/item_trip"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:text="Description"
-android:textAppearance="?android:attr/textAppearanceLarge" />
-
-<TextView
-android:id="@+id/item_place"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:text="Description"
-android:textAppearance="?android:attr/textAppearanceLarge" />
-
-<TextView
-android:id="@+id/item_social"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:text="Description"
-android:textAppearance="?android:attr/textAppearanceLarge" /><TextView
-android:id="@+id/item_images"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:text="Description"
-android:textAppearance="?android:attr/textAppearanceLarge" /></LinearLayout>
