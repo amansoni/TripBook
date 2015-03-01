@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.amansoni.tripbook.db.TripBookItemData;
 import com.amansoni.tripbook.model.TripBookItem;
+import com.amansoni.tripbook.recycler.AddItemDialogFragment;
 import com.shamanland.fab.FloatingActionButton;
 
 /**
@@ -90,6 +91,8 @@ public class RecyclerViewFragment extends Fragment {
                 if(event.getAction() == MotionEvent.ACTION_DOWN){
                     // Do what you want
                     Toast.makeText(v.getContext(), "FAB click" + v.getClass(), Toast.LENGTH_SHORT).show();
+                    AddItemDialogFragment additem = new AddItemDialogFragment();
+                    additem.show(getFragmentManager(), "addnew");
                     return true;
                 }
                 return true; // consume the event
@@ -195,14 +198,9 @@ public class RecyclerViewFragment extends Fragment {
                 tripBookItem.star();
                 new TripBookItemData().update(tripBookItem);
                 mAdapter.notifyItemChanged(position);
-//                RecyclerViewAdapter.ListViewHolder view = (RecyclerViewAdapter.ListViewHolder)mRecyclerView.findViewHolderForPosition(position);
-//                if (view.mItem.isStarred())
-//                    view.imageStar.setImageResource(R.drawable.ic_action_important);
-//                else
-//                    view.imageStar.setImageResource(R.drawable.ic_action_not_important);
-
-                // do your stuff
-//                Toast.makeText(getActivity(), "star " + position, Toast.LENGTH_SHORT).show();
+//                mAdapter.notify();
+//                do your stuff
+                Toast.makeText(getActivity(), "star " + position, Toast.LENGTH_SHORT).show();
                 break;
             case 2:
                 Toast.makeText(getActivity(), "star2 " + position, Toast.LENGTH_SHORT).show();

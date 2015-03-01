@@ -48,6 +48,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return new ListViewHolder(v, ((FragmentActivity) viewGroup.getContext()).getSupportFragmentManager(), mDataSet);
     }
 
+//    RecyclerViewAdapter.ListViewHolder view = (RecyclerViewAdapter.ListViewHolder)mRecyclerView.findViewHolderForPosition(position);
+//    if (view.mItem.isStarred())
+//            view.imageStar.setImageResource(R.drawable.ic_action_important);
+//    else
+//            view.imageStar.setImageResource(R.drawable.ic_action_not_important);
+
+
     @Override
     public void onBindViewHolder(ListViewHolder listViewHolder, final int position) {
         Log.d(TAG, "Element " + position + " set.");
