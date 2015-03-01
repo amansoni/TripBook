@@ -1,5 +1,6 @@
 package com.amansoni.tripbook;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,13 +12,14 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.amansoni.tripbook.db.TripBookItemData;
-import com.amansoni.tripbook.model.TripBookCommon;
 import com.amansoni.tripbook.model.TripBookItem;
+import com.shamanland.fab.FloatingActionButton;
 
 /**
  * RecyclerView list fragment. Adds options to change the list view style
@@ -45,7 +47,6 @@ public class RecyclerViewFragment extends Fragment {
             mItemType = args.getString("itemType");
             Log.d(TAG, "Now showing" + mItemType);
         }
-
         setHasOptionsMenu(true);
     }
 
@@ -80,6 +81,20 @@ public class RecyclerViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.recycler_view_frag, container, false);
         view.setTag(TAG);
+        FloatingActionButton mFab = (FloatingActionButton)view.findViewById(R.id.fab);
+//        mFab.setBackgroundColor(getResources().getColor(R.color.floating_button));
+        //mFab.setBackground(getResources().getDrawable(R.drawable.oval));;
+        mFab.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    // Do what you want
+                    Toast.makeText(v.getContext(), "FAB click" + v.getClass(), Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                return true; // consume the event
+            }
+        });
 
         // setup RecyclerView and layout managers
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);

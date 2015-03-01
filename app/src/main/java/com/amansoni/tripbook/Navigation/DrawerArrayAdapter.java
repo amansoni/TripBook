@@ -34,7 +34,6 @@ public class DrawerArrayAdapter extends ArrayAdapter<String> {
 
         ImageView imageView = (ImageView) rowView.findViewById(R.id.rowIcon);
         imageView.setImageResource(getTitleIcon(values[position]));
-        // change the icon for Windows and iPhone
         return rowView;
     }
 

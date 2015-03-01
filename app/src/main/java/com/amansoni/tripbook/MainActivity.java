@@ -24,16 +24,19 @@ import com.amansoni.tripbook.model.TripBookItem;
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
+    private static Context mContext;
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
-    private static Context mContext;
-
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+
+    public static Context getContext() {
+        return mContext;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +53,6 @@ public class MainActivity extends ActionBarActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
     }
 
-    public static Context getContext(){
-        return mContext;
-    }
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // first check for activities that are not fragments
@@ -116,7 +116,6 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void onSectionAttached(int number) {
-/*
         switch (number) {
             case 0:
                 mTitle = getString(R.string.title_trip);
@@ -125,19 +124,21 @@ public class MainActivity extends ActionBarActivity
                 mTitle = getString(R.string.title_place);
                 break;
             case 2:
-                mTitle = getString(R.string.title_gallery);
-                break;
-            case 3:
                 mTitle = getString(R.string.title_social);
                 break;
-            case 4:
+            case 3:
                 mTitle = getString(R.string.title_starred);
                 break;
+            case 4:
+                mTitle = getString(R.string.title_gallery);
+                break;
             case 5:
+                mTitle = getString(R.string.title_map);
+                break;
+            case 6:
                 mTitle = getString(R.string.title_settings);
                 break;
         }
-*/
     }
 
     public void restoreActionBar() {

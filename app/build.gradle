@@ -27,4 +27,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:21.0.3'
     compile 'com.android.support:support-v4:21.0.3'
     compile 'de.hdodenhof:circleimageview:1.2.1'
+    compile 'com.shamanland:fab:0.0.8'
 }

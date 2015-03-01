@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">TripBook</string>
 
-    <!-- Navigation drawer items-->
+    <!-- navigation drawer items-->
     <string name="title_trip">Trips</string>
     <string name="title_place">Places</string>
     <string name="title_social">Friends</string>

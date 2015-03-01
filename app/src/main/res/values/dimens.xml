@@ -5,7 +5,7 @@
 
     <!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
          https://developer.android.com/design/patterns/navigation-drawer.html -->
-    <dimen name="navigation_drawer_width">240dp</dimen>
+    <dimen name="navigation_drawer_width">260dp</dimen>
 
     <!-- Default list item height -->
     <dimen name="list_item_height">100dp</dimen>
@@ -26,4 +26,10 @@
     <dimen name="image_thumbnail_size">150dp</dimen>
     <dimen name="image_thumbnail_spacing">5dp</dimen>
 
+    <!--Floating button-->
+    <dimen name="diameter">48dp</dimen>
+    <dimen name="elevation_low">1dp</dimen>
+    <dimen name="elevation_high">4dp</dimen>
+    <dimen name="add_button_margin">16dp</dimen>
+    <dimen name="round_button_diameter">48px</dimen>
 </resources>
