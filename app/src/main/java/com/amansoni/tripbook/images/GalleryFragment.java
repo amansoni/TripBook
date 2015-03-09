@@ -178,7 +178,15 @@ public class GalleryFragment extends Fragment implements AdapterView.OnItemClick
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == getActivity().RESULT_OK) {
                 // Image captured and saved to fileUri specified in the Intent
+                Fragment viewNow = ImageDetailFragment.newInstance(fileUri.getPath());
+
                 Toast.makeText(getActivity(), "Image saved to:\n" + fileUri.getPath(), Toast.LENGTH_LONG).show();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, viewNow)
+//                    .addToBackStack(mTitle.toString())
+                        .commit();
+
             } else if (resultCode == getActivity().RESULT_CANCELED) {
                 // User cancelled the image capture
             } else {
