@@ -126,7 +126,6 @@ public class ImageDetailFragment extends Fragment implements
         super.onCreate(savedInstanceState);
         mImageUrl = getArguments() != null ? getArguments().getString(IMAGE_DATA_EXTRA) : null;
         Log.i(TAG, "OnCreate:Set image to " + mImageUrl);
-
     }
 
     @Override
@@ -173,6 +172,22 @@ public class ImageDetailFragment extends Fragment implements
 
         updateUIWidgets();
         buildGoogleApiClient();
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (mLastLocation != null) {
+            // Determine whether a Geocoder is available.
+            if (!Geocoder.isPresent()) {
+                Toast.makeText(getActivity(), R.string.no_geocoder_available, Toast.LENGTH_LONG).show();
+                return;
+            }
+            // It is possible that the user presses the button to get the address before the
+            // GoogleApiClient object successfully connects. In such a case, mAddressRequested
+            // is set to true, but no attempt is made to fetch the address (see
+            // fetchAddressButtonHandler()) . Instead, we start the intent service here if the
+            // user has requested an address, since we now have a connection to GoogleApiClient.
+            if (mAddressRequested) {
+                startIntentService();
+            }
+        }
 
     }
 
@@ -274,7 +289,26 @@ public class ImageDetailFragment extends Fragment implements
      */
     public void fetchAddressButtonHandler(View view) {
         // We only start the service to fetch the address if GoogleApiClient is connected.
-        if (mGoogleApiClient.isConnected() && mLastLocation != null) {
+        if (mGoogleApiClient.isConnected()) {
+            if (mLastLocation == null) {
+
+                mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                if (mLastLocation != null) {
+                    // Determine whether a Geocoder is available.
+                    if (!Geocoder.isPresent()) {
+                        Toast.makeText(getActivity(), R.string.no_geocoder_available, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    // It is possible that the user presses the button to get the address before the
+                    // GoogleApiClient object successfully connects. In such a case, mAddressRequested
+                    // is set to true, but no attempt is made to fetch the address (see
+                    // fetchAddressButtonHandler()) . Instead, we start the intent service here if the
+                    // user has requested an address, since we now have a connection to GoogleApiClient.
+                    if (mAddressRequested) {
+                        startIntentService();
+                    }
+                }
+            }
             startIntentService();
         }
         // If GoogleApiClient isn't connected, we process the user's request by setting
@@ -296,6 +330,7 @@ public class ImageDetailFragment extends Fragment implements
     /**
      * Updates the address in the UI.
      */
+
     protected void displayAddressOutput() {
         mLocationAddressTextView.setText(mAddressOutput);
     }

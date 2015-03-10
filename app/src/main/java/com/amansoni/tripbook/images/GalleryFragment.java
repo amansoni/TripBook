@@ -30,6 +30,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.amansoni.tripbook.BuildConfig;
+import com.amansoni.tripbook.LocationLookup;
+import com.amansoni.tripbook.MapsActivity;
 import com.amansoni.tripbook.R;
 import com.amansoni.tripbook.provider.Images;
 import com.amansoni.tripbook.recycler.AddItemDialogFragment;
@@ -177,15 +179,18 @@ public class GalleryFragment extends Fragment implements AdapterView.OnItemClick
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == getActivity().RESULT_OK) {
-                // Image captured and saved to fileUri specified in the Intent
-                Fragment viewNow = ImageDetailFragment.newInstance(fileUri.getPath());
+                Intent intent = new Intent(getActivity(), LocationLookup.class);
+                startActivity(intent);
 
-                Toast.makeText(getActivity(), "Image saved to:\n" + fileUri.getPath(), Toast.LENGTH_LONG).show();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, viewNow)
-//                    .addToBackStack(mTitle.toString())
-                        .commit();
+//                // Image captured and saved to fileUri specified in the Intent
+//                Fragment viewNow = ImageDetailFragment.newInstance(fileUri.getPath());
+//
+//                Toast.makeText(getActivity(), "Image saved to:\n" + fileUri.getPath(), Toast.LENGTH_LONG).show();
+//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                fragmentManager.beginTransaction()
+//                        .replace(R.id.container, viewNow)
+////                    .addToBackStack(mTitle.toString())
+//                        .commit();
 
             } else if (resultCode == getActivity().RESULT_CANCELED) {
                 // User cancelled the image capture

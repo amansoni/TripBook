@@ -71,15 +71,15 @@
                 android:value="com.amansoni.tripbook.SettingsActivity" />
         </activity>
         <activity
-            android:name=".images.ImageDetailActivity"
-            android:label="@string/app_name"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppThemeDark.FullScreen">
+            android:name=".LocationLookup"
+            android:label="@string/app_name" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
+        <service
+            android:name=".FetchAddressIntentService"
+            android:exported="false"/>
     </application>
 
 </manifest>

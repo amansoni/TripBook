@@ -1,8 +1,5 @@
 package com.amansoni.tripbook;
 
-/**
- * Created by Aman on 09/03/2015.
- */
 import android.app.IntentService;
 import android.content.Intent;
 import android.location.Address;
@@ -24,7 +21,7 @@ import java.util.Locale;
  * sends the result to the ResultReceiver.
  */
 public class FetchAddressIntentService extends IntentService {
-    private static final String TAG = "address-intent-service";
+    private static final String TAG = "fetch-address-intent";
 
     /**
      * The receiver where results are forwarded from this service.
