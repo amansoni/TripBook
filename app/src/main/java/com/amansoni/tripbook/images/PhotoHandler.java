@@ -63,6 +63,6 @@ public class PhotoHandler implements PictureCallback {
     private File getDir() {
         File sdDir = Environment
                 .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        return new File(sdDir, "CameraAPIDemo");
+        return new File(sdDir, "TripBook");
     }
 }

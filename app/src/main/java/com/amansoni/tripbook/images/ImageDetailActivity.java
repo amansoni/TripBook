@@ -40,7 +40,7 @@ import com.amansoni.tripbook.util.ImageCache;
 import com.amansoni.tripbook.provider.Images;
 
 public class ImageDetailActivity extends FragmentActivity implements OnClickListener {
-    private static final String IMAGE_CACHE_DIR = "images";
+    public static final String IMAGE_CACHE_DIR = "images";
     public static final String EXTRA_IMAGE = "extra_image";
 
     private ImagePagerAdapter mAdapter;

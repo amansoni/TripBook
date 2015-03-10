@@ -17,54 +17,42 @@
 package com.amansoni.tripbook;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.support.v7.app.ActionBarActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amansoni.tripbook.util.ImageCache;
+import com.amansoni.tripbook.util.ImageFetcher;
+import com.amansoni.tripbook.util.ImageWorker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationServices;
 
-/**
- * Getting the Location Address.
- *
- * Demonstrates how to use the {@link android.location.Geocoder} API and reverse geocoding to
- * display a device's location as an address. Uses an IntentService to fetch the location address,
- * and a ResultReceiver to process results sent by the IntentService.
- *
- * Android has two location request settings:
- * {@code ACCESS_COARSE_LOCATION} and {@code ACCESS_FINE_LOCATION}. These settings control
- * the accuracy of the current location. This sample uses ACCESS_FINE_LOCATION, as defined in
- * the AndroidManifest.xml.
- *
- * For a starter example that displays the last known location of a device using a longitude and latitude,
- * see https://github.com/googlesamples/android-play-location/tree/master/BasicLocation.
- *
- * For an example that shows location updates using the Fused Location Provider API, see
- * https://github.com/googlesamples/android-play-location/tree/master/LocationUpdates.
- *
- * This sample uses Google Play services (GoogleApiClient) but does not need to authenticate a user.
- * For an example that uses authentication, see
- * https://github.com/googlesamples/android-google-accounts/tree/master/QuickStart.
- */
+import java.io.File;
+
 public class LocationLookup extends ActionBarActivity implements
         ConnectionCallbacks, OnConnectionFailedListener {
 
-    protected static final String TAG = "main-activity";
+    protected static final String TAG = "LocationLookup";
 
     protected static final String ADDRESS_REQUESTED_KEY = "address-request-pending";
     protected static final String LOCATION_ADDRESS_KEY = "location-address";
+    public static final String IMAGE_URI = "image-file-path" ;
 
     /**
      * Provides the entry point to Google Play services.
@@ -90,6 +78,14 @@ public class LocationLookup extends ActionBarActivity implements
      * The formatted location address.
      */
     protected String mAddressOutput;
+    /**
+     * Displays the location address.
+     */
+    protected EditText mLocationAddressTextView;
+    /**
+     * Visible while the address is being fetched.
+     */
+    ProgressBar mProgressBar;
 
     /**
      * Receiver registered with this activity to get the response from FetchAddressIntentService.
@@ -97,19 +93,14 @@ public class LocationLookup extends ActionBarActivity implements
     private AddressResultReceiver mResultReceiver;
 
     /**
-     * Displays the location address.
+     * The image view to display the image
      */
-    protected TextView mLocationAddressTextView;
+    ImageView mImageView;
 
     /**
-     * Visible while the address is being fetched.
+     * Image file path string
      */
-    ProgressBar mProgressBar;
-
-    /**
-     * Kicks off the request to fetch an address when pressed.
-     */
-    Button mFetchAddressButton;
+    private String mImageFilePath;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -118,17 +109,23 @@ public class LocationLookup extends ActionBarActivity implements
 
         mResultReceiver = new AddressResultReceiver(new Handler());
 
-        mLocationAddressTextView = (TextView) findViewById(R.id.location_address_view);
+        mLocationAddressTextView = (EditText) findViewById(R.id.location_address_view);
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        mFetchAddressButton = (Button) findViewById(R.id.fetch_address_button);
+        mImageView = (ImageView) findViewById(R.id.imageView);
+//        mFetchAddressButton = (Button) findViewById(R.id.fetch_address_button);
 
         // Set defaults, then update using values stored in the Bundle.
-        mAddressRequested = false;
+        mAddressRequested = true;
         mAddressOutput = "";
         updateValuesFromBundle(savedInstanceState);
-
+        mImageFilePath = getIntent().getExtras().getString(IMAGE_URI);
+        showImage();
         updateUIWidgets();
         buildGoogleApiClient();
+        // We only start the service to fetch the address if GoogleApiClient is connected.
+        if (mGoogleApiClient.isConnected() && mLastLocation != null) {
+            startIntentService();
+        }
     }
 
     /**
@@ -139,6 +136,11 @@ public class LocationLookup extends ActionBarActivity implements
             // Check savedInstanceState to see if the address was previously requested.
             if (savedInstanceState.keySet().contains(ADDRESS_REQUESTED_KEY)) {
                 mAddressRequested = savedInstanceState.getBoolean(ADDRESS_REQUESTED_KEY);
+            }
+
+            if (savedInstanceState.keySet().contains(IMAGE_URI)) {
+//                mImageFilePath = savedInstanceState.getString(IMAGE_URI);
+                showImage();
             }
             // Check savedInstanceState to see if the location address string was previously found
             // and stored in the Bundle. If it was found, display the address string in the UI.
@@ -158,23 +160,6 @@ public class LocationLookup extends ActionBarActivity implements
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-    }
-
-    /**
-     * Runs when user clicks the Fetch Address button. Starts the service to fetch the address if
-     * GoogleApiClient is connected.
-     */
-    public void fetchAddressButtonHandler(View view) {
-        // We only start the service to fetch the address if GoogleApiClient is connected.
-        if (mGoogleApiClient.isConnected() && mLastLocation != null) {
-            startIntentService();
-        }
-        // If GoogleApiClient isn't connected, we process the user's request by setting
-        // mAddressRequested to true. Later, when GoogleApiClient connects, we launch the service to
-        // fetch the address. As far as the user is concerned, pressing the Fetch Address button
-        // immediately kicks off the process of getting the address.
-        mAddressRequested = true;
-        updateUIWidgets();
     }
 
     @Override
@@ -260,15 +245,26 @@ public class LocationLookup extends ActionBarActivity implements
     }
 
     /**
+     * Updates the address in the UI.
+     */
+    protected void showImage() {
+        File imgFile = new File(mImageFilePath);
+
+        if(imgFile.exists()){
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            mImageView.setImageBitmap(myBitmap);
+        }
+
+    }
+
+    /**
      * Toggles the visibility of the progress bar. Enables or disables the Fetch Address button.
      */
     private void updateUIWidgets() {
         if (mAddressRequested) {
             mProgressBar.setVisibility(ProgressBar.VISIBLE);
-            mFetchAddressButton.setEnabled(false);
         } else {
             mProgressBar.setVisibility(ProgressBar.GONE);
-            mFetchAddressButton.setEnabled(true);
         }
     }
 
@@ -298,7 +294,7 @@ public class LocationLookup extends ActionBarActivity implements
         }
 
         /**
-         *  Receives data sent from FetchAddressIntentService and updates the UI in MainActivity.
+         * Receives data sent from FetchAddressIntentService and updates the UI in MainActivity.
          */
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {

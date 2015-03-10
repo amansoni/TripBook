@@ -179,7 +179,9 @@ public class GalleryFragment extends Fragment implements AdapterView.OnItemClick
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == getActivity().RESULT_OK) {
+
                 Intent intent = new Intent(getActivity(), LocationLookup.class);
+                intent.putExtra(LocationLookup.IMAGE_URI, fileUri.getPath());
                 startActivity(intent);
 
 //                // Image captured and saved to fileUri specified in the Intent
