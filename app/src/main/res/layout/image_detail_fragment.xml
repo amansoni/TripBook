@@ -21,8 +21,7 @@
         android:id="@+id/fetch_address_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/fetch_address"
-        android:onClick="fetchAddressButtonHandler" />
+        android:text="@string/fetch_address" />
 
     <ProgressBar
         android:id="@+id/progress_bar"

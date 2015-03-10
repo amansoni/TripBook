@@ -140,6 +140,12 @@ public class ImageDetailFragment extends Fragment implements
         mLocationAddressTextView = (TextView) v.findViewById(R.id.location_address_view);
         mProgressBar = (ProgressBar) v.findViewById(R.id.progress_bar);
         mFetchAddressButton = (Button) v.findViewById(R.id.fetch_address_button);
+        mFetchAddressButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fetchAddressButtonHandler(view);
+            }
+        });
 
         return v;
     }
@@ -154,7 +160,6 @@ public class ImageDetailFragment extends Fragment implements
             mImageFetcher = ((ImageDetailActivity) getActivity()).getImageFetcher();
             mImageFetcher.loadImage(mImageUrl, mImageView);
             Log.i(TAG, "onActivityCreated:Set image in " + mImageView + " to " + mImageUrl);
-
         }
 
         // Pass clicks on the ImageView to the parent activity to handle
