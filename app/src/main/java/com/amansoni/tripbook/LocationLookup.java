@@ -16,6 +16,11 @@
 
 package com.amansoni.tripbook;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,15 +30,29 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.amansoni.tripbook.db.TripBookItemData;
+import com.amansoni.tripbook.model.TripBookCommon;
+import com.amansoni.tripbook.model.TripBookImage;
+import com.amansoni.tripbook.model.TripBookItem;
 import com.amansoni.tripbook.util.ImageCache;
 import com.amansoni.tripbook.util.ImageFetcher;
 import com.amansoni.tripbook.util.ImageWorker;
@@ -44,6 +63,7 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 import com.google.android.gms.location.LocationServices;
 
 import java.io.File;
+import java.util.Calendar;
 
 public class LocationLookup extends ActionBarActivity implements
         ConnectionCallbacks, OnConnectionFailedListener {
@@ -53,15 +73,10 @@ public class LocationLookup extends ActionBarActivity implements
     protected static final String ADDRESS_REQUESTED_KEY = "address-request-pending";
     protected static final String LOCATION_ADDRESS_KEY = "location-address";
     public static final String IMAGE_URI = "image-file-path" ;
-
-    /**
-     * Provides the entry point to Google Play services.
-     */
+//     * Provides the entry point to Google Play services.
     protected GoogleApiClient mGoogleApiClient;
 
-    /**
-     * Represents a geographical location.
-     */
+//     * Represents a geographical location.
     protected Location mLastLocation;
 
     /**
@@ -74,33 +89,24 @@ public class LocationLookup extends ActionBarActivity implements
      */
     protected boolean mAddressRequested;
 
-    /**
-     * The formatted location address.
-     */
+//     * The formatted location address.
     protected String mAddressOutput;
-    /**
-     * Displays the location address.
-     */
+//     * Displays the location address.
     protected EditText mLocationAddressTextView;
-    /**
-     * Visible while the address is being fetched.
-     */
+//     * Visible while the address is being fetched.
     ProgressBar mProgressBar;
 
-    /**
-     * Receiver registered with this activity to get the response from FetchAddressIntentService.
-     */
+//     * Receiver registered with this activity to get the response from FetchAddressIntentService.
     private AddressResultReceiver mResultReceiver;
 
-    /**
-     * The image view to display the image
-     */
+//     * The image view to display the image
     ImageView mImageView;
-
-    /**
-     * Image file path string
-     */
+//     * Image file path string
     private String mImageFilePath;
+
+    protected static EditText mDatePicker;
+    protected static EditText mTimePicker;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -112,6 +118,8 @@ public class LocationLookup extends ActionBarActivity implements
         mLocationAddressTextView = (EditText) findViewById(R.id.location_address_view);
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
         mImageView = (ImageView) findViewById(R.id.imageView);
+        mDatePicker = (EditText)  findViewById(R.id.dateText);
+        mTimePicker = (EditText)  findViewById(R.id.timeText);
 //        mFetchAddressButton = (Button) findViewById(R.id.fetch_address_button);
 
         // Set defaults, then update using values stored in the Bundle.
@@ -122,11 +130,65 @@ public class LocationLookup extends ActionBarActivity implements
         showImage();
         updateUIWidgets();
         buildGoogleApiClient();
+//        setHasOptionsMenu(true);
+
         // We only start the service to fetch the address if GoogleApiClient is connected.
         if (mGoogleApiClient.isConnected() && mLastLocation != null) {
             startIntentService();
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.item_edit, menu);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle("Add new place");
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_cancel) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.dialog_cancel_save_title)
+                    .setMessage(R.string.dialog_cancel_save_message)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            finish();
+                        }})
+                    .setNegativeButton(android.R.string.no, null).show();
+            return true;
+        }
+
+        if (item.getItemId() == R.id.action_item_save) {
+            saveItem();
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    private void saveItem() {
+
+        TripBookItemData tripBookItemData = new TripBookItemData();
+        // save the image
+        TripBookItem tripBookItem = new TripBookItem(mLocationAddressTextView.getText().toString(), TripBookItem.TYPE_PLACE);
+        tripBookItem = tripBookItemData.add(tripBookItem);
+
+        //TODO add image(s)
+//        TripBookImage tripBookImage = new TripBookImage(mImageFilePath);
+//        if (tripBookImage != null)
+//            tripBookItem.addImage(tripBookImage);
+//
+        //TODO add location
+
+        //        new TripBookItemData().update(tripBookItem);
+
+    }
+
 
     /**
      * Updates fields based on data stored in the bundle.
@@ -311,6 +373,57 @@ public class LocationLookup extends ActionBarActivity implements
             // Reset. Enable the Fetch Address button and stop showing the progress bar.
             mAddressRequested = false;
             updateUIWidgets();
+        }
+    }
+
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    public void showTimePickerDialog(View v) {
+        DialogFragment newFragment = new TimePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "timePicker");
+    }
+
+    public static class TimePickerFragment extends DialogFragment
+            implements TimePickerDialog.OnTimeSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current time as the default values for the picker
+            final Calendar c = Calendar.getInstance();
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            int minute = c.get(Calendar.MINUTE);
+
+            // Create a new instance of TimePickerDialog and return it
+            return new TimePickerDialog(getActivity(), this, hour, minute,
+                    DateFormat.is24HourFormat(getActivity()));
+        }
+
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            mTimePicker.setText(hourOfDay + ":" + minute);
+        }
+    }
+
+    public static class DatePickerFragment extends DialogFragment
+            implements DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            // Create a new instance of DatePickerDialog and return it
+            return new DatePickerDialog(getActivity(), this, year, month, day);
+        }
+
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            // Do something with the date chosen by the user
+            mDatePicker.setText(day + "/" + month + "/" + year);
         }
     }
 }
