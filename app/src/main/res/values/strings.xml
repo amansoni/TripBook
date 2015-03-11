@@ -77,4 +77,10 @@
     <string name="play_services_error">Google Play services is not available.  This application will close.</string>
     <string name="close">Close</string>
     <string name="profile_picture">User\'s profile picture.</string>
+    <string name="label_name">Name</string>
+    <string name="label_date">Date</string>
+    <string name="label_notes">Notes</string>
+    <string name="label_rating">Rating</string>
+    <string name="dialog_cancel_save_message">Do you really want to discard this item?</string>
+    <string name="dialog_cancel_save_title">Discard Item?</string>
 </resources>

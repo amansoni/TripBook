@@ -25,6 +25,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -93,7 +95,7 @@ public class ImageDetailActivity extends FragmentActivity implements OnClickList
         // immersive photo viewing experience
         if (Utils.hasHoneycomb()) {
 //            TODO
-//            final ActionBar actionBar = getActionBar();
+//            final ActionBar actionBar = getSupportActionBar();
 //
 //            // Hide title text and set home as up
 //            actionBar.setDisplayShowTitleEnabled(false);
@@ -115,12 +117,12 @@ public class ImageDetailActivity extends FragmentActivity implements OnClickList
 //            // Start low profile mode and hide ActionBar
 //            mPager.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 //            actionBar.hide();
-        }
-
-        // Set the current item based on the extra passed in to this activity
-        final int extraCurrentItem = getIntent().getIntExtra(EXTRA_IMAGE, -1);
-        if (extraCurrentItem != -1) {
-            mPager.setCurrentItem(extraCurrentItem);
+//        }
+//
+//        // Set the current item based on the extra passed in to this activity
+//        final int extraCurrentItem = getIntent().getIntExtra(EXTRA_IMAGE, -1);
+//        if (extraCurrentItem != -1) {
+//            mPager.setCurrentItem(extraCurrentItem);
         }
     }
 

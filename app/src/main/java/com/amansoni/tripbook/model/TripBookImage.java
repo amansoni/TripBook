@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 
+import com.amansoni.tripbook.util.AsyncTask;
+
 import java.io.ByteArrayOutputStream;
 
 /**
@@ -20,10 +22,10 @@ public class TripBookImage extends TripBookCommon {
         super();
     }
 
-    public TripBookImage(Uri uri) {
+    public TripBookImage(String filePath) {
         super();
-        mFilePath = Uri.parse(mFilePath).toString();
-        Bitmap bmp = BitmapFactory.decodeFile(uri.toString()); //Uri.parse(mFilePath).toString());
+        mFilePath = filePath;
+        Bitmap bmp = BitmapFactory.decodeFile(mFilePath); //Uri.parse(mFilePath).toString());
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
         mImage = stream.toByteArray();
