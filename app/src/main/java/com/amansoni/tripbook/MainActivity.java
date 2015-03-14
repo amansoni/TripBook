@@ -1,6 +1,7 @@
 package com.amansoni.tripbook;
 
 import android.app.Activity;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -155,8 +157,14 @@ public class MainActivity extends ActionBarActivity
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.main, menu);
-            restoreActionBar();
+//            getMenuInflater().inflate(R.menu.main, menu);
+//            restoreActionBar();
+            // Get the SearchView and set the searchable configuration
+//            SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+//            SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+//            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+//            searchView.setIconifiedByDefault(false);
+
             return true;
         }
         return super.onCreateOptionsMenu(menu);
@@ -167,14 +175,21 @@ public class MainActivity extends ActionBarActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case R.id.menu_search:
+                onSearchRequested();
+                return true;
+            default:
+                return false;
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

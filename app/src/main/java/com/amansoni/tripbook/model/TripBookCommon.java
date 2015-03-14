@@ -1,5 +1,7 @@
 package com.amansoni.tripbook.model;
 
+import android.location.Location;
+
 import com.amansoni.tripbook.Utils;
 
 import java.util.Date;
@@ -11,6 +13,7 @@ public abstract class TripBookCommon {
     protected Long mId;
     protected Date mCreatedAt;
     protected boolean isStarred;
+    private Location mLocation;
 
     public TripBookCommon() {
     }
@@ -45,7 +48,24 @@ public abstract class TripBookCommon {
         return isStarred;
     }
 
+    public void setLocation(Location location) {
+        this.mLocation = location;
+    }
+
+    public Location getLocation(){
+        return mLocation;
+    }
+
     public void setStarred(boolean isStarred) {
         this.isStarred = isStarred;
+    }
+
+
+    public Location getmLocation() {
+        return mLocation;
+    }
+
+    public void setmLocation(Location mLocation) {
+        this.mLocation = mLocation;
     }
 }

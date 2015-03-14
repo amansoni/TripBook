@@ -83,4 +83,6 @@
     <string name="label_rating">Rating</string>
     <string name="dialog_cancel_save_message">Do you really want to discard this item?</string>
     <string name="dialog_cancel_save_title">Discard Item?</string>
+    <string name="search_title">Search TripBook</string>
+    <string name="search_hint">enter name or description</string>
 </resources>

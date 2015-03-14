@@ -51,11 +51,14 @@ public class TripBookItemData extends TripBookAbstractData {
                 allColumns, DatabaseHelper.COLUMN_ID + " = " + insertId, null,
                 null, null, null);
         cursor.moveToFirst();
-        TripBookItem TripBookItem = cursorToTripBookItem(cursor);
+        TripBookItem savedItem = cursorToTripBookItem(cursor);
+        if (tripBookCommon.getLocation() != null){
+            //todo save the location
+        }
         cursor.close();
         close();
         mList = null;
-        return TripBookItem;
+        return savedItem;
     }
 
     public TripBookCommon update(TripBookCommon tripBookCommon) {
