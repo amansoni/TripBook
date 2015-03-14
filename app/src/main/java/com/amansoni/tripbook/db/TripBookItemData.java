@@ -21,7 +21,7 @@ public class TripBookItemData extends TripBookAbstractData {
     private static final String TAG = "TripBookItemData";
     private String mItemType = null;
     private String[] allColumns = {DatabaseHelper.COLUMN_ID, DatabaseHelper.COLUMN_ITEM_TITLE, DatabaseHelper.COLUMN_ITEM_TYPE,
-            DatabaseHelper.COLUMN_ITEM_STARRED, DatabaseHelper.COLUMN_CREATED_AT};
+            DatabaseHelper.COLUMN_ITEM_STARRED, DatabaseHelper.COLUMN_END_DATE, DatabaseHelper.COLUMN_CREATED_AT};
     private List<TripBookCommon> mList = null;
     public TripBookItemData() {
         super();
@@ -43,6 +43,7 @@ public class TripBookItemData extends TripBookAbstractData {
         values.put(DatabaseHelper.COLUMN_ITEM_TITLE, tripBookItem.getTitle());
         values.put(DatabaseHelper.COLUMN_ITEM_TYPE, tripBookItem.getItemType());
         values.put(DatabaseHelper.COLUMN_ITEM_STARRED, tripBookItem.isStarred());
+        values.put(DatabaseHelper.COLUMN_END_DATE, tripBookItem.getEndDate().toString());
         values.put(DatabaseHelper.COLUMN_CREATED_AT, tripBookItem.getCreatedAt());
         open();
         long insertId = database.insert(DatabaseHelper.TABLE_NAME_ITEM, null,
@@ -130,7 +131,8 @@ public class TripBookItemData extends TripBookAbstractData {
         TripBookItem.setTitle(cursor.getString(1));
         TripBookItem.setItemType(cursor.getString(2));
         TripBookItem.setStarred((cursor.getInt(3) == 0 ? false : true));
-        TripBookItem.setCreatedAt(cursor.getString(4));
+        TripBookItem.setEndDate(cursor.getString(4));
+        TripBookItem.setCreatedAt(cursor.getString(5));
 //        Log.d(TAG, "cursorToTripBookItem" + TripBookItem.toString());
         return TripBookItem;
     }

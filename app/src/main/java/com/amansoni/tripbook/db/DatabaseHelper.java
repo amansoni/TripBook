@@ -31,6 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ITEM_TITLE = "title";
     public static final String COLUMN_ITEM_TYPE = "item_type";
     public static final String COLUMN_ITEM_STARRED = "starred";
+    public static final String COLUMN_END_DATE = "end_date";
 
     // TABLE_NAME_IMAGES column names
     public static final String COLUMN_IMAGE_THUMBNAIL = "thumbnail";
@@ -54,7 +55,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COLUMN_ITEM_TITLE + " TEXT,"
             + COLUMN_ITEM_TYPE + " TEXT,"
             + COLUMN_ITEM_STARRED + " INTEGER,"
-            + COLUMN_CREATED_AT + " DATETIME" + ")";
+            + COLUMN_CREATED_AT + " DATETIME,"
+            + COLUMN_END_DATE + " DATETIME" + ")";
 
     private static final String CREATE_TABLE_TBIMAGES = "CREATE TABLE " + TABLE_NAME_IMAGES
             + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"

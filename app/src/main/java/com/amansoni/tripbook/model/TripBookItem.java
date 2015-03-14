@@ -64,4 +64,5 @@ public class TripBookItem extends TripBookCommon {
         mTripBookImages.add(tripBookImage);
     }
 
+
 }

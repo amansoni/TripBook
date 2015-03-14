@@ -12,6 +12,7 @@ import java.util.Date;
 public abstract class TripBookCommon {
     protected Long mId;
     protected Date mCreatedAt;
+    protected Date mEndDate;
     protected boolean isStarred;
     private Location mLocation;
 
@@ -60,12 +61,11 @@ public abstract class TripBookCommon {
         this.isStarred = isStarred;
     }
 
-
-    public Location getmLocation() {
-        return mLocation;
+    public void setEndDate(String endDate) {
+        this.mEndDate = Utils.formatDateTime(endDate);
     }
 
-    public void setmLocation(Location mLocation) {
-        this.mLocation = mLocation;
+    public String getEndDate(){
+        return (mEndDate != null ? mEndDate.toString() : "");
     }
 }

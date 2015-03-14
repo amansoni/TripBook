@@ -8,7 +8,7 @@
     <color name="cardview_text_">#AFAFAF</color>
     <color name="floating_button">#29C436</color>
 
-    <color name="navigation_row_selected">#000000</color>
+    <color name="navigation_row_selected">#4199bac4</color>
     <color name="navigation_row">#888888</color>
 
 </resources>

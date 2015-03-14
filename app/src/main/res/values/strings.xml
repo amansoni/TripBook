@@ -2,9 +2,9 @@
     <string name="app_name">TripBook</string>
 
     <!-- navigation drawer items-->
-    <string name="title_trip">Trips</string>
-    <string name="title_place">Places</string>
-    <string name="title_social">Friends</string>
+    <string name="title_trip">Trip</string>
+    <string name="title_place">Place</string>
+    <string name="title_social">Friend</string>
     <string name="title_starred">Starred</string>
     <string name="title_gallery">Gallery</string>
     <string name="title_map">Map</string>
@@ -79,6 +79,8 @@
     <string name="profile_picture">User\'s profile picture.</string>
     <string name="label_name">Name</string>
     <string name="label_date">Date</string>
+    <string name="label_start">Start on</string>
+    <string name="label_end">End on</string>
     <string name="label_notes">Notes</string>
     <string name="label_rating">Rating</string>
     <string name="dialog_cancel_save_message">Do you really want to discard this item?</string>
