@@ -83,6 +83,27 @@
                 <!--android:name="android.support.PARENT_ACTIVITY"-->
                 <!--android:value=".MainActivity" />-->
         </activity>
+        <!-- Searchable -->
+        <activity
+            android:name=".SearchableActivity"
+            android:launchMode="singleTop" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+
+        <!-- Points to searchable activity so the whole app can invoke search. -->
+        <meta-data
+            android:name="android.app.default_searchable"
+            android:value=".SearchableActivity" />
+
         <service
             android:name=".FetchAddressIntentService"
             android:exported="false"/>
