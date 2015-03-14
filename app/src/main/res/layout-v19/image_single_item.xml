@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="@dimen/image_thumbnail_size"
+        android:layout_height="@dimen/image_thumbnail_size"
+        android:id="@+id/thumbnailView"
+        android:layout_gravity="left|top"
+        android:src="@drawable/empty_photo"/>
+
+    <ImageButton
+        android:id="@+id/add_button"
+        android:layout_width="@dimen/small_button_diameter"
+        android:layout_height="@dimen/small_button_diameter"
+        android:layout_gravity="end|bottom"
+        android:layout_marginBottom="@dimen/small_button_margin"
+        android:layout_marginEnd="@dimen/small_button_margin"
+        android:src="@android:drawable/ic_input_add"
+        android:elevation="@dimen/elevation_low"
+        android:tint="@android:color/white"
+        android:background="@drawable/oval"/>
+
+</FrameLayout>

@@ -80,11 +80,15 @@
     <string name="label_name">Name</string>
     <string name="label_date">Date</string>
     <string name="label_start">Start on</string>
+    <string name="label_visited">Visited on</string>
     <string name="label_end">End on</string>
+    <string name="label_location">Address</string>
     <string name="label_notes">Notes</string>
     <string name="label_rating">Rating</string>
     <string name="dialog_cancel_save_message">Do you really want to discard this item?</string>
     <string name="dialog_cancel_save_title">Discard Item?</string>
     <string name="search_title">Search TripBook</string>
     <string name="search_hint">enter name or description</string>
+    <string name="hint_trip_name">A name for the trip (required)</string>
+    <string name="enddate_before_startdate">The end date must be at least the same as the start date</string>
 </resources>

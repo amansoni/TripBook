@@ -23,12 +23,8 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,13 +37,12 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.amansoni.tripbook.db.TripBookItemData;
-import com.amansoni.tripbook.images.GalleryFragment;
 import com.amansoni.tripbook.model.TripBookItem;
 
 import java.util.Calendar;
 import java.util.Date;
 
-public class AddActivity extends ActionBarActivity {
+public class AddPlaceActivity extends ActionBarActivity {
 
     protected static final String TAG = "AddActivity";
 
@@ -56,28 +51,12 @@ public class AddActivity extends ActionBarActivity {
     protected static TextView mEndDatePicker;
     protected static EditText mNotes;
     protected static TextView mCurrentDate;
-    protected static boolean isDirty = false;
-    private TextWatcher textWatcher = new TextWatcher() {
-        @Override
-        public void afterTextChanged(Editable s) {
-            // TODO Auto-generated method stub
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            // TODO Auto-generated method stub
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            isDirty = true;
-        }
-    };
     static java.text.DateFormat dateFormat;
+
     private View.OnTouchListener dateOnTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN){
                 showDatePickerDialog(view);
             }
             return true;
@@ -87,10 +66,8 @@ public class AddActivity extends ActionBarActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add);
+        setContentView(R.layout.activity_add_place);
         mTripName = (EditText) findViewById(R.id.trip_add_name);
-        mTripName.addTextChangedListener(textWatcher);
-        mTripName.setHint(R.string.hint_trip_name);
 
         mStartDatePicker = (TextView) findViewById(R.id.trip_add_start);
         mStartDatePicker.setOnTouchListener(dateOnTouchListener);
@@ -99,19 +76,8 @@ public class AddActivity extends ActionBarActivity {
         mEndDatePicker.setOnTouchListener(dateOnTouchListener);
 
         mNotes = (EditText) findViewById(R.id.trip_add_notes);
-        mNotes.addTextChangedListener(textWatcher);
-
         mCurrentDate = mStartDatePicker;
         dateFormat = DateFormat.getMediumDateFormat(this);
-        isDirty = false;
-
-        Fragment images = new GalleryFragment();
-        // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.trip_images, images)
-//                    .addToBackStack(mTitle.toString())
-                .commit();
     }
 
     @Override
@@ -121,35 +87,29 @@ public class AddActivity extends ActionBarActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(getResources().getString(R.string.add_item_title) + " " + getResources().getString(R.string.title_trip));
+        actionBar.setTitle(getResources().getString(R.string.add_item_title) + " " + getResources().getString(R.string.title_place));
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_cancel) {
-            if (isDirty)
-                new AlertDialog.Builder(this)
-                        .setTitle(R.string.dialog_cancel_save_title)
-                        .setMessage(R.string.dialog_cancel_save_message)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                finish();
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, null).show();
-            else
-                finish();
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.dialog_cancel_save_title)
+                    .setMessage(R.string.dialog_cancel_save_message)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            finish();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, null).show();
             return true;
         }
 
         if (item.getItemId() == R.id.action_item_save) {
-            if (validate()) {
-                saveItem();
-                showToast("Trip saved");
-                finish();
-            }
+            saveItem();
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -161,36 +121,6 @@ public class AddActivity extends ActionBarActivity {
         tripBookItem.setCreatedAt(mStartDatePicker.getText().toString());
         tripBookItem.setEndDate(mEndDatePicker.getText().toString());
         tripBookItem = tripBookItemData.add(tripBookItem);
-    }
-
-    private boolean validate() {
-        if (mTripName.getText().toString().length() == 0) {
-            String message = getResources().getString(R.string.error_field_required);
-            mTripName.setError(message, getResources().getDrawable(R.drawable.ic_action_error));
-            mTripName.requestFocus();
-            return false;
-        }
-        if (mStartDatePicker.getText().toString().length() == 0) {
-            String message = getResources().getString(R.string.error_field_required);
-            mStartDatePicker.setError(message, getResources().getDrawable(R.drawable.ic_action_error));
-            mStartDatePicker.requestFocus();
-            return false;
-        }
-        if (mEndDatePicker.getText().toString().length() == 0) {
-            String message = getResources().getString(R.string.error_field_required);
-            mEndDatePicker.setError(message, getResources().getDrawable(R.drawable.ic_action_error));
-            mEndDatePicker.requestFocus();
-            return false;
-        }
-        long startDate = Date.parse(mStartDatePicker.getText().toString());
-        long endDate = Date.parse(mEndDatePicker.getText().toString());
-        if (endDate < startDate){
-            String message = getResources().getString(R.string.enddate_before_startdate);
-            mEndDatePicker.setError(message, getResources().getDrawable(R.drawable.ic_action_error));
-            mEndDatePicker.requestFocus();
-            return false;
-        }
-        return true;
     }
 
     /**
@@ -207,7 +137,7 @@ public class AddActivity extends ActionBarActivity {
     }
 
     public void showDatePickerDialog(View v) {
-        mCurrentDate = (TextView) v;
+        mCurrentDate = (TextView)v;
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
@@ -251,7 +181,6 @@ public class AddActivity extends ActionBarActivity {
             // Do something with the date chosen by the user
             year = -1900 + year;
             mCurrentDate.setText(dateFormat.format(new Date(year, month, day)));
-            isDirty = true;
             //mCurrentDate.setText(day + "/" + month + "/" + year);
         }
     }

@@ -3,19 +3,23 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <dimen name="image_main_height">200dp</dimen>
+    <dimen name="textarea_height">150dp</dimen>
+
     <!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
          https://developer.android.com/design/patterns/navigation-drawer.html -->
     <dimen name="navigation_drawer_width">260dp</dimen>
 
     <!-- Default list item height -->
+    <dimen name="list_item_card_height">200dp</dimen>
     <dimen name="list_item_height">100dp</dimen>
     <dimen name="list_image_width">40dp</dimen>
     <dimen name="list_image_height">40dp</dimen>
 
     <!--Card padding-->
     <dimen name="seekbar_label_length">70dp</dimen>
-    <dimen name="card_horizontal_margin">1dp</dimen>
-    <dimen name="card_vertical_margin">1dp</dimen>
+    <dimen name="card_horizontal_margin">10dp</dimen>
+    <dimen name="card_vertical_margin">10dp</dimen>
 
     <!-- Item item_view view-->
     <dimen name="detail_image_width">80dp</dimen>
@@ -32,6 +36,9 @@
     <dimen name="elevation_high">4dp</dimen>
     <dimen name="add_button_margin">16dp</dimen>
     <dimen name="round_button_diameter">48px</dimen>
-    <dimen name="image_main_height">200dp</dimen>
-    <dimen name="textarea_height">100dp</dimen>
+
+    <!--Floating button-->
+    <dimen name="small_button_margin">16dp</dimen>
+    <dimen name="small_button_diameter">48px</dimen>
+
 </resources>

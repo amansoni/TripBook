@@ -1,6 +1,7 @@
 package com.amansoni.tripbook;
 
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -82,9 +83,12 @@ public class RecyclerViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.recycler_view_frag, container, false);
         view.setTag(TAG);
+
         FloatingActionButton mFab = (FloatingActionButton)view.findViewById(R.id.fab);
-//        mFab.setBackgroundColor(getResources().getColor(R.color.floating_button));
-        //mFab.setBackground(getResources().getDrawable(R.drawable.oval));;
+        mFab.setBackgroundColor(getResources().getColor(R.color.floating_button));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            mFab.setBackground(getResources().getDrawable(R.drawable.oval));;
+        }
         mFab.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

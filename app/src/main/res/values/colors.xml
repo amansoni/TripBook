@@ -4,8 +4,8 @@
     <color name="ActionBarDark">#1A0C70</color>
     <color name="grid_state_pressed">#1Affffff</color>
     <color name="grid_state_focused">#80000000</color>
-    <color name="cardview_initial_background">#1F0F8A</color>
-    <color name="cardview_text_">#AFAFAF</color>
+    <color name="cardview_initial_background">#4199bac4</color>
+    <color name="cardview_text_">#29C436</color>
     <color name="floating_button">#29C436</color>
 
     <color name="navigation_row_selected">#4199bac4</color>
