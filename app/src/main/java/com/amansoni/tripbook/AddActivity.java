@@ -42,6 +42,7 @@ import android.widget.Toast;
 
 import com.amansoni.tripbook.db.TripBookItemData;
 import com.amansoni.tripbook.images.GalleryFragment;
+import com.amansoni.tripbook.images.ItemGalleryFragment;
 import com.amansoni.tripbook.model.TripBookItem;
 
 import java.util.Calendar;
@@ -105,7 +106,7 @@ public class AddActivity extends ActionBarActivity {
         dateFormat = DateFormat.getMediumDateFormat(this);
         isDirty = false;
 
-        Fragment images = new GalleryFragment();
+        Fragment images = new ItemGalleryFragment();
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
