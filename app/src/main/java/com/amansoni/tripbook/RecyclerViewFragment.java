@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.amansoni.tripbook.db.TripBookItemData;
@@ -84,12 +85,8 @@ public class RecyclerViewFragment extends Fragment {
         View view = inflater.inflate(R.layout.recycler_view_frag, container, false);
         view.setTag(TAG);
 
-        FloatingActionButton mFab = (FloatingActionButton)view.findViewById(R.id.fab);
-        mFab.setBackgroundColor(getResources().getColor(R.color.floating_button));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-            mFab.setBackground(getResources().getDrawable(R.drawable.oval));;
-        }
-        mFab.setOnTouchListener(new View.OnTouchListener() {
+        ImageButton mAddButton = (ImageButton)view.findViewById(R.id.add_button);
+        mAddButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN){
@@ -99,6 +96,21 @@ public class RecyclerViewFragment extends Fragment {
                 return true; // consume the event
             }
         });
+//        FloatingActionButton mFab = (FloatingActionButton)view.findViewById(R.id.fab);
+//        mFab.setBackgroundColor(getResources().getColor(R.color.floating_button));
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+//            mFab.setBackground(getResources().getDrawable(R.drawable.oval));;
+//        }
+//        mFab.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if(event.getAction() == MotionEvent.ACTION_DOWN){
+//                    new AddItemDialogFragment().show(getFragmentManager(), "addnew");
+//                    return true;
+//                }
+//                return true; // consume the event
+//            }
+//        });
 
         // setup RecyclerView and layout managers
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
