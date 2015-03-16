@@ -23,7 +23,7 @@
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="2dp"
             android:clickable="false"
             android:focusable="false"
             android:orientation="horizontal"
@@ -44,7 +44,8 @@
                 android:layout_height="wrap_content"
                 android:text="Birmingham Library Main"
                 android:textAppearance="?android:attr/textAppearanceListItem"
-                android:textColor="@color/cardview_text_" />
+                android:textColor="@color/cardview_text_"
+                android:background="?android:attr/activatedBackgroundIndicator"/>
 
 
         </LinearLayout>

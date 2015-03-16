@@ -11,8 +11,8 @@ import java.util.Date;
  */
 public abstract class TripBookCommon {
     protected Long mId;
-    protected Date mCreatedAt;
-    protected Date mEndDate;
+    protected String mCreatedAt;
+    protected String mEndDate;
     protected boolean isStarred;
     private Location mLocation;
 
@@ -21,7 +21,7 @@ public abstract class TripBookCommon {
 
     public TripBookCommon(Long mId) {
         this.mId = mId;
-        this.mCreatedAt = new Date();
+        //this.mCreatedAt = new Date();
     }
 
     public long getId() {
@@ -37,7 +37,7 @@ public abstract class TripBookCommon {
     }
 
     public void setCreatedAt(String createdAt) {
-        this.mCreatedAt = Utils.formatDateTime(createdAt);
+        this.mCreatedAt = createdAt; //Utils.formatDateTime(createdAt);
     }
 
     public void star() {
@@ -62,7 +62,7 @@ public abstract class TripBookCommon {
     }
 
     public void setEndDate(String endDate) {
-        this.mEndDate = Utils.formatDateTime(endDate);
+        this.mEndDate = endDate; //Utils.formatDateTime(endDate);
     }
 
     public String getEndDate(){

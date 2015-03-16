@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,11 +18,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amansoni.tripbook.db.TripBookImageData;
 import com.amansoni.tripbook.db.TripBookItemData;
+import com.amansoni.tripbook.images.ItemGalleryFragment;
 import com.amansoni.tripbook.model.TripBookImage;
 import com.amansoni.tripbook.model.TripBookItem;
 
@@ -36,7 +39,7 @@ public class ItemViewFragment extends Fragment {
     private static final String TAG = "ItemViewFragment";
     private android.support.v7.widget.ShareActionProvider mShareActionProvider;
     private TripBookItem tripBookItem;
-    private ImageView mImageView;
+    private ListAdapter mListAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,25 +62,46 @@ public class ItemViewFragment extends Fragment {
             Log.d(TAG, "No itemKey passed in bundle args");
         }
         tripBookItem = new TripBookItemData().getItem(args.getLong("itemKey"));
-        // TextView:title
-        ((TextView) view.findViewById(R.id.item_title)).setText(tripBookItem.getTitle());
-        // TextView:description
-        ((TextView) view.findViewById(R.id.item_createdAt)).setText(tripBookItem.getCreatedAt());
-        // ImageView:description
-        mImageView = ((ImageView) view.findViewById(R.id.item_image));
-//        TripBookImage tripBookImage = new TripBookImageData(getActivity()).getItem(3);
-//        mImageView.setImageBitmap(tripBookImage.getThumbnail());
-//        if (tripBookItem.getImage() != null && tripBookItem.getImage().length() > 0) {
-//            mImageView = ((ImageView) view.findViewById(R.id.item_image));
-//            mImageView.setImageURI(Uri.parse(tripBookItem.getImage()));
-//            mImageView.setImageBitmap(Utils.decodeSampledBitmap(Uri.parse(tripBookItem.getImage()).getPath(), 80, 80));
-//            Bitmap bitmap = BitmapFactory.decodeFile(tripBookItem.getImage());
-//            if (bitmap == null){
-//                Log.d(TAG, "Bitmap is null from " + tripBookItem.getImage());
-//            }
-//            mImageView.setImageBitmap(Utils.getResizedBitmap(bitmap, 80, 80));
-//        }
+        TextView tripName =  ((TextView) view.findViewById(R.id.trip_add_name));
+        tripName.setText(tripBookItem.getTitle());
+        ((TextView) view.findViewById(R.id.trip_add_start)).setText(tripBookItem.getCreatedAt());
+        ((TextView) view.findViewById(R.id.trip_add_end)).setText(tripBookItem.getEndDate());
+        TextView tripNotes = ((TextView) view.findViewById(R.id.trip_add_notes));
+        tripNotes.setText(tripBookItem.getDescription());
+
+        if (true) {
+            tripName.setFocusable(false);
+            tripName.setClickable(false);
+            tripNotes.setFocusable(false);
+            tripNotes.setClickable(false);
+        }
+
+        String imagePath = new TripBookImageData().getItem(1).getFilePath();
+        File image = new File(imagePath);
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(),bmOptions);
+        bitmap = Bitmap.createScaledBitmap(bitmap,72,72,true);
+        ImageView mainImage = (ImageView)view.findViewById(R.id.item_main_image);
+        mainImage.setImageBitmap(bitmap);
+
+        replaceListFragment(R.id.trip_view_friends,TripBookItem.TYPE_FRIENDS);
+        replaceListFragment(R.id.trip_view_places,TripBookItem.TYPE_PLACE);
+        replaceListFragment(R.id.trip_view_gallery,TripBookItem.TYPE_GALLERY);
+
         return view;
+    }
+
+    private void replaceListFragment(int horizontalList, String itemType) {
+        Fragment images = new HorizontalListFragment();
+        Bundle listArgs = new Bundle();
+        listArgs.putString("itemType", itemType);
+        images.setArguments(listArgs);
+
+        // update the main content by replacing fragments
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(horizontalList, images)
+                .commit();
     }
 
     @Override
@@ -117,8 +141,9 @@ public class ItemViewFragment extends Fragment {
         shareIntent.setType("image/jpg");
         shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, tripBookItem.getTitle());
         shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, tripBookItem.getCreatedAt());
-        Uri uri = getLocalBitmapUri(mImageView);
-        shareIntent.putExtra(Intent.EXTRA_STREAM, uri.toString());
+//TODO
+//        Uri uri = getLocalBitmapUri(mImageView);
+//        shareIntent.putExtra(Intent.EXTRA_STREAM, uri.toString());
         startActivity(Intent.createChooser(shareIntent, "Share via"));
         return shareIntent;
     }

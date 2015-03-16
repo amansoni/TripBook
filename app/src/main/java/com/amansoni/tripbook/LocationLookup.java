@@ -26,20 +26,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Geocoder;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.format.DateFormat;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
@@ -50,12 +45,8 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.amansoni.tripbook.db.TripBookItemData;
-import com.amansoni.tripbook.model.TripBookCommon;
 import com.amansoni.tripbook.model.TripBookImage;
 import com.amansoni.tripbook.model.TripBookItem;
-import com.amansoni.tripbook.util.ImageCache;
-import com.amansoni.tripbook.util.ImageFetcher;
-import com.amansoni.tripbook.util.ImageWorker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -68,17 +59,16 @@ import java.util.Calendar;
 public class LocationLookup extends ActionBarActivity implements
         ConnectionCallbacks, OnConnectionFailedListener {
 
+    public static final String IMAGE_URI = "image-file-path";
     protected static final String TAG = "LocationLookup";
-
     protected static final String ADDRESS_REQUESTED_KEY = "address-request-pending";
     protected static final String LOCATION_ADDRESS_KEY = "location-address";
-    public static final String IMAGE_URI = "image-file-path" ;
-//     * Provides the entry point to Google Play services.
+    protected static EditText mDatePicker;
+    protected static EditText mTimePicker;
+    //     * Provides the entry point to Google Play services.
     protected GoogleApiClient mGoogleApiClient;
-
-//     * Represents a geographical location.
+    //     * Represents a geographical location.
     protected Location mLastLocation;
-
     /**
      * Tracks whether the user has requested an address. Becomes true when the user requests an
      * address and false when the address (or an error message) is delivered.
@@ -88,25 +78,18 @@ public class LocationLookup extends ActionBarActivity implements
      * GoogleApiClient connects.
      */
     protected boolean mAddressRequested;
-
-//     * The formatted location address.
+    //     * The formatted location address.
     protected String mAddressOutput;
-//     * Displays the location address.
+    //     * Displays the location address.
     protected EditText mLocationAddressTextView;
-//     * Visible while the address is being fetched.
+    //     * Visible while the address is being fetched.
     ProgressBar mProgressBar;
-
-//     * Receiver registered with this activity to get the response from FetchAddressIntentService.
-    private AddressResultReceiver mResultReceiver;
-
-//     * The image view to display the image
+    //     * The image view to display the image
     ImageView mImageView;
-//     * Image file path string
+    //     * Receiver registered with this activity to get the response from FetchAddressIntentService.
+    private AddressResultReceiver mResultReceiver;
+    //     * Image file path string
     private String mImageFilePath;
-
-    protected static EditText mDatePicker;
-    protected static EditText mTimePicker;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -118,8 +101,8 @@ public class LocationLookup extends ActionBarActivity implements
         mLocationAddressTextView = (EditText) findViewById(R.id.location_address_view);
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
         mImageView = (ImageView) findViewById(R.id.imageView);
-        mDatePicker = (EditText)  findViewById(R.id.dateText);
-        mTimePicker = (EditText)  findViewById(R.id.timeText);
+        mDatePicker = (EditText) findViewById(R.id.dateText);
+        mTimePicker = (EditText) findViewById(R.id.timeText);
 //        mFetchAddressButton = (Button) findViewById(R.id.fetch_address_button);
 
         // Set defaults, then update using values stored in the Bundle.
@@ -145,7 +128,7 @@ public class LocationLookup extends ActionBarActivity implements
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("Add new place");
+        actionBar.setTitle("Add new photo");
         return true;
     }
 
@@ -159,7 +142,8 @@ public class LocationLookup extends ActionBarActivity implements
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             finish();
-                        }})
+                        }
+                    })
                     .setNegativeButton(android.R.string.no, null).show();
             return true;
         }
@@ -171,6 +155,7 @@ public class LocationLookup extends ActionBarActivity implements
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void saveItem() {
 
         TripBookItemData tripBookItemData = new TripBookItemData();
@@ -181,12 +166,11 @@ public class LocationLookup extends ActionBarActivity implements
         tripBookItem = tripBookItemData.add(tripBookItem);
 
         //TODO add image(s)
-//        TripBookImage tripBookImage = new TripBookImage(mImageFilePath);
-//        if (tripBookImage != null)
-//            tripBookItem.addImage(tripBookImage);
-//
+        TripBookImage tripBookImage = new TripBookImage(mImageFilePath);
+        if (tripBookImage != null)
+            tripBookItem.addImage(tripBookImage);
 
-        //        new TripBookItemData().update(tripBookItem);
+        new TripBookItemData().update(tripBookItem);
 
     }
 
@@ -313,7 +297,7 @@ public class LocationLookup extends ActionBarActivity implements
     protected void showImage() {
         File imgFile = new File(mImageFilePath);
 
-        if(imgFile.exists()){
+        if (imgFile.exists()) {
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             mImageView.setImageBitmap(myBitmap);
         }
@@ -346,35 +330,6 @@ public class LocationLookup extends ActionBarActivity implements
         // Save the address string.
         savedInstanceState.putString(LOCATION_ADDRESS_KEY, mAddressOutput);
         super.onSaveInstanceState(savedInstanceState);
-    }
-
-    /**
-     * Receiver for data sent from FetchAddressIntentService.
-     */
-    class AddressResultReceiver extends ResultReceiver {
-        public AddressResultReceiver(Handler handler) {
-            super(handler);
-        }
-
-        /**
-         * Receives data sent from FetchAddressIntentService and updates the UI in MainActivity.
-         */
-        @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-
-            // Display the address string or an error message sent from the intent service.
-            mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
-            displayAddressOutput();
-
-            // Show a toast message if an address was found.
-            if (resultCode == Constants.SUCCESS_RESULT) {
-                showToast(getString(R.string.address_found));
-            }
-
-            // Reset. Enable the Fetch Address button and stop showing the progress bar.
-            mAddressRequested = false;
-            updateUIWidgets();
-        }
     }
 
     public void showDatePickerDialog(View v) {
@@ -425,6 +380,35 @@ public class LocationLookup extends ActionBarActivity implements
         public void onDateSet(DatePicker view, int year, int month, int day) {
             // Do something with the date chosen by the user
             mDatePicker.setText(day + "/" + month + "/" + year);
+        }
+    }
+
+    /**
+     * Receiver for data sent from FetchAddressIntentService.
+     */
+    class AddressResultReceiver extends ResultReceiver {
+        public AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        /**
+         * Receives data sent from FetchAddressIntentService and updates the UI in MainActivity.
+         */
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+
+            // Display the address string or an error message sent from the intent service.
+            mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
+            displayAddressOutput();
+
+            // Show a toast message if an address was found.
+            if (resultCode == Constants.SUCCESS_RESULT) {
+                showToast(getString(R.string.address_found));
+            }
+
+            // Reset. Enable the Fetch Address button and stop showing the progress bar.
+            mAddressRequested = false;
+            updateUIWidgets();
         }
     }
 }

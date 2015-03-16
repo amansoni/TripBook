@@ -1,5 +1,8 @@
 package com.amansoni.tripbook;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -61,6 +64,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         listViewHolder.mItem = (TripBookItem) listViewHolder.mData.getAllRows().get(position);
         listViewHolder.listName.setText(listViewHolder.mItem.getTitle());
         listViewHolder.listDescription.setText(listViewHolder.mItem.getCreatedAt());
+//        Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(listViewHolder.mItem.getImage()), 48, 48);
+//        listViewHolder.listImage.setImageBitmap(ThumbImage);
+
         if (listViewHolder.mItem.isStarred()){
             Log.d(TAG, "Starred: " + position + " yes");
             listViewHolder.imageStar.setImageResource(R.drawable.ic_action_important);
@@ -69,8 +75,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             Log.d(TAG, "Starred: " + position + " no");
             listViewHolder.imageStar.setImageResource(R.drawable.ic_action_not_important);
         }
-//        Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(tbImage.getImage()), 48, 48);
-//        viewHolder.getListImage().setImageBitmap(ThumbImage);
     }
 
     @Override
@@ -85,7 +89,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             implements View.OnClickListener, View.OnLongClickListener, View.OnCreateContextMenuListener {
         public final TextView listName;
         private final TextView listDescription;
-        private final ImageView listImage;
+        public final ImageView listImage;
         public final ImageView imageStar;
         private final FragmentManager fragmentManager;
         private final TripBookItemData mData;

@@ -16,6 +16,7 @@ public class TripBookItem extends TripBookCommon {
     List<TripBookImage> mTripBookImages;
     // private fields
     private String mTitle;
+    private String mDescription;
     private String mItemType;
 
     public TripBookItem() {
@@ -50,6 +51,13 @@ public class TripBookItem extends TripBookCommon {
 
     public void setTitle(String title) {
         this.mTitle = title;
+    }
+    public String getDescription() {
+        return mDescription;
+    }
+
+    public void setDescription(String description) {
+        this.mDescription = description;
     }
 
     public List<TripBookImage> getTripBookImages() {

@@ -161,6 +161,7 @@ public class AddActivity extends ActionBarActivity {
         TripBookItem tripBookItem = new TripBookItem(mTripName.getText().toString(), TripBookItem.TYPE_TRIP);
         tripBookItem.setCreatedAt(mStartDatePicker.getText().toString());
         tripBookItem.setEndDate(mEndDatePicker.getText().toString());
+        tripBookItem.setDescription(mNotes.getText().toString());
         tripBookItem = tripBookItemData.add(tripBookItem);
     }
 

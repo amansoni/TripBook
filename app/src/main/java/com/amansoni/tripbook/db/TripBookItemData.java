@@ -20,8 +20,11 @@ import java.util.List;
 public class TripBookItemData extends TripBookAbstractData {
     private static final String TAG = "TripBookItemData";
     private String mItemType = null;
-    private String[] allColumns = {DatabaseHelper.COLUMN_ID, DatabaseHelper.COLUMN_ITEM_TITLE, DatabaseHelper.COLUMN_ITEM_TYPE,
-            DatabaseHelper.COLUMN_ITEM_STARRED, DatabaseHelper.COLUMN_END_DATE, DatabaseHelper.COLUMN_CREATED_AT};
+    private String[] allColumns = {DatabaseHelper.COLUMN_ID,
+            DatabaseHelper.COLUMN_ITEM_TITLE, DatabaseHelper.COLUMN_ITEM_TYPE,
+            DatabaseHelper.COLUMN_ITEM_DESCRIPTION,
+            DatabaseHelper.COLUMN_ITEM_STARRED,
+            DatabaseHelper.COLUMN_END_DATE, DatabaseHelper.COLUMN_CREATED_AT};
     private List<TripBookCommon> mList = null;
     public TripBookItemData() {
         super();
@@ -41,6 +44,7 @@ public class TripBookItemData extends TripBookAbstractData {
         TripBookItem tripBookItem = (TripBookItem) tripBookCommon;
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_ITEM_TITLE, tripBookItem.getTitle());
+        values.put(DatabaseHelper.COLUMN_ITEM_DESCRIPTION, tripBookItem.getDescription());
         values.put(DatabaseHelper.COLUMN_ITEM_TYPE, tripBookItem.getItemType());
         values.put(DatabaseHelper.COLUMN_ITEM_STARRED, tripBookItem.isStarred());
         values.put(DatabaseHelper.COLUMN_END_DATE, tripBookItem.getEndDate().toString());
@@ -74,6 +78,7 @@ public class TripBookItemData extends TripBookAbstractData {
         }
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_ITEM_TITLE, tripBookItem.getTitle());
+        values.put(DatabaseHelper.COLUMN_ITEM_DESCRIPTION, tripBookItem.getDescription());
         values.put(DatabaseHelper.COLUMN_ITEM_TYPE, tripBookItem.getItemType());
         values.put(DatabaseHelper.COLUMN_ITEM_STARRED, tripBookItem.isStarred());
         open();
@@ -130,9 +135,10 @@ public class TripBookItemData extends TripBookAbstractData {
         TripBookItem.setId(cursor.getLong(0));
         TripBookItem.setTitle(cursor.getString(1));
         TripBookItem.setItemType(cursor.getString(2));
-        TripBookItem.setStarred((cursor.getInt(3) == 0 ? false : true));
-        TripBookItem.setEndDate(cursor.getString(4));
-        TripBookItem.setCreatedAt(cursor.getString(5));
+        TripBookItem.setDescription(cursor.getString(3));
+        TripBookItem.setStarred((cursor.getInt(4) == 0 ? false : true));
+        TripBookItem.setEndDate(cursor.getString(6));
+        TripBookItem.setCreatedAt(cursor.getString(6));
 //        Log.d(TAG, "cursorToTripBookItem" + TripBookItem.toString());
         return TripBookItem;
     }

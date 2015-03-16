@@ -1,11 +1,10 @@
 package com.amansoni.tripbook;
 
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -22,20 +21,19 @@ import android.widget.Toast;
 import com.amansoni.tripbook.db.TripBookItemData;
 import com.amansoni.tripbook.model.TripBookItem;
 import com.amansoni.tripbook.recycler.AddItemDialogFragment;
-import com.shamanland.fab.FloatingActionButton;
 
 /**
  * RecyclerView list fragment. Adds options to change the list view style
  */
-public class RecyclerViewFragment extends Fragment {
+public class HorizontalListFragment extends Fragment {
 
-    private static final String TAG = "RecyclerViewFragment";
+    private static final String TAG = "HorizontalListFragment";
     private static final String KEY_LAYOUT_MANAGER = "layoutManager";
     private static final int GRID_COLUMNS = 2;
     private static final int STAGGERED_ROWS = 4;
     protected LayoutManagerType mCurrentLayoutManagerType;
     protected RecyclerView mRecyclerView;
-    protected RecyclerViewAdapter mAdapter;
+    protected HorizontalListAdapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
     private String mItemType = null;
 //    private String mItemType = getString( R.string.title_trip);
@@ -50,62 +48,35 @@ public class RecyclerViewFragment extends Fragment {
             mItemType = args.getString("itemType");
             Log.d(TAG, "Now showing" + mItemType);
         }
-        setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.listview, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_view_grid) {
-            setRecyclerViewLayoutManager(LayoutManagerType.GRID_LAYOUT_MANAGER);
-            return true;
-        }
-
-        if (item.getItemId() == R.id.action_view_list) {
-            setRecyclerViewLayoutManager(LayoutManagerType.LINEAR_LAYOUT_MANAGER);
-            return true;
-        }
-
-        if (item.getItemId() == R.id.action_view_staggered) {
-            setRecyclerViewLayoutManager(LayoutManagerType.STAGGERED_LAYOUT_MANAGER);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.recycler_view_frag, container, false);
+        View view = inflater.inflate(R.layout.fragment_horizontal_list, container, false);
         view.setTag(TAG);
 
-        ImageButton mAddButton = (ImageButton)view.findViewById(R.id.add_button);
-        mAddButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
-                    new AddItemDialogFragment().show(getFragmentManager(), "addnew");
-                    return true;
-                }
-                return true; // consume the event
-            }
-        });
+//        ImageButton mAddButton = (ImageButton)view.findViewById(R.id.add_button);
+//        mAddButton.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if(event.getAction() == MotionEvent.ACTION_DOWN){
+//                    new AddItemDialogFragment().show(getFragmentManager(), "addnew");
+//                    return true;
+//                }
+//                return true; // consume the event
+//            }
+//        });
 
         // setup RecyclerView and layout managers
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        mLayoutManager = new LinearLayoutManager(getActivity());
+        mLayoutManager = new LinearLayoutManager(getActivity(), OrientationHelper.HORIZONTAL, false);
         mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
-
-        if (savedInstanceState != null) {
-            mCurrentLayoutManagerType = (LayoutManagerType) savedInstanceState
-                    .getSerializable(KEY_LAYOUT_MANAGER);
-        }
+//
+//        if (savedInstanceState != null) {
+//            mCurrentLayoutManagerType = (LayoutManagerType) savedInstanceState
+//                    .getSerializable(KEY_LAYOUT_MANAGER);
+//        }
 
         setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
 
@@ -116,9 +87,9 @@ public class RecyclerViewFragment extends Fragment {
         } else {
             ds = new TripBookItemData(mItemType);
         }
-        mAdapter = new RecyclerViewAdapter(getActivity(), ds);
+        mAdapter = new HorizontalListAdapter(getActivity(), ds);
         mRecyclerView.setAdapter(mAdapter);
-        registerForContextMenu(container);
+//        registerForContextMenu(container);
 
 //        mRecyclerView.addOnItemTouchListener(
 //                new RecyclerItemClickListener((Context) getActivity(),mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
@@ -142,28 +113,11 @@ public class RecyclerViewFragment extends Fragment {
         int scrollPosition = 0;
 
         // If a layout manager has already been set, get current scroll position.
-//        if (mRecyclerView.getLayoutManager() != null && mCurrentLayoutManagerType == LayoutManagerType.LINEAR_LAYOUT_MANAGER) {
-////            scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
-////                    .findFirstCompletelyVisibleItemPosition();
-//        }
-
-        switch (layoutManagerType) {
-            case GRID_LAYOUT_MANAGER:
-                mLayoutManager = new GridLayoutManager(getActivity(), GRID_COLUMNS);
-                mCurrentLayoutManagerType = LayoutManagerType.GRID_LAYOUT_MANAGER;
-                break;
-            case LINEAR_LAYOUT_MANAGER:
-                mLayoutManager = new LinearLayoutManager(getActivity());
-                mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
-                break;
-            case STAGGERED_LAYOUT_MANAGER:
-                mLayoutManager = new StaggeredGridLayoutManager(STAGGERED_ROWS, StaggeredGridLayoutManager.HORIZONTAL);
-                mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
-                break;
-            default:
-                mLayoutManager = new LinearLayoutManager(getActivity());
-                mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+        if (mRecyclerView.getLayoutManager() != null && mCurrentLayoutManagerType == LayoutManagerType.LINEAR_LAYOUT_MANAGER) {
+//            scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
+//                    .findFirstCompletelyVisibleItemPosition();
         }
+        mLayoutManager = new LinearLayoutManager(getActivity(), OrientationHelper.HORIZONTAL, false);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.scrollToPosition(scrollPosition);
