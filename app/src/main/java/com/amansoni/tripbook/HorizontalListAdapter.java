@@ -144,7 +144,11 @@ public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAd
                 itemView.setBackgroundColor(Color.RED);
                 selectedItems.add(tripBookItem);
             } else {
-                selectedItems.remove(tripBookItem);
+                for (int i=0; i< selectedItems.size(); i++){
+                    if (selectedItems.get(i).getId() == tripBookItem.getId()){
+                        selectedItems.remove(i);
+                    }
+                }
                 itemView.setBackgroundColor(Color.CYAN);
             }
         }
