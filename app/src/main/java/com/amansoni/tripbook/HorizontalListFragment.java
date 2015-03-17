@@ -136,10 +136,10 @@ public class HorizontalListFragment extends Fragment {
                     mAdapter.notify();
                 }
 //                do your stuff
-                Toast.makeText(getActivity(), "star " + position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "star " + position, Toast.LENGTH_SHORT).show();
                 break;
             case 2:
-                Toast.makeText(getActivity(), "star2 " + position, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "star2 " + position, Toast.LENGTH_SHORT).show();
                 // do your stuff
                 break;
         }

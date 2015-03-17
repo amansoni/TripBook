@@ -58,6 +58,9 @@ public class TripBookItemData extends TripBookAbstractData {
         mLinkedItemId = linkedItemId;
     }
 
+    public String getItemType(){
+        return mItemType;
+    }
     public TripBookItem add(TripBookCommon tripBookCommon) {
         TripBookItem tripBookItem = (TripBookItem) tripBookCommon;
         ContentValues values = new ContentValues();
@@ -93,7 +96,8 @@ public class TripBookItemData extends TripBookAbstractData {
     public TripBookCommon update(TripBookCommon tripBookCommon) {
         TripBookItem tripBookItem = (TripBookItem) tripBookCommon;
         TripBookLinkData tripBookLinkData = new TripBookLinkData();
-        for (TripBookItem link : ((TripBookItem) tripBookCommon).getLinks()) {
+        tripBookLinkData.removeLinks(tripBookCommon);
+        for (TripBookCommon link : ((TripBookItem) tripBookCommon).getLinks()) {
             TripBookLink tripBookLink = new TripBookLink(tripBookCommon, link);
             tripBookLinkData.add(tripBookLink);
         }

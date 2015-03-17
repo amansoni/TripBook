@@ -17,7 +17,7 @@ public class TripBookItem extends TripBookCommon {
     public static final String TYPE_GALLERY = "gallery";
     public static final String TYPE_STARRED = "starred";
     public static final String TYPE_FRIENDS = "friend";
-    List<TripBookItem> mLinks;
+    List<TripBookCommon> mLinks;
     // private fields
     private String mTitle;
     private String mDescription;
@@ -73,15 +73,15 @@ public class TripBookItem extends TripBookCommon {
         mThumbNail = thumbNail;
     }
 
-    public List<TripBookItem> getLinks() {
+    public List<TripBookCommon> getLinks() {
         return mLinks;
     }
 
-    public void setLinks(List<TripBookItem> links) {
+    public void setLinks(List<TripBookCommon> links) {
         mLinks = links;
     }
 
-    public void addLink(TripBookItem linkItem) {
+    public void addLink(TripBookCommon linkItem) {
         mLinks.add(linkItem);
     }
 

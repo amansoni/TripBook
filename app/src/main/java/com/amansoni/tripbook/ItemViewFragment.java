@@ -104,7 +104,7 @@ public class ItemViewFragment extends Fragment {
         Bundle listArgs = new Bundle();
         listArgs.putLong("itemId", tripBookItem.getId());
         listArgs.putString("itemType", itemType);
-        listArgs.putBoolean("editable", mEditable);
+        listArgs.putBoolean("editable", false);
         images.setArguments(listArgs);
 
         // update the main content by replacing fragments

@@ -5,7 +5,6 @@ package com.amansoni.tripbook.db;
  */
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
@@ -44,7 +43,7 @@ public class TripBookLinkData extends TripBookAbstractData {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_LINKS_PARENTID, tripBookLink.getParent().getId());
         values.put(DatabaseHelper.COLUMN_LINKS_CHILDID, tripBookLink.getChild().getId());
-        values.put(DatabaseHelper.COLUMN_ITEM_TYPE, ((TripBookItem)tripBookLink.getChild()).getItemType());
+        values.put(DatabaseHelper.COLUMN_ITEM_TYPE, ((TripBookItem) tripBookLink.getChild()).getItemType());
         open();
         long insertId = database.insert(DatabaseHelper.TABLE_NAME_LINKS, null,
                 values);
@@ -125,35 +124,14 @@ public class TripBookLinkData extends TripBookAbstractData {
         return tripBookLink;
     }
 
-    public void createTestData() {
-        add(new TripBookItem("Birmingham 2015", TripBookItem.TYPE_TRIP));
-        add(new TripBookItem("Lake District", TripBookItem.TYPE_TRIP));
-        add(new TripBookItem("Peak District Camping", TripBookItem.TYPE_TRIP));
-        add(new TripBookItem("London Attractions", TripBookItem.TYPE_TRIP));
-        add(new TripBookItem("Birmingham 2014", TripBookItem.TYPE_TRIP));
-        add(new TripBookItem("South Africa Summer 2014", TripBookItem.TYPE_TRIP));
-        add(new TripBookItem("London SuperTechies", TripBookItem.TYPE_TRIP));
-        add(new TripBookItem("Cheltenham Weekend away", TripBookItem.TYPE_TRIP));
-        add(new TripBookItem("Cannon Hill Park", TripBookItem.TYPE_TRIP));
+    public void removeLinks(TripBookCommon tripBookCommon) {
+        long id = tripBookCommon.getId();
+        System.out.println("TripBookLink data deleted for item id: " + id);
+        final String sql = "DELETE FROM " + DatabaseHelper.TABLE_NAME_LINKS
+                + " WHERE " + DatabaseHelper.COLUMN_LINKS_PARENTID + " = ?";
+        open();
+        database.execSQL(sql, new String[]{String.valueOf(id)});
+        close();
     }
+
 }
-//    add("test 1 ", "desc 1", null, null);
-//    add("test 2 ", "desc 2", null, null);
-//    add("test 3 ", "desc 3", null, null);
-//    add("test 4 ", "desc 4", null, null);
-//    add("test 11 ", "desc 1", null, null);
-//    add("test 12 ", "desc 2", null, null);
-//    add("test 13 ", "desc 3", null, null);
-//    add("test 14 ", "desc 4", null, null);
-//    add("test 21 ", "desc 1", null, null);
-//    add("test 22 ", "desc 2", null, null);
-//    add("test 23 ", "desc 3", null, null);
-//    add("test 24 ", "desc 4", null, null);
-//    add("test 31 ", "desc 1", null, null);
-//    add("test 32 ", "desc 2", null, null);
-//    add("test 33 ", "desc 3", null, null);
-//    add("test 34 ", "desc 4", null, null);
-//    add("test 41 ", "desc 1", null, null);
-//    add("test 42 ", "desc 2", null, null);
-//    add("test 43 ", "desc 3", null, null);
-//    add("test 44 ", "desc 4", null, null);

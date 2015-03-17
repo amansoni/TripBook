@@ -89,6 +89,6 @@
     <string name="dialog_cancel_save_title">Discard Item?</string>
     <string name="search_title">Search TripBook</string>
     <string name="search_hint">enter name or description</string>
-    <string name="hint_trip_name">A name for the trip (required)</string>
+    <string name="hint_trip_name">A name is required</string>
     <string name="enddate_before_startdate">The end date must be at least the same as the start date</string>
 </resources>

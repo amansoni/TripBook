@@ -24,30 +24,41 @@ import java.util.ArrayList;
  * Provide views to RecyclerView with data from mDataSet.
  */
 public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAdapter.ListViewHolder> {
-    private static final String TAG = "RecyclerViewAdapter";
-    private static int mPosition = -1;
-    protected final FragmentActivity mActivity;
-    private ArrayList<TripBookCommon> tripBookItems;
-    ArrayList<TripBookItem> selectedItems;
-    private static long mItemId = 0;
+    private static final String TAG = "HorizontalListAdapter";
     protected static boolean mEditable = false;
+    private static int mPosition = -1;
+    private static long mItemId = 0;
+    protected final FragmentActivity mActivity;
+    ArrayList<TripBookCommon> selectedItems;
+    private ArrayList<TripBookCommon> tripBookItems;
 
     /**
      * Initialize the dataset of the Adapter.
-     * */
+     */
     public HorizontalListAdapter(FragmentActivity activity, TripBookItemData dataSet, long itemId, boolean editable) {
         mActivity = activity;
-        tripBookItems = (ArrayList<TripBookCommon>) dataSet.getAllRows();
-        selectedItems = new ArrayList<>();
         mItemId = itemId;
         mEditable = editable;
+        if (!editable) {
+            tripBookItems = (ArrayList<TripBookCommon>) dataSet.getAllRows();
+            selectedItems = new ArrayList<>();
+        } else {
+            // get all rows for new items with no selected
+            if (itemId == 0){
+                selectedItems = new ArrayList<>();
+                tripBookItems= (ArrayList<TripBookCommon>) dataSet.getAllRows();
+            }else {
+                selectedItems = (ArrayList<TripBookCommon>) dataSet.getAllRows();
+                tripBookItems = (ArrayList<TripBookCommon>) new TripBookItemData(dataSet.getItemType()).getAllRows();
+            }
+        }
     }
 
     public static int getPosition() {
         return mPosition;
     }
 
-    public ArrayList<TripBookItem> getSelectedItems(){
+    public ArrayList<TripBookCommon> getSelectedItems() {
         return selectedItems;
     }
 
@@ -66,7 +77,21 @@ public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAd
         listViewHolder.itemName.setText(listViewHolder.tripBookItem.getTitle());
         ImageWrapper.loadImage(mActivity, listViewHolder.itemImage, Images.imageThumbUrls[position]);
 
-        if(listViewHolder.isSelected)
+        for (TripBookCommon item : selectedItems){
+            if (item.getId() == listViewHolder.tripBookItem.getId()){
+                Log.d(TAG, "In selectedItems" + listViewHolder.tripBookItem.getTitle());
+                listViewHolder.isSelected = true;
+            }
+        }
+        if (selectedItems.contains(listViewHolder.tripBookItem)) {
+            Log.d(TAG, "In selectedItems" + listViewHolder.tripBookItem.getTitle());
+            listViewHolder.isSelected = true;
+        } else {
+            Log.d(TAG, "Not selectedItems" + listViewHolder.tripBookItem.getTitle());
+        }
+
+
+        if (listViewHolder.isSelected)
             listViewHolder.itemView.setBackgroundColor(Color.RED);
         else {
             listViewHolder.itemView.setBackgroundColor(Color.CYAN);
@@ -87,10 +112,10 @@ public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAd
         public final ImageView itemImage;
         public TripBookItem tripBookItem;
         public boolean isSelected;
-        public ArrayList<TripBookItem> selectedItems;
+        public ArrayList<TripBookCommon> selectedItems;
 
 
-        public ListViewHolder(View view, ArrayList<TripBookItem> selectedItems) {
+        public ListViewHolder(View view, ArrayList<TripBookCommon> selectedItems) {
             super(view);
             itemName = (TextView) view.findViewById(R.id.item_title);
             itemImage = (ImageView) view.findViewById(R.id.item_image);
@@ -111,16 +136,16 @@ public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAd
         @Override
         public void onClick(View view) {
             Toast.makeText(view.getContext(), "position = " + getPosition() + isSelected, Toast.LENGTH_SHORT).show();
-            isSelected = !isSelected;
 
             if (mEditable) {
-                if (isSelected) {
-                    itemView.setBackgroundColor(Color.RED);
-                    selectedItems.add(tripBookItem);
-                } else {
-                    selectedItems.remove(tripBookItem);
-                    itemView.setBackgroundColor(Color.CYAN);
-                }
+                isSelected = !isSelected;
+            }
+            if (isSelected) {
+                itemView.setBackgroundColor(Color.RED);
+                selectedItems.add(tripBookItem);
+            } else {
+                selectedItems.remove(tripBookItem);
+                itemView.setBackgroundColor(Color.CYAN);
             }
         }
 

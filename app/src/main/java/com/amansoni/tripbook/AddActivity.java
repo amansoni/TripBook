@@ -23,7 +23,6 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -41,8 +40,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.amansoni.tripbook.db.TripBookItemData;
-import com.amansoni.tripbook.images.GalleryFragment;
-import com.amansoni.tripbook.images.ItemGalleryFragment;
+import com.amansoni.tripbook.model.TripBookCommon;
 import com.amansoni.tripbook.model.TripBookItem;
 
 import java.util.ArrayList;
@@ -53,17 +51,13 @@ public class AddActivity extends ActionBarActivity {
 
     protected static final String TAG = "AddActivity";
 
+    protected static TripBookItem mTripbookItem;
     protected static EditText mTripName;
     protected static TextView mStartDatePicker;
     protected static TextView mEndDatePicker;
     protected static EditText mNotes;
     protected static TextView mCurrentDate;
     protected static boolean isDirty = false;
-    protected static ArrayList<TripBookItem> selectedItems = new ArrayList<>();
-    protected static HorizontalListFragment fragmentFriends = new HorizontalListFragment();;
-    protected static HorizontalListFragment fragmentImages = new HorizontalListFragment();;
-    protected static HorizontalListFragment fragmentPlace = new HorizontalListFragment();;
-
     private TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void afterTextChanged(Editable s) {
@@ -80,6 +74,14 @@ public class AddActivity extends ActionBarActivity {
             isDirty = true;
         }
     };
+    protected static String mItemType;
+    protected static ArrayList<TripBookItem> selectedItems;
+    ;
+    protected static HorizontalListFragment fragmentFriends;
+    ;
+    protected static HorizontalListFragment fragmentImages;
+    ;
+    protected static HorizontalListFragment fragmentPlace;
     static java.text.DateFormat dateFormat;
     private View.OnTouchListener dateOnTouchListener = new View.OnTouchListener() {
         @Override
@@ -92,9 +94,18 @@ public class AddActivity extends ActionBarActivity {
     };
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+//        getSupportFragmentManager().beginTransaction().remove(fragmentFriends).commit();
+//        getSupportFragmentManager().beginTransaction().remove(fragmentImages).commit();
+//        getSupportFragmentManager().beginTransaction().remove(fragmentPlace).commit();
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
+
         mTripName = (EditText) findViewById(R.id.trip_add_name);
         mTripName.addTextChangedListener(textWatcher);
         mTripName.setHint(R.string.hint_trip_name);
@@ -105,23 +116,45 @@ public class AddActivity extends ActionBarActivity {
         mStartDatePicker.setOnTouchListener(dateOnTouchListener);
 
         mEndDatePicker = (TextView) findViewById(R.id.trip_add_end);
-        mEndDatePicker .setText(dateFormat.format(new Date()));
+        mEndDatePicker.setText(dateFormat.format(new Date()));
         mEndDatePicker.setOnTouchListener(dateOnTouchListener);
 
         mNotes = (EditText) findViewById(R.id.trip_add_notes);
         mNotes.addTextChangedListener(textWatcher);
 
         mCurrentDate = mStartDatePicker;
-        isDirty = false;
+        // check it its and edit
+        if (getIntent().getExtras() != null) {
+            if (getIntent().getExtras().containsKey("itemKey")) {
+                long itemKey = getIntent().getExtras().getLong("itemKey");
+                mTripbookItem = new TripBookItemData().getItem(itemKey);
+                mTripName.setText(mTripbookItem.getTitle());
+                mStartDatePicker.setText(mTripbookItem.getCreatedAt());
+                mEndDatePicker.setText(mTripbookItem.getEndDate());
+                mNotes.setText(mTripbookItem.getDescription());
+            }
+            if (getIntent().getExtras().containsKey("itemType")) {
+                mItemType = getIntent().getExtras().getString("itemType");
+            } else {
+                mItemType = TripBookItem.TYPE_TRIP;
+            }
+        }
 
+        selectedItems = new ArrayList<>();
+        fragmentFriends = new HorizontalListFragment();
         replaceListFragment(fragmentFriends, R.id.trip_view_friends, TripBookItem.TYPE_FRIENDS);
+        fragmentPlace = new HorizontalListFragment();
         replaceListFragment(fragmentPlace, R.id.trip_view_places, TripBookItem.TYPE_PLACE);
+        fragmentImages = new HorizontalListFragment();
         replaceListFragment(fragmentImages, R.id.trip_view_gallery, TripBookItem.TYPE_GALLERY);
+        isDirty = false;
 
     }
 
     private void replaceListFragment(HorizontalListFragment fragment, int horizontalList, String itemType) {
         Bundle listArgs = new Bundle();
+        if (mTripbookItem != null)
+            listArgs.putLong("itemId", mTripbookItem.getId());
         listArgs.putString("itemType", itemType);
         listArgs.putBoolean("editable", true);
         fragment.setArguments(listArgs);
@@ -140,7 +173,7 @@ public class AddActivity extends ActionBarActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(getResources().getString(R.string.add_item_title) + " " + getResources().getString(R.string.title_trip));
+        actionBar.setTitle(getResources().getString(R.string.add_item_title) + " " + mItemType);
         return true;
     }
 
@@ -175,19 +208,28 @@ public class AddActivity extends ActionBarActivity {
     }
 
     private void saveItem() {
-        TripBookItemData tripBookItemData = new TripBookItemData();
-        TripBookItem tripBookItem = new TripBookItem(mTripName.getText().toString(), TripBookItem.TYPE_TRIP);
+        TripBookItem tripBookItem;
+        if (mTripbookItem == null)
+            tripBookItem = new TripBookItem(mTripName.getText().toString(), mItemType);
+        else
+            tripBookItem = mTripbookItem;
+
         tripBookItem.setCreatedAt(mStartDatePicker.getText().toString());
         tripBookItem.setEndDate(mEndDatePicker.getText().toString());
         tripBookItem.setDescription(mNotes.getText().toString());
-        tripBookItem = tripBookItemData.add(tripBookItem);
-        for (TripBookItem item : fragmentFriends.mAdapter.getSelectedItems()){
+
+        if (mTripbookItem == null) {
+            tripBookItem = new TripBookItemData().add(tripBookItem);
+        }else{
+            tripBookItem.setLinks(new ArrayList<TripBookCommon>());
+        }
+        for (TripBookCommon item : fragmentFriends.mAdapter.getSelectedItems()) {
             tripBookItem.addLink(item);
         }
-        for (TripBookItem item : fragmentPlace.mAdapter.getSelectedItems()){
+        for (TripBookCommon item : fragmentPlace.mAdapter.getSelectedItems()) {
             tripBookItem.addLink(item);
         }
-        for (TripBookItem item : fragmentImages.mAdapter.getSelectedItems()){
+        for (TripBookCommon item : fragmentImages.mAdapter.getSelectedItems()) {
             tripBookItem.addLink(item);
         }
         tripBookItem.update();
@@ -214,7 +256,7 @@ public class AddActivity extends ActionBarActivity {
         }
         long startDate = Date.parse(mStartDatePicker.getText().toString());
         long endDate = Date.parse(mEndDatePicker.getText().toString());
-        if (endDate < startDate){
+        if (endDate < startDate) {
             String message = getResources().getString(R.string.enddate_before_startdate);
             mEndDatePicker.setError(message, getResources().getDrawable(R.drawable.ic_action_error));
             mEndDatePicker.requestFocus();

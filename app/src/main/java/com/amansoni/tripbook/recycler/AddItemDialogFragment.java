@@ -16,6 +16,7 @@ import com.amansoni.tripbook.AddActivity;
 import com.amansoni.tripbook.ItemEditFragment;
 import com.amansoni.tripbook.LocationLookup;
 import com.amansoni.tripbook.R;
+import com.amansoni.tripbook.model.TripBookItem;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -41,20 +42,21 @@ public class AddItemDialogFragment extends DialogFragment {
                         ItemEditFragment itemEditFragment = new ItemEditFragment();
                         switch (which){
                             case 0: // Friend
-                                args.putInt("itemType", R.string.title_social);
-                                itemEditFragment.setArguments(args);
-
-                                getActivity().getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.container, itemEditFragment)
-                                        .commit();
-
+                                Intent friendIntent = new Intent(getActivity(), AddActivity.class);
+                                args.putString("itemType", TripBookItem.TYPE_FRIENDS);
+                                friendIntent.putExtras(args);
+                                startActivity(friendIntent);
                                 break;
                             case 1: // Trip
                                 Intent tripIntent = new Intent(getActivity(), AddActivity.class);
+                                args.putString("itemType", TripBookItem.TYPE_TRIP);
+                                tripIntent.putExtras(args);
                                 startActivity(tripIntent);
                                 break;
                             case 2: // Place
                                 Intent placeIntent = new Intent(getActivity(), AddActivity.class);
+                                args.putString("itemType", TripBookItem.TYPE_PLACE);
+                                placeIntent.putExtras(args);
                                 startActivity(placeIntent);
                                 break;
                             case 3: // Photo
