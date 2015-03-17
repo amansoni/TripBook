@@ -167,11 +167,11 @@ public class LocationLookup extends ActionBarActivity implements
         tripBookItem = tripBookItemData.add(tripBookItem);
 
         //TODO add image(s)
-        TripBookImage tripBookImage = new TripBookImage(mImageFilePath);
-        if (tripBookImage != null)
-            tripBookItem.addImage(tripBookImage);
+//        TripBookImage tripBookImage = new TripBookImage(mImageFilePath);
+//        if (tripBookImage != null)
+//            tripBookItem.addImage(tripBookImage);
 
-        new TripBookItemData().update(tripBookItem);
+        new TripBookItemData().add(tripBookItem);
 
     }
 

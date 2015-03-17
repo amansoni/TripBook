@@ -2,6 +2,8 @@ package com.amansoni.tripbook.model;
 
 import android.graphics.Bitmap;
 
+import com.amansoni.tripbook.db.TripBookItemData;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +17,7 @@ public class TripBookItem extends TripBookCommon {
     public static final String TYPE_GALLERY = "gallery";
     public static final String TYPE_STARRED = "starred";
     public static final String TYPE_FRIENDS = "friend";
-    List<TripBookImage> mTripBookImages;
+    List<TripBookItem> mLinks;
     // private fields
     private String mTitle;
     private String mDescription;
@@ -24,7 +26,7 @@ public class TripBookItem extends TripBookCommon {
 
     public TripBookItem() {
         super();
-        mTripBookImages = new ArrayList<>();
+        mLinks = new ArrayList<>();
     }
 
     public TripBookItem(String title, String itemType) {
@@ -63,10 +65,6 @@ public class TripBookItem extends TripBookCommon {
         this.mDescription = description;
     }
 
-    public List<TripBookImage> getTripBookImages() {
-        return mTripBookImages;
-    }
-
     public Bitmap getThumbnail(){
         return mThumbNail;
     }
@@ -75,13 +73,20 @@ public class TripBookItem extends TripBookCommon {
         mThumbNail = thumbNail;
     }
 
-    public void setTripBookImages(List<TripBookImage> tripBookImages) {
-        mTripBookImages = tripBookImages;
+    public List<TripBookItem> getLinks() {
+        return mLinks;
     }
 
-    public void addImage(TripBookImage tripBookImage) {
-        mTripBookImages.add(tripBookImage);
+    public void setLinks(List<TripBookItem> links) {
+        mLinks = links;
     }
 
+    public void addLink(TripBookItem linkItem) {
+        mLinks.add(linkItem);
+    }
+
+    public void update(){
+        new TripBookItemData().update(this);
+    }
 
 }

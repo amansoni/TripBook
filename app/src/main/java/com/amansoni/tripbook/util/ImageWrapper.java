@@ -3,6 +3,7 @@ package com.amansoni.tripbook.util;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.widget.ImageView;
 
 import com.amansoni.tripbook.R;
@@ -35,6 +36,27 @@ public class ImageWrapper {
         mImageFetcher.loadImage(imageSource, imageView);
 
     }
+
+    public static void loadImage(FragmentActivity activity, ImageView imageView, String imageSource){
+
+        int mImageThumbSize = activity.getResources().getDimensionPixelSize(R.dimen.image_thumbnail_size);
+
+        ImageCache.ImageCacheParams cacheParams =
+                new ImageCache.ImageCacheParams(activity, IMAGE_CACHE_DIR);
+
+        cacheParams.setMemCacheSizePercent(0.25f); // Set memory cache to 25% of app memory
+
+        // The ImageFetcher takes care of loading images into our ImageView children asynchronously
+        ImageFetcher mImageFetcher = new ImageFetcher(activity, mImageThumbSize);
+        mImageFetcher.setLoadingImage(R.drawable.empty_photo);
+        mImageFetcher.addImageCache(activity.getSupportFragmentManager(), cacheParams);
+
+        // Finally load the image asynchronously into the ImageView, this also takes care of
+        // setting a placeholder image while the background thread runs
+        mImageFetcher.loadImage(imageSource, imageView);
+
+    }
+
 
     public static void loadImageFromFile(Context context, ImageView imageView, String imageSource, int size){
         ImageResizer imageResizer = new ImageResizer(context, size);

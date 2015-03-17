@@ -44,7 +44,7 @@ public class TripBookLinkData extends TripBookAbstractData {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_LINKS_PARENTID, tripBookLink.getParent().getId());
         values.put(DatabaseHelper.COLUMN_LINKS_CHILDID, tripBookLink.getChild().getId());
-        values.put(DatabaseHelper.COLUMN_ITEM_TYPE, TripBookItem.TYPE_GALLERY);
+        values.put(DatabaseHelper.COLUMN_ITEM_TYPE, ((TripBookItem)tripBookLink.getChild()).getItemType());
         open();
         long insertId = database.insert(DatabaseHelper.TABLE_NAME_LINKS, null,
                 values);

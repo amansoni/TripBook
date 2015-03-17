@@ -1,13 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_marginTop="5dp">
+
+    <TextView
+        android:id="@+id/textViewHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/navigation_row_selected"
+        android:text="@string/title_social" />
+
+    <ImageButton
+        android:id="@+id/add_button"
+        android:layout_width="@dimen/small_button_diameter"
+        android:layout_height="@dimen/small_button_diameter"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/oval"
+        android:elevation="@dimen/elevation_low"
+        android:src="@android:drawable/ic_input_add"
+        android:tint="@android:color/white" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/textViewHeader" />
 
-</FrameLayout>
+</RelativeLayout>

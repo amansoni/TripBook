@@ -18,21 +18,22 @@
         android:orientation="vertical"
         android:elevation="2dp"
         android:weightSum="1"
-        android:layout_marginTop="10dp">
+        >
 
-        <TextView
-            android:id="@+id/item_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Birmingham Library Main"
-            android:textAppearance="?android:attr/textAppearanceListItem"
-            android:textColor="@color/cardview_text_"/>
 
         <ImageView
             android:id="@+id/item_image"
             android:layout_width="@dimen/horizontal_list_image_width"
             android:layout_height="@dimen/horizontal_list_image_height"
             android:src="@drawable/ic_action_edit" />
+
+        <TextView
+            android:id="@+id/item_title"
+            android:layout_width="@dimen/horizontal_list_image_width"
+            android:layout_height="wrap_content"
+            android:text="Birmingham Library Main"
+            android:textAppearance="?android:attr/textAppearanceListItem"
+            android:textColor="@color/ActionBarDark"/>
 
 
     </LinearLayout>

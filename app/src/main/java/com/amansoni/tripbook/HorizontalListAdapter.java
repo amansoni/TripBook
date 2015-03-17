@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.amansoni.tripbook.db.TripBookImageData;
 import com.amansoni.tripbook.db.TripBookItemData;
 import com.amansoni.tripbook.model.TripBookItem;
+import com.amansoni.tripbook.provider.Images;
+import com.amansoni.tripbook.util.ImageWrapper;
 
 import java.io.File;
 
@@ -58,12 +60,14 @@ public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAd
         Log.d(TAG, "Element " + position + " set.");
         TripBookItem tripBookItem = ((TripBookItem)mDataSet.getAllRows().get(position));
         listViewHolder.itemName.setText(tripBookItem.getTitle());
-        //TODO get the associated image, not just the 1st 1
-        if (tripBookItem.getThumbnail() != null) {
-            listViewHolder.itemImage.setImageBitmap(tripBookItem.getThumbnail());
-        } else{
-            listViewHolder.itemImage.setImageResource(R.drawable.empty_photo);
-        }
+        ImageWrapper.loadImage(mActivity,listViewHolder.itemImage, Images.imageThumbUrls[position]);
+
+//        //TODO get the associated image, not just the 1st 1
+//        if (tripBookItem.getThumbnail() != null) {
+//            listViewHolder.itemImage.setImageBitmap(tripBookItem.getThumbnail());
+//        } else{
+//            listViewHolder.itemImage.setImageResource(R.drawable.empty_photo);
+//        }
     }
 
     @Override

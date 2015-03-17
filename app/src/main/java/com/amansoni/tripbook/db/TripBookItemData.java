@@ -11,7 +11,6 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.amansoni.tripbook.model.TripBookCommon;
-import com.amansoni.tripbook.model.TripBookImage;
 import com.amansoni.tripbook.model.TripBookItem;
 import com.amansoni.tripbook.model.TripBookLink;
 
@@ -22,6 +21,7 @@ import java.util.List;
 public class TripBookItemData extends TripBookAbstractData {
     private static final String TAG = "TripBookItemData";
     private String mItemType = null;
+    private long mLinkedItemId = 0;
     private String[] allColumns = {DatabaseHelper.COLUMN_ID,
             DatabaseHelper.COLUMN_ITEM_TITLE, DatabaseHelper.COLUMN_ITEM_TYPE,
             DatabaseHelper.COLUMN_ITEM_DESCRIPTION,
@@ -42,6 +42,17 @@ public class TripBookItemData extends TripBookAbstractData {
     public TripBookItemData(String itemType) {
         this();
         mItemType = itemType;
+    }
+
+    /**
+     * Use this constructor for the DataAdaptor to only return lists of a particular itemType
+     *
+     * @param itemType
+     */
+    public TripBookItemData(String itemType, long linkedItemId) {
+        this();
+        mItemType = itemType;
+        mLinkedItemId = linkedItemId;
     }
 
     public TripBookItem add(TripBookCommon tripBookCommon) {
@@ -78,12 +89,9 @@ public class TripBookItemData extends TripBookAbstractData {
 
     public TripBookCommon update(TripBookCommon tripBookCommon) {
         TripBookItem tripBookItem = (TripBookItem) tripBookCommon;
-        // save images
-        TripBookImageData tripBookImageData = new TripBookImageData();
         TripBookLinkData tripBookLinkData = new TripBookLinkData();
-        for (TripBookImage image : ((TripBookItem) tripBookCommon).getTripBookImages()) {
-            TripBookImage tripBookImage = tripBookImageData.add(image);
-            TripBookLink tripBookLink = new TripBookLink(tripBookCommon, tripBookImage);
+        for (TripBookItem link : ((TripBookItem) tripBookCommon).getLinks()) {
+            TripBookLink tripBookLink = new TripBookLink(tripBookCommon, link);
             tripBookLinkData.add(tripBookLink);
         }
         ContentValues values = new ContentValues();
@@ -91,7 +99,8 @@ public class TripBookItemData extends TripBookAbstractData {
         values.put(DatabaseHelper.COLUMN_ITEM_DESCRIPTION, tripBookItem.getDescription());
         values.put(DatabaseHelper.COLUMN_ITEM_TYPE, tripBookItem.getItemType());
         values.put(DatabaseHelper.COLUMN_ITEM_STARRED, tripBookItem.isStarred());
-        values.put(DatabaseHelper.COLUMN_ITEM_STARRED, tripBookItem.isStarred());
+        values.put(DatabaseHelper.COLUMN_END_DATE, tripBookItem.getEndDate().toString());
+        values.put(DatabaseHelper.COLUMN_CREATED_AT, tripBookItem.getCreatedAt());
         if (tripBookItem.getThumbnail() != null)
             values.put(DatabaseHelper.COLUMN_IMAGE_THUMBNAIL, tripBookItem.getThumbnail().getRowBytes());
         open();
@@ -123,13 +132,27 @@ public class TripBookItemData extends TripBookAbstractData {
             open();
 
             Cursor cursor = null;
-            if (mItemType == null) {
-                cursor = database.query(DatabaseHelper.TABLE_NAME_ITEM,
-                        allColumns, null, null, null, null, null);
+            String whereClause = null;
+            if (mItemType != null) {
+                if (mLinkedItemId == 0) {
+                    cursor = database.query(DatabaseHelper.TABLE_NAME_ITEM,
+                            allColumns, DatabaseHelper.COLUMN_ITEM_TYPE + " = ?", new String[]{mItemType}, null, null, null);
+                } else {
+                    final String MY_QUERY = "SELECT c.* FROM " + DatabaseHelper.TABLE_NAME_ITEM
+                            + " a INNER JOIN " + DatabaseHelper.TABLE_NAME_LINKS + " b ON b." +
+                            DatabaseHelper.COLUMN_LINKS_CHILDID + " = a." + DatabaseHelper.COLUMN_ID
+                            + " INNER JOIN " + DatabaseHelper.TABLE_NAME_ITEM + " c ON b." +
+                            DatabaseHelper.COLUMN_LINKS_CHILDID + " = c." + DatabaseHelper.COLUMN_ID
+                            + " WHERE b." + DatabaseHelper.COLUMN_LINKS_PARENTID + " = ? AND "
+                            + " b." + DatabaseHelper.COLUMN_ITEM_TYPE + " = ?";
+                    Log.d(TAG, MY_QUERY);
+                    cursor = database.rawQuery(MY_QUERY, new String[]{String.valueOf(mLinkedItemId), mItemType});
+                }
             } else {
                 cursor = database.query(DatabaseHelper.TABLE_NAME_ITEM,
-                        allColumns, DatabaseHelper.COLUMN_ITEM_TYPE + " = ?", new String[]{mItemType}, null, null, null);
+                        allColumns, null, null, null, null, null);
             }
+
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 TripBookItem TripBookItem = cursorToTripBookItem(cursor);
@@ -150,9 +173,8 @@ public class TripBookItemData extends TripBookAbstractData {
         TripBookItem.setItemType(cursor.getString(2));
         TripBookItem.setDescription(cursor.getString(3));
         TripBookItem.setStarred((cursor.getInt(4) == 0 ? false : true));
-        TripBookItem.setEndDate(cursor.getString(6));
+        TripBookItem.setEndDate(cursor.getString(5));
         TripBookItem.setCreatedAt(cursor.getString(6));
-
         byte[] data = cursor.getBlob(7);
         if (data != null) {
             Bitmap thumbNail;
@@ -191,8 +213,19 @@ public class TripBookItemData extends TripBookAbstractData {
 
     public void createTestData() {
         // create trips
-        TripBookItem loader = add(new TripBookItem("Birmingham 2015", TripBookItem.TYPE_TRIP));
-        add(new TripBookItem("Vicki", TripBookItem.TYPE_FRIENDS, true));
+        TripBookItem trip = add(new TripBookItem("Birmingham 2015", TripBookItem.TYPE_TRIP));
+        TripBookItem friend = add(new TripBookItem("Vicki", TripBookItem.TYPE_FRIENDS, true));
+        TripBookItem place1 = add(new TripBookItem("Bullring", TripBookItem.TYPE_PLACE));
+        TripBookItem place2 = add(new TripBookItem("City Library", TripBookItem.TYPE_PLACE, true));
+        trip.setDescription("Going to do some shopping");
+        trip.setStarred(true);
+        trip.setCreatedAt("20 Jan 2015");
+        trip.setEndDate("25 Jan 2015");
+        trip.addLink(friend);
+        trip.addLink(place1);
+        trip.addLink(place2);
+        trip.update();
+
         add(new TripBookItem("Farhaan", TripBookItem.TYPE_FRIENDS));
         add(new TripBookItem("Hugh", TripBookItem.TYPE_FRIENDS));
         add(new TripBookItem("Joshua", TripBookItem.TYPE_FRIENDS));

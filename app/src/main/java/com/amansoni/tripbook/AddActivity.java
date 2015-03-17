@@ -106,12 +106,22 @@ public class AddActivity extends ActionBarActivity {
         dateFormat = DateFormat.getMediumDateFormat(this);
         isDirty = false;
 
-        Fragment images = new ItemGalleryFragment();
+        replaceListFragment(R.id.trip_view_friends, TripBookItem.TYPE_FRIENDS);
+        replaceListFragment(R.id.trip_view_places, TripBookItem.TYPE_PLACE);
+        replaceListFragment(R.id.trip_view_gallery, TripBookItem.TYPE_GALLERY);
+
+    }
+
+    private void replaceListFragment(int horizontalList, String itemType) {
+        Fragment images = new HorizontalListFragment();
+        Bundle listArgs = new Bundle();
+        listArgs.putString("itemType", itemType);
+        images.setArguments(listArgs);
+
         // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.trip_images, images)
-//                    .addToBackStack(mTitle.toString())
+                .replace(horizontalList, images)
                 .commit();
     }
 

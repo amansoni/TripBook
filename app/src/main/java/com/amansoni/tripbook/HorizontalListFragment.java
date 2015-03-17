@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amansoni.tripbook.db.TripBookItemData;
@@ -33,6 +34,7 @@ public class HorizontalListFragment extends Fragment {
     protected HorizontalListAdapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
     private String mItemType = null;
+    private long mItemId = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class HorizontalListFragment extends Fragment {
         if (args != null) {
             mItemType = args.getString("itemType");
             Log.d(TAG, "Now showing" + mItemType);
+            mItemId = args.getLong("itemId");
         }
     }
 
@@ -51,6 +54,27 @@ public class HorizontalListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_horizontal_list, container, false);
         view.setTag(TAG);
+        ((TextView) view.findViewById(R.id.textViewHeader)).setText(mItemType);
+
+        // setup RecyclerView and layout managers
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        mLayoutManager = new LinearLayoutManager(getActivity(), OrientationHelper.HORIZONTAL, false);
+        mLayoutManager = new LinearLayoutManager(getActivity(), OrientationHelper.HORIZONTAL, false);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.scrollToPosition(0);
+
+        // setup DataAdapter
+        TripBookItemData ds;
+        if (mItemType == null) {
+            ds = new TripBookItemData();
+        } else if (mItemId == 0) {
+            ds = new TripBookItemData(mItemType);
+        } else {
+            ds = new TripBookItemData(mItemType, mItemId);
+        }
+        mAdapter = new HorizontalListAdapter(getActivity(), ds);
+        mRecyclerView.setAdapter(mAdapter);
+        registerForContextMenu(container);
 
 //        ImageButton mAddButton = (ImageButton)view.findViewById(R.id.add_button);
 //        mAddButton.setOnTouchListener(new View.OnTouchListener() {
@@ -63,30 +87,6 @@ public class HorizontalListFragment extends Fragment {
 //                return true; // consume the event
 //            }
 //        });
-
-        // setup RecyclerView and layout managers
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        mLayoutManager = new LinearLayoutManager(getActivity(), OrientationHelper.HORIZONTAL, false);
-//
-//        if (savedInstanceState != null) {
-//            mCurrentLayoutManagerType = (LayoutManagerType) savedInstanceState
-//                    .getSerializable(KEY_LAYOUT_MANAGER);
-//        }
-
-        mLayoutManager = new LinearLayoutManager(getActivity(), OrientationHelper.HORIZONTAL, false);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.scrollToPosition(0);
-
-        // setup DataAdapter
-        TripBookItemData ds;
-        if (mItemType == null) {
-            ds = new TripBookItemData();
-        } else {
-            ds = new TripBookItemData(mItemType);
-        }
-        mAdapter = new HorizontalListAdapter(getActivity(), ds);
-        mRecyclerView.setAdapter(mAdapter);
-        registerForContextMenu(container);
 
 //        mRecyclerView.addOnItemTouchListener(
 //                new RecyclerItemClickListener((Context) getActivity(),mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {

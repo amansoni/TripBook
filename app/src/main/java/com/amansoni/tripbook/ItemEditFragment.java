@@ -141,8 +141,9 @@ public class ItemEditFragment extends Fragment implements View.OnClickListener {
         tripBookItem.setCreatedAt("1/1/1");
         tripBookItem.setEndDate("1/1/1");
         tripBookItem.setThumbnail(((BitmapDrawable)imageView.getDrawable()).getBitmap());
-        if (tripBookImage != null)
-            tripBookItem.addImage(tripBookImage);
+//        TODO
+//        if (tripBookImage != null)
+//            tripBookItem.addImage(tripBookImage);
         new TripBookItemData().add(tripBookItem);
     }
 

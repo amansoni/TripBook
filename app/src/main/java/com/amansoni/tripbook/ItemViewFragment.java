@@ -90,6 +90,7 @@ public class ItemViewFragment extends Fragment {
     private void replaceListFragment(int horizontalList, String itemType) {
         Fragment images = new HorizontalListFragment();
         Bundle listArgs = new Bundle();
+        listArgs.putLong("itemId", tripBookItem.getId());
         listArgs.putString("itemType", itemType);
         images.setArguments(listArgs);
 
