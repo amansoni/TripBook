@@ -173,7 +173,13 @@ public class AddActivity extends ActionBarActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(getResources().getString(R.string.add_item_title) + " " + mItemType);
+        String title = getResources().getString(R.string.add_item_title);
+        if (mTripbookItem != null)
+            title = "Edit " + mTripbookItem.getTitle();
+        else
+            title = title + mItemType;
+
+        actionBar.setTitle(title);
         return true;
     }
 
@@ -220,7 +226,7 @@ public class AddActivity extends ActionBarActivity {
 
         if (mTripbookItem == null) {
             tripBookItem = new TripBookItemData().add(tripBookItem);
-        }else{
+        } else {
             tripBookItem.setLinks(new ArrayList<TripBookCommon>());
         }
         for (TripBookCommon item : fragmentFriends.mAdapter.getSelectedItems()) {
