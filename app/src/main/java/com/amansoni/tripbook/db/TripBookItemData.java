@@ -22,11 +22,14 @@ public class TripBookItemData extends TripBookAbstractData {
     private static final String TAG = "TripBookItemData";
     private String mItemType = null;
     private long mLinkedItemId = 0;
-    private String[] allColumns = {DatabaseHelper.COLUMN_ID,
-            DatabaseHelper.COLUMN_ITEM_TITLE, DatabaseHelper.COLUMN_ITEM_TYPE,
+    private String[] allColumns = {
+            DatabaseHelper.COLUMN_ID,
+            DatabaseHelper.COLUMN_ITEM_TITLE,
+            DatabaseHelper.COLUMN_ITEM_TYPE,
             DatabaseHelper.COLUMN_ITEM_DESCRIPTION,
             DatabaseHelper.COLUMN_ITEM_STARRED,
-            DatabaseHelper.COLUMN_END_DATE, DatabaseHelper.COLUMN_CREATED_AT,
+            DatabaseHelper.COLUMN_END_DATE,
+            DatabaseHelper.COLUMN_CREATED_AT,
             DatabaseHelper.COLUMN_IMAGE_THUMBNAIL};
     private List<TripBookCommon> mList = null;
 

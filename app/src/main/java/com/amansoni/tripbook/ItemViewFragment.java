@@ -17,14 +17,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amansoni.tripbook.db.TripBookItemData;
 import com.amansoni.tripbook.model.TripBookItem;
 import com.amansoni.tripbook.provider.Images;
-import com.amansoni.tripbook.util.ImageCache;
-import com.amansoni.tripbook.util.ImageFetcher;
 import com.amansoni.tripbook.util.ImageWrapper;
 
 import java.io.File;
@@ -40,6 +38,10 @@ public class ItemViewFragment extends Fragment {
     private android.support.v7.widget.ShareActionProvider mShareActionProvider;
     private TripBookItem tripBookItem;
     private boolean mEditable = false;
+    private TextView tripName;
+    TextView tripNotes;
+    TextView tripStart;
+    TextView tripEnd;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,8 @@ public class ItemViewFragment extends Fragment {
         Bundle args = getArguments();
         if (args != null) {
             tripBookItem = new TripBookItemData().getItem(args.getLong("itemKey"));
+            if (args.containsKey("editable"))
+                mEditable = args.getBoolean("editable");
             Log.d(TAG, tripBookItem.toString());
         }
         setHasOptionsMenu(true);
@@ -62,11 +66,19 @@ public class ItemViewFragment extends Fragment {
             Log.d(TAG, "No itemKey passed in bundle args");
         }
         tripBookItem = new TripBookItemData().getItem(args.getLong("itemKey"));
-        TextView tripName = ((TextView) view.findViewById(R.id.trip_add_name));
+
+        tripName = ((TextView) view.findViewById(R.id.trip_add_name));
         tripName.setText(tripBookItem.getTitle());
-        ((TextView) view.findViewById(R.id.trip_add_start)).setText(tripBookItem.getCreatedAt());
+
+        tripStart = ((TextView) view.findViewById(R.id.trip_add_start));
+        tripStart.setText(tripBookItem.getCreatedAt());
+
+        tripEnd = ((TextView) view.findViewById(R.id.trip_add_start));
+        tripEnd.setText(tripBookItem.getCreatedAt());
+
         ((TextView) view.findViewById(R.id.trip_add_end)).setText(tripBookItem.getEndDate());
-        TextView tripNotes = ((TextView) view.findViewById(R.id.trip_add_notes));
+
+        tripNotes = ((TextView) view.findViewById(R.id.trip_add_notes));
         tripNotes.setText(tripBookItem.getDescription());
 
         if (true) {
@@ -104,7 +116,11 @@ public class ItemViewFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.item_view, menu);
+        if (mEditable){
+            inflater.inflate(R.menu.item_edit, menu);
+        } else {
+            inflater.inflate(R.menu.item_view, menu);
+        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -113,15 +129,12 @@ public class ItemViewFragment extends Fragment {
         if (item.getItemId() == R.id.action_item_edit) {
 //            Toast.makeText(getActivity(), "Edit Item", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "Setting bundle for itemEditFragment:" + item.toString());
+            Intent editIntent = new Intent(getActivity(), AddActivity.class);
             Bundle args = new Bundle();
             args.putLong("itemKey", tripBookItem.getId());
-            ItemEditFragment itemEditFragment = new ItemEditFragment();
-            itemEditFragment.setArguments(args);
-
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, itemEditFragment)
-                            //.addToBackStack("view")
-                    .commit();
+            args.putBoolean("editable", true);
+            editIntent.putExtras(args);
+            startActivity(editIntent);
 
             return true;
         }
@@ -130,9 +143,40 @@ public class ItemViewFragment extends Fragment {
             createShareIntent();
             return true;
         }
+        if (item.getItemId() == R.id.action_cancel) {
+            getActivity().getSupportFragmentManager().popBackStack();
+            return true;
+        }
+
+        if (item.getItemId() == R.id.action_item_save) {
+            saveItem();
+            Toast.makeText(getActivity(), tripBookItem.getTitle() + " saved", Toast.LENGTH_SHORT).show();
+            Bundle args = new Bundle();
+            args.putLong("itemKey", tripBookItem.getId());
+            ItemViewFragment itemViewFragment = new ItemViewFragment();
+            itemViewFragment.setArguments(args);
+
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, itemViewFragment)
+                    .commit();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void saveItem() {
+        tripBookItem.setTitle(tripName.getText().toString());
+        tripBookItem.setCreatedAt(tripStart.getText().toString());
+        tripBookItem.setEndDate(tripEnd.getText().toString());
+        tripBookItem.setDescription(tripNotes.getText().toString());
+        //tripBookItem.setThumbnail(((BitmapDrawable)imageView.getDrawable()).getBitmap());
+//        TODO
+//        if (tripBookImage != null)
+//            tripBookItem.addImage(tripBookImage);
+        tripBookItem.update();
+    }
+
 
     protected Intent createShareIntent() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);

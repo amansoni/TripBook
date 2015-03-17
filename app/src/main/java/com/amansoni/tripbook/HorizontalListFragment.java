@@ -31,11 +31,11 @@ public class HorizontalListFragment extends Fragment {
     private static final String TAG = "HorizontalListFragment";
     private static final String KEY_LAYOUT_MANAGER = "layoutManager";
     protected RecyclerView mRecyclerView;
-    protected HorizontalListAdapter mAdapter;
+    public HorizontalListAdapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
     private String mItemType = null;
     private long mItemId = 0;
-    private boolean mEditable = false;
+    protected boolean mEditable = false;
 
 
     @Override
@@ -78,7 +78,7 @@ public class HorizontalListFragment extends Fragment {
         } else {
             ds = new TripBookItemData(mItemType, mItemId);
         }
-        mAdapter = new HorizontalListAdapter(getActivity(), ds);
+        mAdapter = new HorizontalListAdapter(getActivity(), ds, mItemId, mEditable);
         mRecyclerView.setAdapter(mAdapter);
         registerForContextMenu(container);
 

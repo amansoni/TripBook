@@ -1,28 +1,24 @@
 package com.amansoni.tripbook;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Bundle;
+import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amansoni.tripbook.db.TripBookImageData;
 import com.amansoni.tripbook.db.TripBookItemData;
+import com.amansoni.tripbook.model.TripBookCommon;
 import com.amansoni.tripbook.model.TripBookItem;
 import com.amansoni.tripbook.provider.Images;
 import com.amansoni.tripbook.util.ImageWrapper;
 
-import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Provide views to RecyclerView with data from mDataSet.
@@ -31,20 +27,28 @@ public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAd
     private static final String TAG = "RecyclerViewAdapter";
     private static int mPosition = -1;
     protected final FragmentActivity mActivity;
-    private TripBookItemData mDataSet;
+    private ArrayList<TripBookCommon> tripBookItems;
+    ArrayList<TripBookItem> selectedItems;
+    private static long mItemId = 0;
+    protected static boolean mEditable = false;
 
     /**
      * Initialize the dataset of the Adapter.
-     *
-     * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
-     */
-    public HorizontalListAdapter(FragmentActivity activity, TripBookItemData dataSet) {
+     * */
+    public HorizontalListAdapter(FragmentActivity activity, TripBookItemData dataSet, long itemId, boolean editable) {
         mActivity = activity;
-        mDataSet = dataSet;
+        tripBookItems = (ArrayList<TripBookCommon>) dataSet.getAllRows();
+        selectedItems = new ArrayList<>();
+        mItemId = itemId;
+        mEditable = editable;
     }
 
     public static int getPosition() {
         return mPosition;
+    }
+
+    public ArrayList<TripBookItem> getSelectedItems(){
+        return selectedItems;
     }
 
     @Override
@@ -52,27 +56,26 @@ public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAd
         // Create a new view.
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.horizontal_list_item, viewGroup, false);
-        return new ListViewHolder(v);
+        return new ListViewHolder(v, selectedItems);
     }
 
     @Override
     public void onBindViewHolder(ListViewHolder listViewHolder, final int position) {
         Log.d(TAG, "Element " + position + " set.");
-        TripBookItem tripBookItem = ((TripBookItem)mDataSet.getAllRows().get(position));
-        listViewHolder.itemName.setText(tripBookItem.getTitle());
-        ImageWrapper.loadImage(mActivity,listViewHolder.itemImage, Images.imageThumbUrls[position]);
+        listViewHolder.tripBookItem = ((TripBookItem) tripBookItems.get(position));
+        listViewHolder.itemName.setText(listViewHolder.tripBookItem.getTitle());
+        ImageWrapper.loadImage(mActivity, listViewHolder.itemImage, Images.imageThumbUrls[position]);
 
-//        //TODO get the associated image, not just the 1st 1
-//        if (tripBookItem.getThumbnail() != null) {
-//            listViewHolder.itemImage.setImageBitmap(tripBookItem.getThumbnail());
-//        } else{
-//            listViewHolder.itemImage.setImageResource(R.drawable.empty_photo);
-//        }
+        if(listViewHolder.isSelected)
+            listViewHolder.itemView.setBackgroundColor(Color.RED);
+        else {
+            listViewHolder.itemView.setBackgroundColor(Color.CYAN);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return mDataSet.getAllRows().size();
+        return tripBookItems.size();
     }
 
     /**
@@ -82,11 +85,17 @@ public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAd
             implements View.OnClickListener, View.OnLongClickListener, View.OnCreateContextMenuListener {
         public final TextView itemName;
         public final ImageView itemImage;
+        public TripBookItem tripBookItem;
+        public boolean isSelected;
+        public ArrayList<TripBookItem> selectedItems;
 
-        public ListViewHolder(View view) {
+
+        public ListViewHolder(View view, ArrayList<TripBookItem> selectedItems) {
             super(view);
             itemName = (TextView) view.findViewById(R.id.item_title);
             itemImage = (ImageView) view.findViewById(R.id.item_image);
+            isSelected = false;
+            this.selectedItems = selectedItems;
             view.setOnClickListener(this);
             view.setOnLongClickListener(this);
             view.setOnCreateContextMenuListener(this);
@@ -101,13 +110,18 @@ public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAd
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(view.getContext(), "position = " + getPosition(), Toast.LENGTH_SHORT).show();
-//            TripBookItem selected = (TripBookItem) mData.getAllRows().get(getPosition());
-//            // set the db item key and create the view for a single item
-//            Bundle args = new Bundle();
-//            args.putLong("itemKey", selected.getId());
-//            ItemViewFragment itemViewFragment = new ItemViewFragment();
-//            itemViewFragment.setArguments(args);
+            Toast.makeText(view.getContext(), "position = " + getPosition() + isSelected, Toast.LENGTH_SHORT).show();
+            isSelected = !isSelected;
+
+            if (mEditable) {
+                if (isSelected) {
+                    itemView.setBackgroundColor(Color.RED);
+                    selectedItems.add(tripBookItem);
+                } else {
+                    selectedItems.remove(tripBookItem);
+                    itemView.setBackgroundColor(Color.CYAN);
+                }
+            }
         }
 
         @Override
