@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -135,10 +137,13 @@ public class ItemEditFragment extends Fragment implements View.OnClickListener {
     }
 
     private void saveItem() {
-            tripBookItem.setTitle(imageTitle.getText().toString());
-            if (tripBookImage != null)
-                tripBookItem.addImage(tripBookImage);
-            new TripBookItemData().update(tripBookItem);
+        tripBookItem.setTitle("test image save");
+        tripBookItem.setCreatedAt("1/1/1");
+        tripBookItem.setEndDate("1/1/1");
+        tripBookItem.setThumbnail(((BitmapDrawable)imageView.getDrawable()).getBitmap());
+        if (tripBookImage != null)
+            tripBookItem.addImage(tripBookImage);
+        new TripBookItemData().add(tripBookItem);
     }
 
     @Override
@@ -155,6 +160,9 @@ public class ItemEditFragment extends Fragment implements View.OnClickListener {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
                 selectedImageUri = data.getData();
+
+                Bitmap thumbImage = ThumbnailUtils.extractThumbnail
+                        (BitmapFactory.decodeFile(selectedImageUri.getEncodedPath()), 100, 100);
                 imageView.setImageURI(selectedImageUri);
                 Log.d(TAG, "Set ImageView:" + selectedImageUri);
 

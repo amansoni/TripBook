@@ -1,5 +1,7 @@
 package com.amansoni.tripbook;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -14,8 +16,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amansoni.tripbook.db.TripBookImageData;
 import com.amansoni.tripbook.db.TripBookItemData;
 import com.amansoni.tripbook.model.TripBookItem;
+
+import java.io.File;
 
 /**
  * Provide views to RecyclerView with data from mDataSet.
@@ -51,8 +56,14 @@ public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAd
     @Override
     public void onBindViewHolder(ListViewHolder listViewHolder, final int position) {
         Log.d(TAG, "Element " + position + " set.");
-        listViewHolder.itemImage.setImageResource(R.drawable.ic_action_about);
-        listViewHolder.itemName.setText("demo text");
+        TripBookItem tripBookItem = ((TripBookItem)mDataSet.getAllRows().get(position));
+        listViewHolder.itemName.setText(tripBookItem.getTitle());
+        //TODO get the associated image, not just the 1st 1
+        if (tripBookItem.getThumbnail() != null) {
+            listViewHolder.itemImage.setImageBitmap(tripBookItem.getThumbnail());
+        } else{
+            listViewHolder.itemImage.setImageResource(R.drawable.empty_photo);
+        }
     }
 
     @Override

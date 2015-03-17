@@ -58,7 +58,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COLUMN_ITEM_DESCRIPTION + " TEXT,"
             + COLUMN_ITEM_STARRED + " INTEGER,"
             + COLUMN_CREATED_AT + " DATETIME,"
-            + COLUMN_END_DATE + " DATETIME" + ")";
+            + COLUMN_END_DATE + " DATETIME,"
+            + COLUMN_IMAGE_THUMBNAIL + " BLOB"
+            + ")";
 
     private static final String CREATE_TABLE_TBIMAGES = "CREATE TABLE " + TABLE_NAME_IMAGES
             + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"

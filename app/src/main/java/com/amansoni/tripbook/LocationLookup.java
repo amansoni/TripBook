@@ -47,6 +47,7 @@ import android.widget.Toast;
 import com.amansoni.tripbook.db.TripBookItemData;
 import com.amansoni.tripbook.model.TripBookImage;
 import com.amansoni.tripbook.model.TripBookItem;
+import com.amansoni.tripbook.util.ImageWrapper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -295,13 +296,14 @@ public class LocationLookup extends ActionBarActivity implements
      * Updates the address in the UI.
      */
     protected void showImage() {
-        File imgFile = new File(mImageFilePath);
-
-        if (imgFile.exists()) {
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            mImageView.setImageBitmap(myBitmap);
-        }
-
+        ImageWrapper.loadImageFromFile(this, mImageView, mImageFilePath, mImageView.getHeight());
+//        File imgFile = new File(mImageFilePath);
+//        Log.d(TAG, mImageFilePath);
+//
+//        if (imgFile.exists()) {
+//            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+//            mImageView.setImageBitmap(myBitmap);
+//        }
     }
 
     /**

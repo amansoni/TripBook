@@ -29,14 +29,10 @@ public class HorizontalListFragment extends Fragment {
 
     private static final String TAG = "HorizontalListFragment";
     private static final String KEY_LAYOUT_MANAGER = "layoutManager";
-    private static final int GRID_COLUMNS = 2;
-    private static final int STAGGERED_ROWS = 4;
-    protected LayoutManagerType mCurrentLayoutManagerType;
     protected RecyclerView mRecyclerView;
     protected HorizontalListAdapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
     private String mItemType = null;
-//    private String mItemType = getString( R.string.title_trip);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,14 +67,15 @@ public class HorizontalListFragment extends Fragment {
         // setup RecyclerView and layout managers
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mLayoutManager = new LinearLayoutManager(getActivity(), OrientationHelper.HORIZONTAL, false);
-        mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
 //
 //        if (savedInstanceState != null) {
 //            mCurrentLayoutManagerType = (LayoutManagerType) savedInstanceState
 //                    .getSerializable(KEY_LAYOUT_MANAGER);
 //        }
 
-        setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
+        mLayoutManager = new LinearLayoutManager(getActivity(), OrientationHelper.HORIZONTAL, false);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.scrollToPosition(0);
 
         // setup DataAdapter
         TripBookItemData ds;
@@ -89,7 +86,7 @@ public class HorizontalListFragment extends Fragment {
         }
         mAdapter = new HorizontalListAdapter(getActivity(), ds);
         mRecyclerView.setAdapter(mAdapter);
-//        registerForContextMenu(container);
+        registerForContextMenu(container);
 
 //        mRecyclerView.addOnItemTouchListener(
 //                new RecyclerItemClickListener((Context) getActivity(),mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
@@ -107,27 +104,6 @@ public class HorizontalListFragment extends Fragment {
 //        );
 
         return view;
-    }
-
-    public void setRecyclerViewLayoutManager(LayoutManagerType layoutManagerType) {
-        int scrollPosition = 0;
-
-        // If a layout manager has already been set, get current scroll position.
-        if (mRecyclerView.getLayoutManager() != null && mCurrentLayoutManagerType == LayoutManagerType.LINEAR_LAYOUT_MANAGER) {
-//            scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
-//                    .findFirstCompletelyVisibleItemPosition();
-        }
-        mLayoutManager = new LinearLayoutManager(getActivity(), OrientationHelper.HORIZONTAL, false);
-
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.scrollToPosition(scrollPosition);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Save currently selected layout manager.
-        savedInstanceState.putSerializable(KEY_LAYOUT_MANAGER, mCurrentLayoutManagerType);
-        super.onSaveInstanceState(savedInstanceState);
     }
 
     public boolean onContextItemSelected(MenuItem item) {
@@ -163,11 +139,4 @@ public class HorizontalListFragment extends Fragment {
         }
         return super.onContextItemSelected(item);
     }
-
-    public enum LayoutManagerType {
-        GRID_LAYOUT_MANAGER,
-        LINEAR_LAYOUT_MANAGER,
-        STAGGERED_LAYOUT_MANAGER
-    }
-
 }

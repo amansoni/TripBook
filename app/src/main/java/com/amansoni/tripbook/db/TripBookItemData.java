@@ -5,8 +5,9 @@ package com.amansoni.tripbook.db;
  */
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.amansoni.tripbook.model.TripBookCommon;
@@ -14,6 +15,7 @@ import com.amansoni.tripbook.model.TripBookImage;
 import com.amansoni.tripbook.model.TripBookItem;
 import com.amansoni.tripbook.model.TripBookLink;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,8 +26,10 @@ public class TripBookItemData extends TripBookAbstractData {
             DatabaseHelper.COLUMN_ITEM_TITLE, DatabaseHelper.COLUMN_ITEM_TYPE,
             DatabaseHelper.COLUMN_ITEM_DESCRIPTION,
             DatabaseHelper.COLUMN_ITEM_STARRED,
-            DatabaseHelper.COLUMN_END_DATE, DatabaseHelper.COLUMN_CREATED_AT};
+            DatabaseHelper.COLUMN_END_DATE, DatabaseHelper.COLUMN_CREATED_AT,
+            DatabaseHelper.COLUMN_IMAGE_THUMBNAIL};
     private List<TripBookCommon> mList = null;
+
     public TripBookItemData() {
         super();
     }
@@ -49,6 +53,12 @@ public class TripBookItemData extends TripBookAbstractData {
         values.put(DatabaseHelper.COLUMN_ITEM_STARRED, tripBookItem.isStarred());
         values.put(DatabaseHelper.COLUMN_END_DATE, tripBookItem.getEndDate().toString());
         values.put(DatabaseHelper.COLUMN_CREATED_AT, tripBookItem.getCreatedAt());
+        if (tripBookItem.getThumbnail() != null) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            tripBookItem.getThumbnail().compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+            values.put(DatabaseHelper.COLUMN_IMAGE_THUMBNAIL, byteArray);
+        }
         open();
         long insertId = database.insert(DatabaseHelper.TABLE_NAME_ITEM, null,
                 values);
@@ -57,7 +67,7 @@ public class TripBookItemData extends TripBookAbstractData {
                 null, null, null);
         cursor.moveToFirst();
         TripBookItem savedItem = cursorToTripBookItem(cursor);
-        if (tripBookCommon.getLocation() != null){
+        if (tripBookCommon.getLocation() != null) {
             //todo save the location
         }
         cursor.close();
@@ -71,7 +81,7 @@ public class TripBookItemData extends TripBookAbstractData {
         // save images
         TripBookImageData tripBookImageData = new TripBookImageData();
         TripBookLinkData tripBookLinkData = new TripBookLinkData();
-        for (TripBookImage image : ((TripBookItem)tripBookCommon).getTripBookImages()) {
+        for (TripBookImage image : ((TripBookItem) tripBookCommon).getTripBookImages()) {
             TripBookImage tripBookImage = tripBookImageData.add(image);
             TripBookLink tripBookLink = new TripBookLink(tripBookCommon, tripBookImage);
             tripBookLinkData.add(tripBookLink);
@@ -81,6 +91,9 @@ public class TripBookItemData extends TripBookAbstractData {
         values.put(DatabaseHelper.COLUMN_ITEM_DESCRIPTION, tripBookItem.getDescription());
         values.put(DatabaseHelper.COLUMN_ITEM_TYPE, tripBookItem.getItemType());
         values.put(DatabaseHelper.COLUMN_ITEM_STARRED, tripBookItem.isStarred());
+        values.put(DatabaseHelper.COLUMN_ITEM_STARRED, tripBookItem.isStarred());
+        if (tripBookItem.getThumbnail() != null)
+            values.put(DatabaseHelper.COLUMN_IMAGE_THUMBNAIL, tripBookItem.getThumbnail().getRowBytes());
         open();
         long updateId = database.update(DatabaseHelper.TABLE_NAME_ITEM, values, DatabaseHelper.COLUMN_ID + " = ?", new String[]{String.valueOf(tripBookItem.getId())});
         Cursor cursor = database.query(DatabaseHelper.TABLE_NAME_ITEM,
@@ -139,6 +152,15 @@ public class TripBookItemData extends TripBookAbstractData {
         TripBookItem.setStarred((cursor.getInt(4) == 0 ? false : true));
         TripBookItem.setEndDate(cursor.getString(6));
         TripBookItem.setCreatedAt(cursor.getString(6));
+
+        byte[] data = cursor.getBlob(7);
+        if (data != null) {
+            Bitmap thumbNail;
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inMutable = true;
+            thumbNail = BitmapFactory.decodeByteArray(data, 0, data.length, options);
+            TripBookItem.setThumbnail(thumbNail);
+        }
 //        Log.d(TAG, "cursorToTripBookItem" + TripBookItem.toString());
         return TripBookItem;
     }
@@ -169,7 +191,7 @@ public class TripBookItemData extends TripBookAbstractData {
 
     public void createTestData() {
         // create trips
-        TripBookItem loader =  add(new TripBookItem("Birmingham 2015", TripBookItem.TYPE_TRIP));
+        TripBookItem loader = add(new TripBookItem("Birmingham 2015", TripBookItem.TYPE_TRIP));
         add(new TripBookItem("Vicki", TripBookItem.TYPE_FRIENDS, true));
         add(new TripBookItem("Farhaan", TripBookItem.TYPE_FRIENDS));
         add(new TripBookItem("Hugh", TripBookItem.TYPE_FRIENDS));

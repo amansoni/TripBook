@@ -1,5 +1,7 @@
 package com.amansoni.tripbook.model;
 
+import android.graphics.Bitmap;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,7 @@ public class TripBookItem extends TripBookCommon {
     private String mTitle;
     private String mDescription;
     private String mItemType;
+    private Bitmap mThumbNail;
 
     public TripBookItem() {
         super();
@@ -62,6 +65,14 @@ public class TripBookItem extends TripBookCommon {
 
     public List<TripBookImage> getTripBookImages() {
         return mTripBookImages;
+    }
+
+    public Bitmap getThumbnail(){
+        return mThumbNail;
+    }
+
+    public void setThumbnail(Bitmap thumbNail){
+        mThumbNail = thumbNail;
     }
 
     public void setTripBookImages(List<TripBookImage> tripBookImages) {

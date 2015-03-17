@@ -98,7 +98,14 @@ public class ImageResizer extends ImageWorker {
 
     @Override
     protected Bitmap processBitmap(Object data) {
-        return processBitmap(Integer.parseInt(String.valueOf(data)));
+        int check=0;
+        try{
+            check = Integer.parseInt(String.valueOf(data));
+            return processBitmap(check);
+        } catch (Exception e){
+            return decodeSampledBitmapFromFile(data.toString(), mImageWidth,
+                    mImageHeight, getImageCache());
+        }
     }
 
     /**

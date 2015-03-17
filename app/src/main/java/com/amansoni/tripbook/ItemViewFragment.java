@@ -2,7 +2,6 @@ package com.amansoni.tripbook;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -20,13 +19,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.amansoni.tripbook.db.TripBookImageData;
 import com.amansoni.tripbook.db.TripBookItemData;
-import com.amansoni.tripbook.images.ItemGalleryFragment;
-import com.amansoni.tripbook.model.TripBookImage;
 import com.amansoni.tripbook.model.TripBookItem;
+import com.amansoni.tripbook.provider.Images;
+import com.amansoni.tripbook.util.ImageCache;
+import com.amansoni.tripbook.util.ImageFetcher;
+import com.amansoni.tripbook.util.ImageWrapper;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,6 +36,7 @@ import java.io.IOException;
  */
 public class ItemViewFragment extends Fragment {
     private static final String TAG = "ItemViewFragment";
+    private static final String IMAGE_CACHE_DIR = "thumbs";
     private android.support.v7.widget.ShareActionProvider mShareActionProvider;
     private TripBookItem tripBookItem;
     private ListAdapter mListAdapter;
@@ -62,7 +62,7 @@ public class ItemViewFragment extends Fragment {
             Log.d(TAG, "No itemKey passed in bundle args");
         }
         tripBookItem = new TripBookItemData().getItem(args.getLong("itemKey"));
-        TextView tripName =  ((TextView) view.findViewById(R.id.trip_add_name));
+        TextView tripName = ((TextView) view.findViewById(R.id.trip_add_name));
         tripName.setText(tripBookItem.getTitle());
         ((TextView) view.findViewById(R.id.trip_add_start)).setText(tripBookItem.getCreatedAt());
         ((TextView) view.findViewById(R.id.trip_add_end)).setText(tripBookItem.getEndDate());
@@ -76,17 +76,13 @@ public class ItemViewFragment extends Fragment {
             tripNotes.setClickable(false);
         }
 
-        String imagePath = new TripBookImageData().getItem(1).getFilePath();
-        File image = new File(imagePath);
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(),bmOptions);
-        bitmap = Bitmap.createScaledBitmap(bitmap,72,72,true);
-        ImageView mainImage = (ImageView)view.findViewById(R.id.item_main_image);
-        mainImage.setImageBitmap(bitmap);
+        ImageView imageView = (ImageView) view.findViewById(R.id.item_main_image);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        ImageWrapper.loadImage(this, imageView, Images.imageThumbUrls[1]);
 
-        replaceListFragment(R.id.trip_view_friends,TripBookItem.TYPE_FRIENDS);
-        replaceListFragment(R.id.trip_view_places,TripBookItem.TYPE_PLACE);
-        replaceListFragment(R.id.trip_view_gallery,TripBookItem.TYPE_GALLERY);
+        replaceListFragment(R.id.trip_view_friends, TripBookItem.TYPE_FRIENDS);
+        replaceListFragment(R.id.trip_view_places, TripBookItem.TYPE_PLACE);
+        replaceListFragment(R.id.trip_view_gallery, TripBookItem.TYPE_GALLERY);
 
         return view;
     }
@@ -122,7 +118,7 @@ public class ItemViewFragment extends Fragment {
 
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, itemEditFragment)
-                    //.addToBackStack("view")
+                            //.addToBackStack("view")
                     .commit();
 
             return true;
@@ -141,7 +137,7 @@ public class ItemViewFragment extends Fragment {
         shareIntent.setType("image/jpg");
         shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, tripBookItem.getTitle());
         shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, tripBookItem.getCreatedAt());
-//TODO
+//TODO share appropriate data for the item
 //        Uri uri = getLocalBitmapUri(mImageView);
 //        shareIntent.putExtra(Intent.EXTRA_STREAM, uri.toString());
         startActivity(Intent.createChooser(shareIntent, "Share via"));
