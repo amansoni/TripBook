@@ -35,6 +35,8 @@ public class HorizontalListFragment extends Fragment {
     protected RecyclerView.LayoutManager mLayoutManager;
     private String mItemType = null;
     private long mItemId = 0;
+    private boolean mEditable = false;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class HorizontalListFragment extends Fragment {
             mItemType = args.getString("itemType");
             Log.d(TAG, "Now showing" + mItemType);
             mItemId = args.getLong("itemId");
+            mEditable = args.getBoolean("editable");
         }
     }
 
@@ -55,6 +58,9 @@ public class HorizontalListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_horizontal_list, container, false);
         view.setTag(TAG);
         ((TextView) view.findViewById(R.id.textViewHeader)).setText(mItemType);
+        if (!mEditable) {
+            view.findViewById(R.id.add_button).setVisibility(View.GONE);
+        }
 
         // setup RecyclerView and layout managers
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);

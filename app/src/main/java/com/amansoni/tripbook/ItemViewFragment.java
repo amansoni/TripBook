@@ -39,7 +39,7 @@ public class ItemViewFragment extends Fragment {
     private static final String IMAGE_CACHE_DIR = "thumbs";
     private android.support.v7.widget.ShareActionProvider mShareActionProvider;
     private TripBookItem tripBookItem;
-    private ListAdapter mListAdapter;
+    private boolean mEditable = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,6 +92,7 @@ public class ItemViewFragment extends Fragment {
         Bundle listArgs = new Bundle();
         listArgs.putLong("itemId", tripBookItem.getId());
         listArgs.putString("itemType", itemType);
+        listArgs.putBoolean("editable", mEditable);
         images.setArguments(listArgs);
 
         // update the main content by replacing fragments
