@@ -13,7 +13,7 @@ public class TbGeolocation {
     public TbGeolocation(double longitude, double latitude){
         this.longitude = longitude;
         this.latitude = latitude;
-        Log.d(TAG, "New location " + this.toString());
+//        Log.d(TAG, "New location " + this.toString());
     }
 
     public double getLongitude() {

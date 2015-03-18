@@ -42,6 +42,13 @@ public class TripBookItem extends TripBookCommon {
         isStarred = starred;
     }
 
+    @Override
+    public String toString() {
+        String s = "";
+        s = "Last visit " + this.getCreatedAt();
+        return mTitle;
+    }
+
     public String getItemType() {
         return mItemType;
     }
@@ -57,6 +64,7 @@ public class TripBookItem extends TripBookCommon {
     public void setTitle(String title) {
         this.mTitle = title;
     }
+
     public String getDescription() {
         return mDescription;
     }
@@ -65,11 +73,11 @@ public class TripBookItem extends TripBookCommon {
         this.mDescription = description;
     }
 
-    public Bitmap getThumbnail(){
+    public Bitmap getThumbnail() {
         return mThumbNail;
     }
 
-    public void setThumbnail(Bitmap thumbNail){
+    public void setThumbnail(Bitmap thumbNail) {
         mThumbNail = thumbNail;
     }
 
@@ -85,7 +93,7 @@ public class TripBookItem extends TripBookCommon {
         mLinks.add(linkItem);
     }
 
-    public void update(){
+    public void update() {
         new TripBookItemData().update(this);
     }
 

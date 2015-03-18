@@ -1,8 +1,10 @@
 package com.amansoni.tripbook;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.amansoni.tripbook.db.TripBookItemData;
@@ -26,6 +28,14 @@ public class MapsActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        Button searchButton = (Button) findViewById(R.id.map_search_nearby);
+        Drawable icon = this.getResources().getDrawable(R.drawable.ic_action_search);
+        searchButton.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
+
+        Button selectButton = (Button) findViewById(R.id.map_select_places);
+        Drawable settings = this.getResources().getDrawable(R.drawable.ic_action_settings);
+        selectButton.setCompoundDrawablesWithIntrinsicBounds(settings, null, null, null);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setUpMapIfNeeded();
         showMarkers();
@@ -96,13 +106,16 @@ public class MapsActivity extends ActionBarActivity {
         TripBookItemData data = new TripBookItemData(TripBookItem.TYPE_PLACE);
 
         for (TripBookCommon common : data.getAllRows()) {
-            TripBookItem place = (TripBookItem)common;
-            if (place.getLocation().getLatitude() != 0 && place.getLocation().getLongitude() != 0) {
-                LatLng position = new LatLng(place.getLocation().getLatitude(), place.getLocation().getLongitude());
-                mMap.addMarker(new MarkerOptions()
-                        .position(position)
-                        .title(place.getTitle()));
-                Log.d(TAG, "Added location for " + place.getTitle() + " " + place.getLocation().toString());
+            TripBookItem place = (TripBookItem) common;
+            if (place.getLocation() != null) {
+                if (place.getLocation().getLatitude() != 0 && place.getLocation().getLongitude() != 0) {
+                    LatLng position = new LatLng(place.getLocation().getLatitude(), place.getLocation().getLongitude());
+                    mMap.addMarker(new MarkerOptions()
+                            .position(position)
+                            .title(place.getTitle()))
+                            .setSnippet(place.toString());
+                    Log.d(TAG, "Added location for " + place.getTitle() + " " + place.getLocation().toString());
+                }
             } else {
                 Log.d(TAG, "No location for " + place.getTitle());
             }

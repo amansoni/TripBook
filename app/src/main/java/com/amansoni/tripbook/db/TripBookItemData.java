@@ -14,7 +14,6 @@ import com.amansoni.tripbook.model.TbGeolocation;
 import com.amansoni.tripbook.model.TripBookCommon;
 import com.amansoni.tripbook.model.TripBookItem;
 import com.amansoni.tripbook.model.TripBookLink;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -201,10 +200,13 @@ public class TripBookItemData extends TripBookAbstractData {
             thumbNail = BitmapFactory.decodeByteArray(data, 0, data.length, options);
             TripBookItem.setThumbnail(thumbNail);
         }
-        double longitude = cursor.getDouble(7);
-        double latitude = cursor.getDouble(8);
-        TripBookItem.setLocation(new TbGeolocation(longitude, latitude));
-//        Log.d(TAG, "cursorToTripBookItem" + TripBookItem.toString());
+        double longitude = cursor.getDouble(8);
+        double latitude = cursor.getDouble(9);
+        if (longitude != 0 && latitude != 0) {
+            TbGeolocation loc = new TbGeolocation(longitude, latitude);
+            TripBookItem.setLocation(loc);
+            Log.d(TAG, "cursorToTripBookItem" + loc.toString());
+        }
         return TripBookItem;
     }
 
@@ -237,10 +239,14 @@ public class TripBookItemData extends TripBookAbstractData {
         TripBookItem trip = add(new TripBookItem("Birmingham 2015", TripBookItem.TYPE_TRIP));
         TripBookItem friend = add(new TripBookItem("Vicki", TripBookItem.TYPE_FRIENDS, true));
         TripBookItem place1 = add(new TripBookItem("Bullring", TripBookItem.TYPE_PLACE));
-        place1.setLocation(new TbGeolocation(52.4778, -1.8942));
+        TbGeolocation loc1 = new TbGeolocation(Double.parseDouble("52.4778"), Double.parseDouble("-1.8942"));
+        Log.d(TAG, "Location added:" + loc1.toString());
+        place1.setLocation(loc1);
         place1.update();
         TripBookItem place2 = add(new TripBookItem("City Library", TripBookItem.TYPE_PLACE, true));
-        place2.setLocation(new TbGeolocation(52.4798, -1.9085));
+        TbGeolocation loc2 = new TbGeolocation(Double.parseDouble("52.4798"), Double.parseDouble("-1.9085"));
+        Log.d(TAG, "Location added:" + loc2.toString());
+        place2.setLocation(loc2);
         trip.setDescription("Going to do some shopping");
         place2.update();
         trip.setStarred(true);
@@ -269,8 +275,8 @@ public class TripBookItemData extends TripBookAbstractData {
 
         // create places for trips
 //        add(new TripBookItem("Birmingham 2015", TripBookItem.TYPE_TRIP));
-        add(new TripBookItem("Bullring", TripBookItem.TYPE_PLACE));
-        add(new TripBookItem("City Library", TripBookItem.TYPE_PLACE, true));
+//        add(new TripBookItem("Bullring", TripBookItem.TYPE_PLACE));
+//        add(new TripBookItem("City Library", TripBookItem.TYPE_PLACE, true));
         add(new TripBookItem("Chinese Quarter", TripBookItem.TYPE_PLACE));
         add(new TripBookItem("Jewellery Quarter", TripBookItem.TYPE_PLACE));
 //        add(new TripBookItem("Lake District", TripBookItem.TYPE_TRIP));
