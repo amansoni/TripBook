@@ -39,7 +39,6 @@ public class AddItemDialogFragment extends DialogFragment {
                 .setItems(R.array.additems_array, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         Bundle args = new Bundle();
-                        ItemEditFragment itemEditFragment = new ItemEditFragment();
                         switch (which){
                             case 0: // Friend
                                 Intent friendIntent = new Intent(getActivity(), AddActivity.class);
@@ -122,16 +121,6 @@ public class AddItemDialogFragment extends DialogFragment {
                 Intent intent = new Intent(getActivity(), LocationLookup.class);
                 intent.putExtra(LocationLookup.IMAGE_URI, fileUri.getPath());
                 startActivity(intent);
-
-//                // Image captured and saved to fileUri specified in the Intent
-//                Fragment viewNow = ImageDetailFragment.newInstance(fileUri.getPath());
-//
-//                Toast.makeText(getActivity(), "Image saved to:\n" + fileUri.getPath(), Toast.LENGTH_LONG).show();
-//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//                fragmentManager.beginTransaction()
-//                        .replace(R.id.container, viewNow)
-////                    .addToBackStack(mTitle.toString())
-//                        .commit();
 
             } else if (resultCode == getActivity().RESULT_CANCELED) {
                 // User cancelled the image capture

@@ -77,22 +77,22 @@
         </activity>
         <activity
             android:name=".AddActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".MainActivity" />
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".LocationLookup"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value=".MainActivity" />-->
+            <!--android:name="android.support.PARENT_ACTIVITY"-->
+            <!--android:value=".MainActivity" />-->
         </activity>
         <!-- Searchable -->
         <activity
             android:name=".SearchableActivity"
-            android:launchMode="singleTop" >
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -112,7 +112,15 @@
 
         <service
             android:name=".FetchAddressIntentService"
-            android:exported="false"/>
+            android:exported="false" />
+
+        <provider
+            android:name="com.amansoni.tripbook.db.TripBookProvider"
+            android:authorities="com.amansoni.tripbook.db.tripbookprovider"
+            android:enabled="true"
+            android:multiprocess="true">
+            </provider>
+
     </application>
 
 </manifest>

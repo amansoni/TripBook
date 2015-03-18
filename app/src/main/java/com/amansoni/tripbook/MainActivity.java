@@ -43,7 +43,7 @@ public class MainActivity extends ActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext = getApplicationContext();
+        mContext = getContext();
         setContentView(R.layout.activity_main);
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -87,14 +87,14 @@ public class MainActivity extends ActionBarActivity
                 case 0:
                     mTitle = getString(R.string.title_trip);
                     itemType = TripBookItem.TYPE_TRIP;
-                    TripBookItemData test = new TripBookItemData();
-                    if (test.getAllRows().size() == 0) {
-                        test.createTestData();
-                    }
                     break;
                 case 1:
                     mTitle = getString(R.string.title_place);
                     itemType = TripBookItem.TYPE_PLACE;
+                    TripBookItemData test = new TripBookItemData(this.getApplicationContext());
+                    if (test.getAllRows().size() == 0) {
+                        test.createTestData(this.getApplicationContext());
+                    }
                     break;
                 case 2:
                     mTitle = getString(R.string.title_social);
@@ -157,13 +157,13 @@ public class MainActivity extends ActionBarActivity
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
-//            getMenuInflater().inflate(R.menu.main, menu);
-//            restoreActionBar();
-            // Get the SearchView and set the searchable configuration
-//            SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-//            SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-//            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-//            searchView.setIconifiedByDefault(false);
+            getMenuInflater().inflate(R.menu.main, menu);
+            restoreActionBar();
+//            Get the SearchView and set the searchable configuration
+            SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+            SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            searchView.setIconifiedByDefault(false);
 
             return true;
         }

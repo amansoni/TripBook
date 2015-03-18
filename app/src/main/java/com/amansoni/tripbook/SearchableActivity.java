@@ -17,6 +17,9 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
+import com.amansoni.tripbook.db.DatabaseHelper;
+import com.amansoni.tripbook.db.TripBookProvider;
+
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class SearchableActivity extends ListActivity {
 
@@ -58,22 +61,22 @@ public class SearchableActivity extends ListActivity {
 
         String wildcardQuery = "%" + query + "%";
 
-//        Cursor cursor = getContentResolver().query(
-//                EmployeeProvider.CONTENT_URI,
-//                null,
-//                EmployeeDatabase.COLUMN_FIRSTNAME + " LIKE ? OR " + EmployeeDatabase.COLUMN_LASTNAME + " LIKE ?",
-//                new String[] { wildcardQuery, wildcardQuery },
-//                null);
-//
-//        ListAdapter adapter = new SimpleCursorAdapter(
-//                this,
-//                android.R.layout.simple_list_item_2,
-//                cursor,
-//                new String[] { EmployeeDatabase.COLUMN_FIRSTNAME, EmployeeDatabase.COLUMN_LASTNAME },
-//                new int[] { android.R.id.text1, android.R.id.text2 },
-//                0);
-//
-//        setListAdapter(adapter);
+        Cursor cursor = getContentResolver().query(
+                TripBookProvider.CONTENT_URI,
+                null,
+                DatabaseHelper.COLUMN_ITEM_TITLE + " LIKE ? OR " + DatabaseHelper.COLUMN_ITEM_TITLE + " LIKE ?",
+                new String[] { wildcardQuery, wildcardQuery },
+                null);
+
+        ListAdapter adapter = new SimpleCursorAdapter(
+                this,
+                android.R.layout.simple_list_item_2,
+                cursor,
+                new String[] { DatabaseHelper.COLUMN_ITEM_TITLE, DatabaseHelper.COLUMN_ITEM_TITLE },
+                new int[] { android.R.id.text1, android.R.id.text2 },
+                0);
+
+        setListAdapter(adapter);
     }
 
     @Override

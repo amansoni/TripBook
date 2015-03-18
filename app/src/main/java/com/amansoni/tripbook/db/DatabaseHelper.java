@@ -107,7 +107,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * constructor should be private to prevent direct instantiation.
      * make call to static factory method "getInstance()" instead.
      */
-    private DatabaseHelper(Context context) {
+    public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.mContext = context;
     }

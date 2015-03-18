@@ -5,9 +5,11 @@ package com.amansoni.tripbook.db;
  */
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import com.amansoni.tripbook.model.TbGeolocation;
@@ -41,6 +43,10 @@ public class TripBookItemData extends TripBookAbstractData {
         super();
     }
 
+    public TripBookItemData(Context context) {
+        super(context);
+    }
+
     /**
      * Use this constructor for the DataAdaptor to only return lists of a particular itemType
      *
@@ -60,6 +66,11 @@ public class TripBookItemData extends TripBookAbstractData {
         this();
         mItemType = itemType;
         mLinkedItemId = linkedItemId;
+    }
+
+    public TripBookItemData(FragmentActivity activity, String itemType) {
+        this(activity);
+        mItemType = itemType;
     }
 
     public String getItemType() {
@@ -234,7 +245,8 @@ public class TripBookItemData extends TripBookAbstractData {
         return tripBookItem;
     }
 
-    public void createTestData() {
+    public void createTestData(Context context) {
+        dbHelper = new DatabaseHelper(context);
         // create trips
         TripBookItem trip = add(new TripBookItem("Birmingham 2015", TripBookItem.TYPE_TRIP));
         TripBookItem friend = add(new TripBookItem("Vicki", TripBookItem.TYPE_FRIENDS, true));

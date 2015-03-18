@@ -20,6 +20,10 @@ public abstract class TripBookAbstractData {
         dbHelper = DatabaseHelper.getInstance();
     }
 
+    public TripBookAbstractData(Context context) {
+        dbHelper = new DatabaseHelper(context);
+    }
+
     public void open() throws SQLException {
         database = dbHelper.getWritableDatabase();
     }
