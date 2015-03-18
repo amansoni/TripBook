@@ -78,7 +78,7 @@ public class HorizontalListFragment extends Fragment {
         } else {
             ds = new TripBookItemData(mItemType, mItemId);
         }
-        mAdapter = new HorizontalListAdapter(getActivity(), ds, mItemId, mEditable);
+        mAdapter = new HorizontalListAdapter(getActivity(), ds, mItemId, mEditable, R.color.list_text_selected, R.color.list_text_unselected);
         mRecyclerView.setAdapter(mAdapter);
         registerForContextMenu(container);
 

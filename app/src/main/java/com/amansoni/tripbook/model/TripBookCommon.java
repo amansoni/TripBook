@@ -3,6 +3,7 @@ package com.amansoni.tripbook.model;
 import android.location.Location;
 
 import com.amansoni.tripbook.Utils;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Date;
 
@@ -14,7 +15,7 @@ public abstract class TripBookCommon {
     protected String mCreatedAt;
     protected String mEndDate;
     protected boolean isStarred;
-    private Location mLocation;
+    private TbGeolocation mLocation;
 
     public TripBookCommon() {
     }
@@ -49,11 +50,11 @@ public abstract class TripBookCommon {
         return isStarred;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(TbGeolocation location) {
         this.mLocation = location;
     }
 
-    public Location getLocation(){
+    public TbGeolocation getLocation(){
         return mLocation;
     }
 

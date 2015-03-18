@@ -76,12 +76,11 @@ public class AddActivity extends ActionBarActivity {
     };
     protected static String mItemType;
     protected static ArrayList<TripBookItem> selectedItems;
-    ;
     protected static HorizontalListFragment fragmentFriends;
-    ;
     protected static HorizontalListFragment fragmentImages;
-    ;
     protected static HorizontalListFragment fragmentPlace;
+    protected static HorizontalListFragment fragmentTrip;
+
     static java.text.DateFormat dateFormat;
     private View.OnTouchListener dateOnTouchListener = new View.OnTouchListener() {
         @Override
@@ -142,13 +141,23 @@ public class AddActivity extends ActionBarActivity {
 
         selectedItems = new ArrayList<>();
         fragmentFriends = new HorizontalListFragment();
-        replaceListFragment(fragmentFriends, R.id.trip_view_friends, TripBookItem.TYPE_FRIENDS);
         fragmentPlace = new HorizontalListFragment();
-        replaceListFragment(fragmentPlace, R.id.trip_view_places, TripBookItem.TYPE_PLACE);
         fragmentImages = new HorizontalListFragment();
-        replaceListFragment(fragmentImages, R.id.trip_view_gallery, TripBookItem.TYPE_GALLERY);
-        isDirty = false;
+        if (mItemType.equals(TripBookItem.TYPE_TRIP)){
+            replaceListFragment(fragmentFriends, R.id.trip_view_friends, TripBookItem.TYPE_FRIENDS);
+            replaceListFragment(fragmentPlace, R.id.trip_view_places, TripBookItem.TYPE_PLACE);
+            replaceListFragment(fragmentImages, R.id.trip_view_gallery, TripBookItem.TYPE_GALLERY);
+        } else if (mItemType.equals(TripBookItem.TYPE_PLACE)){
+            replaceListFragment(fragmentPlace,R.id.trip_view_places, TripBookItem.TYPE_TRIP);
+            replaceListFragment(fragmentFriends, R.id.trip_view_friends, TripBookItem.TYPE_FRIENDS);
+            replaceListFragment(fragmentImages,R.id.trip_view_gallery, TripBookItem.TYPE_GALLERY);
+        } else if (mItemType.equals(TripBookItem.TYPE_FRIENDS)){
+            replaceListFragment(fragmentPlace, R.id.trip_view_places, TripBookItem.TYPE_TRIP);
+            replaceListFragment(fragmentPlace, R.id.trip_view_friends, TripBookItem.TYPE_PLACE);
+            replaceListFragment(fragmentImages, R.id.trip_view_gallery, TripBookItem.TYPE_GALLERY);
+        }
 
+        isDirty = false;
     }
 
     private void replaceListFragment(HorizontalListFragment fragment, int horizontalList, String itemType) {

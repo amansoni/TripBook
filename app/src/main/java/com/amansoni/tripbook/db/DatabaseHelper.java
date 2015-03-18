@@ -59,7 +59,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COLUMN_ITEM_STARRED + " INTEGER,"
             + COLUMN_CREATED_AT + " DATETIME,"
             + COLUMN_END_DATE + " DATETIME,"
-            + COLUMN_IMAGE_THUMBNAIL + " BLOB"
+            + COLUMN_IMAGE_THUMBNAIL + " BLOB,"
+            + COLUMN_LOCATION_LATITUDE + " REAL,"
+            + COLUMN_LOCATION_LONGITUDE + " REAL"
             + ")";
 
     private static final String CREATE_TABLE_TBIMAGES = "CREATE TABLE " + TABLE_NAME_IMAGES
@@ -76,6 +78,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_TBLOCATION = "CREATE TABLE " + TABLE_NAME_LOCATION
             + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+            + COLUMN_LINKS_PARENTID + " INTEGER,"
             + COLUMN_LOCATION_LATITUDE + " REAL,"
             + COLUMN_LOCATION_LONGITUDE + " REAL,"
             + COLUMN_CREATED_AT + " DATETIME" + ")";
@@ -95,7 +98,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public static DatabaseHelper getInstance() {
         if (mInstance == null) {
-            mInstance = new DatabaseHelper(MainActivity.getContext().getApplicationContext());
+            mInstance = new DatabaseHelper(MainActivity.getContext());
         }
         return mInstance;
     }

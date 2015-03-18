@@ -112,7 +112,6 @@
         android:layout_below="@+id/trip_add_notes"
         android:orientation="horizontal" />
 
-
     <LinearLayout
         android:id="@+id/trip_view_friends"
         android:layout_width="fill_parent"

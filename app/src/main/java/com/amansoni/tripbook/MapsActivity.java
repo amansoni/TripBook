@@ -1,23 +1,25 @@
 package com.amansoni.tripbook;
 
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.amansoni.tripbook.db.TripBookItemData;
+import com.amansoni.tripbook.model.TripBookCommon;
+import com.amansoni.tripbook.model.TripBookItem;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends ActionBarActivity {
-
+    protected static final String TAG = "MapsActivity";
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
 
     @Override
@@ -26,6 +28,7 @@ public class MapsActivity extends ActionBarActivity {
         setContentView(R.layout.activity_maps);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setUpMapIfNeeded();
+        showMarkers();
     }
 
     @Override
@@ -69,14 +72,13 @@ public class MapsActivity extends ActionBarActivity {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) )
-        {
+        switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this)) {
             case ConnectionResult.SUCCESS:
                 MapsInitializer.initialize(this);
-                    mMap.getUiSettings().setMyLocationButtonEnabled(true);
-                    mMap.setMyLocationEnabled(true);
-                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(52.487269, -1.890457), 10);
-                    mMap.animateCamera(cameraUpdate);
+                mMap.getUiSettings().setMyLocationButtonEnabled(true);
+                mMap.setMyLocationEnabled(true);
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(52.487269, -1.890457), 10);
+                mMap.animateCamera(cameraUpdate);
                 break;
             case ConnectionResult.SERVICE_MISSING:
                 Toast.makeText(this, "SERVICE MISSING", Toast.LENGTH_SHORT).show();
@@ -84,8 +86,26 @@ public class MapsActivity extends ActionBarActivity {
             case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
                 Toast.makeText(this, "UPDATE REQUIRED", Toast.LENGTH_SHORT).show();
                 break;
-            default: Toast.makeText(this, GooglePlayServicesUtil.isGooglePlayServicesAvailable(this), Toast.LENGTH_SHORT).show();
+            default:
+                Toast.makeText(this, GooglePlayServicesUtil.isGooglePlayServicesAvailable(this), Toast.LENGTH_SHORT).show();
         }
-        mMap.addMarker(new MarkerOptions().position(new LatLng(52.487269, -1.890457)).title("Aston University"));
+        showMarkers();
+    }
+
+    private void showMarkers() {
+        TripBookItemData data = new TripBookItemData(TripBookItem.TYPE_PLACE);
+
+        for (TripBookCommon common : data.getAllRows()) {
+            TripBookItem place = (TripBookItem)common;
+            if (place.getLocation().getLatitude() != 0 && place.getLocation().getLongitude() != 0) {
+                LatLng position = new LatLng(place.getLocation().getLatitude(), place.getLocation().getLongitude());
+                mMap.addMarker(new MarkerOptions()
+                        .position(position)
+                        .title(place.getTitle()));
+                Log.d(TAG, "Added location for " + place.getTitle() + " " + place.getLocation().toString());
+            } else {
+                Log.d(TAG, "No location for " + place.getTitle());
+            }
+        }
     }
 }

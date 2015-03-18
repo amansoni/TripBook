@@ -10,9 +10,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.amansoni.tripbook.model.TbGeolocation;
 import com.amansoni.tripbook.model.TripBookCommon;
 import com.amansoni.tripbook.model.TripBookItem;
 import com.amansoni.tripbook.model.TripBookLink;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -30,7 +32,10 @@ public class TripBookItemData extends TripBookAbstractData {
             DatabaseHelper.COLUMN_ITEM_STARRED,
             DatabaseHelper.COLUMN_END_DATE,
             DatabaseHelper.COLUMN_CREATED_AT,
-            DatabaseHelper.COLUMN_IMAGE_THUMBNAIL};
+            DatabaseHelper.COLUMN_IMAGE_THUMBNAIL,
+            DatabaseHelper.COLUMN_LOCATION_LATITUDE,
+            DatabaseHelper.COLUMN_LOCATION_LONGITUDE
+    };
     private List<TripBookCommon> mList = null;
 
     public TripBookItemData() {
@@ -58,9 +63,10 @@ public class TripBookItemData extends TripBookAbstractData {
         mLinkedItemId = linkedItemId;
     }
 
-    public String getItemType(){
+    public String getItemType() {
         return mItemType;
     }
+
     public TripBookItem add(TripBookCommon tripBookCommon) {
         TripBookItem tripBookItem = (TripBookItem) tripBookCommon;
         ContentValues values = new ContentValues();
@@ -76,6 +82,10 @@ public class TripBookItemData extends TripBookAbstractData {
             byte[] byteArray = stream.toByteArray();
             values.put(DatabaseHelper.COLUMN_IMAGE_THUMBNAIL, byteArray);
         }
+        if (tripBookItem.getLocation() != null) {
+            values.put(DatabaseHelper.COLUMN_LOCATION_LATITUDE, tripBookItem.getLocation().getLatitude());
+            values.put(DatabaseHelper.COLUMN_LOCATION_LONGITUDE, tripBookItem.getLocation().getLongitude());
+        }
         open();
         long insertId = database.insert(DatabaseHelper.TABLE_NAME_ITEM, null,
                 values);
@@ -84,9 +94,6 @@ public class TripBookItemData extends TripBookAbstractData {
                 null, null, null);
         cursor.moveToFirst();
         TripBookItem savedItem = cursorToTripBookItem(cursor);
-        if (tripBookCommon.getLocation() != null) {
-            //todo save the location
-        }
         cursor.close();
         close();
         mList = null;
@@ -110,6 +117,10 @@ public class TripBookItemData extends TripBookAbstractData {
         values.put(DatabaseHelper.COLUMN_CREATED_AT, tripBookItem.getCreatedAt());
         if (tripBookItem.getThumbnail() != null)
             values.put(DatabaseHelper.COLUMN_IMAGE_THUMBNAIL, tripBookItem.getThumbnail().getRowBytes());
+        if (tripBookItem.getLocation() != null) {
+            values.put(DatabaseHelper.COLUMN_LOCATION_LATITUDE, tripBookItem.getLocation().getLatitude());
+            values.put(DatabaseHelper.COLUMN_LOCATION_LONGITUDE, tripBookItem.getLocation().getLongitude());
+        }
         open();
         long updateId = database.update(DatabaseHelper.TABLE_NAME_ITEM, values, DatabaseHelper.COLUMN_ID + " = ?", new String[]{String.valueOf(tripBookItem.getId())});
         Cursor cursor = database.query(DatabaseHelper.TABLE_NAME_ITEM,
@@ -190,6 +201,9 @@ public class TripBookItemData extends TripBookAbstractData {
             thumbNail = BitmapFactory.decodeByteArray(data, 0, data.length, options);
             TripBookItem.setThumbnail(thumbNail);
         }
+        double longitude = cursor.getDouble(7);
+        double latitude = cursor.getDouble(8);
+        TripBookItem.setLocation(new TbGeolocation(longitude, latitude));
 //        Log.d(TAG, "cursorToTripBookItem" + TripBookItem.toString());
         return TripBookItem;
     }
@@ -223,8 +237,12 @@ public class TripBookItemData extends TripBookAbstractData {
         TripBookItem trip = add(new TripBookItem("Birmingham 2015", TripBookItem.TYPE_TRIP));
         TripBookItem friend = add(new TripBookItem("Vicki", TripBookItem.TYPE_FRIENDS, true));
         TripBookItem place1 = add(new TripBookItem("Bullring", TripBookItem.TYPE_PLACE));
+        place1.setLocation(new TbGeolocation(52.4778, -1.8942));
+        place1.update();
         TripBookItem place2 = add(new TripBookItem("City Library", TripBookItem.TYPE_PLACE, true));
+        place2.setLocation(new TbGeolocation(52.4798, -1.9085));
         trip.setDescription("Going to do some shopping");
+        place2.update();
         trip.setStarred(true);
         trip.setCreatedAt("20 Jan 2015");
         trip.setEndDate("25 Jan 2015");

@@ -92,25 +92,35 @@ public class ItemViewFragment extends Fragment {
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         ImageWrapper.loadImage(this, imageView, Images.imageThumbUrls[1]);
 
-        replaceListFragment(R.id.trip_view_friends, TripBookItem.TYPE_FRIENDS);
-        replaceListFragment(R.id.trip_view_places, TripBookItem.TYPE_PLACE);
-        replaceListFragment(R.id.trip_view_gallery, TripBookItem.TYPE_GALLERY);
+        if (tripBookItem.getItemType().equals(TripBookItem.TYPE_TRIP)){
+            replaceListFragment(R.id.trip_view_friends, TripBookItem.TYPE_FRIENDS);
+            replaceListFragment(R.id.trip_view_places, TripBookItem.TYPE_PLACE);
+            replaceListFragment(R.id.trip_view_gallery, TripBookItem.TYPE_GALLERY);
+        } else if (tripBookItem.getItemType().equals(TripBookItem.TYPE_PLACE)){
+            replaceListFragment(R.id.trip_view_places, TripBookItem.TYPE_TRIP);
+            replaceListFragment(R.id.trip_view_friends, TripBookItem.TYPE_FRIENDS);
+            replaceListFragment(R.id.trip_view_gallery, TripBookItem.TYPE_GALLERY);
+        } else if (tripBookItem.getItemType().equals(TripBookItem.TYPE_FRIENDS)){
+            replaceListFragment(R.id.trip_view_places, TripBookItem.TYPE_TRIP);
+            replaceListFragment(R.id.trip_view_friends, TripBookItem.TYPE_PLACE);
+            replaceListFragment(R.id.trip_view_gallery, TripBookItem.TYPE_GALLERY);
+        }
 
         return view;
     }
 
     private void replaceListFragment(int horizontalList, String itemType) {
-        Fragment images = new HorizontalListFragment();
+        Fragment horizontalListFragment = new HorizontalListFragment();
         Bundle listArgs = new Bundle();
         listArgs.putLong("itemId", tripBookItem.getId());
         listArgs.putString("itemType", itemType);
         listArgs.putBoolean("editable", false);
-        images.setArguments(listArgs);
+        horizontalListFragment.setArguments(listArgs);
 
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(horizontalList, images)
+                .replace(horizontalList, horizontalListFragment)
                 .commit();
     }
 
@@ -131,6 +141,7 @@ public class ItemViewFragment extends Fragment {
             Log.d(TAG, "Setting bundle for itemEditFragment:" + item.toString());
             Intent editIntent = new Intent(getActivity(), AddActivity.class);
             Bundle args = new Bundle();
+            args.putString("itemType", tripBookItem.getItemType());
             args.putLong("itemKey", tripBookItem.getId());
             args.putBoolean("editable", true);
             editIntent.putExtras(args);

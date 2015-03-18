@@ -10,5 +10,7 @@
 
     <color name="navigation_row_selected">#4199bac4</color>
     <color name="navigation_row">#888888</color>
+    <color name="list_text_unselected">#ffffff</color>
+    <color name="list_text_selected">#000000</color>
 
 </resources>

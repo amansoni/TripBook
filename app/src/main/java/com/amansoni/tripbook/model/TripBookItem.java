@@ -12,11 +12,11 @@ import java.util.List;
  */
 public class TripBookItem extends TripBookCommon {
     // itemType constants
-    public final static String TYPE_TRIP = "trip";
-    public final static String TYPE_PLACE = "place";
-    public static final String TYPE_GALLERY = "gallery";
-    public static final String TYPE_STARRED = "starred";
-    public static final String TYPE_FRIENDS = "friend";
+    public final static String TYPE_TRIP = "Trips";
+    public final static String TYPE_PLACE = "Places";
+    public static final String TYPE_GALLERY = "Images";
+    public static final String TYPE_STARRED = "Favourite";
+    public static final String TYPE_FRIENDS = "Friends";
     List<TripBookCommon> mLinks;
     // private fields
     private String mTitle;

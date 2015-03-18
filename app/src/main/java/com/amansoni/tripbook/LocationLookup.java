@@ -45,6 +45,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.amansoni.tripbook.db.TripBookItemData;
+import com.amansoni.tripbook.model.TbGeolocation;
 import com.amansoni.tripbook.model.TripBookImage;
 import com.amansoni.tripbook.model.TripBookItem;
 import com.amansoni.tripbook.util.ImageWrapper;
@@ -53,6 +54,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.File;
 import java.util.Calendar;
@@ -163,7 +165,7 @@ public class LocationLookup extends ActionBarActivity implements
         // save the image
         TripBookItem tripBookItem = new TripBookItem(mLocationAddressTextView.getText().toString(), TripBookItem.TYPE_PLACE);
         //TODO add location to data object
-        tripBookItem.setLocation(mLastLocation);
+        tripBookItem.setLocation(new TbGeolocation(mLastLocation.getLongitude(), mLastLocation.getLatitude()));
         tripBookItem = tripBookItemData.add(tripBookItem);
 
         //TODO add image(s)

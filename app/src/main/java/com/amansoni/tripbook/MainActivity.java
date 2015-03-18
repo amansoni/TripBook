@@ -195,6 +195,7 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onResume(){
         super.onResume();
+//        mContext = getApplicationContext();
     }
 
 

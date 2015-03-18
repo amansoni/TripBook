@@ -31,14 +31,18 @@ public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAd
     protected final FragmentActivity mActivity;
     ArrayList<TripBookCommon> selectedItems;
     private ArrayList<TripBookCommon> tripBookItems;
+    protected static int selectedColour = 0;
+    protected static int unSelectedColour = 0;
 
     /**
      * Initialize the dataset of the Adapter.
      */
-    public HorizontalListAdapter(FragmentActivity activity, TripBookItemData dataSet, long itemId, boolean editable) {
+    public HorizontalListAdapter(FragmentActivity activity, TripBookItemData dataSet, long itemId, boolean editable, int list_text_selected, int list_text_unselected) {
         mActivity = activity;
         mItemId = itemId;
         mEditable = editable;
+        selectedColour = list_text_selected;
+        unSelectedColour = list_text_unselected;
         if (!editable) {
             tripBookItems = (ArrayList<TripBookCommon>) dataSet.getAllRows();
             selectedItems = new ArrayList<>();
@@ -91,10 +95,13 @@ public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAd
         }
 
 
-        if (listViewHolder.isSelected)
-            listViewHolder.itemView.setBackgroundColor(Color.RED);
+        if (listViewHolder.isSelected){
+            listViewHolder.itemName.setBackgroundColor(unSelectedColour);
+            listViewHolder.itemName.setTextColor(Color.RED);
+        }
         else {
-            listViewHolder.itemView.setBackgroundColor(Color.CYAN);
+            listViewHolder.itemName.setBackgroundColor(unSelectedColour);
+            listViewHolder.itemName.setTextColor(Color.WHITE);
         }
     }
 
@@ -141,7 +148,7 @@ public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAd
                 isSelected = !isSelected;
             }
             if (isSelected) {
-                itemView.setBackgroundColor(Color.RED);
+                itemName.setTextColor(Color.RED);
                 selectedItems.add(tripBookItem);
             } else {
                 for (int i=0; i< selectedItems.size(); i++){
@@ -149,14 +156,14 @@ public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAd
                         selectedItems.remove(i);
                     }
                 }
-                itemView.setBackgroundColor(Color.CYAN);
+                itemName.setTextColor(Color.WHITE);
             }
         }
 
         @Override
         public boolean onLongClick(View view) {
             HorizontalListAdapter.mPosition = getPosition();
-            Toast.makeText(view.getContext(), "long click" + getPosition(), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(view.getContext(), "long click" + getPosition(), Toast.LENGTH_SHORT).show();
             return false;
         }
     }
