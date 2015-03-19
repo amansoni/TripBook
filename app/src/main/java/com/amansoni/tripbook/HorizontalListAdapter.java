@@ -26,13 +26,13 @@ import java.util.ArrayList;
 public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAdapter.ListViewHolder> {
     private static final String TAG = "HorizontalListAdapter";
     protected static boolean mEditable = false;
+    protected static int selectedColour = 0;
+    protected static int unSelectedColour = 0;
     private static int mPosition = -1;
     private static long mItemId = 0;
     protected final FragmentActivity mActivity;
     ArrayList<TripBookCommon> selectedItems;
     private ArrayList<TripBookCommon> tripBookItems;
-    protected static int selectedColour = 0;
-    protected static int unSelectedColour = 0;
 
     /**
      * Initialize the dataset of the Adapter.
@@ -44,16 +44,21 @@ public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAd
         selectedColour = list_text_selected;
         unSelectedColour = list_text_unselected;
         if (!editable) {
-            tripBookItems = (ArrayList<TripBookCommon>) dataSet.getAllRows();
+            if (itemId == 0)
+                tripBookItems = (ArrayList<TripBookCommon>) dataSet.getAllRows();
+            else{
+                dataSet.setLinkedItemId(itemId);
+                tripBookItems = (ArrayList<TripBookCommon>) dataSet.getAllRows();
+            }
             selectedItems = new ArrayList<>();
         } else {
             // get all rows for new items with no selected
-            if (itemId == 0){
+            if (itemId == 0) {
                 selectedItems = new ArrayList<>();
-                tripBookItems= (ArrayList<TripBookCommon>) dataSet.getAllRows();
-            }else {
+                tripBookItems = (ArrayList<TripBookCommon>) dataSet.getAllRows();
+            } else {
                 selectedItems = (ArrayList<TripBookCommon>) dataSet.getAllRows();
-                tripBookItems = (ArrayList<TripBookCommon>) new TripBookItemData(dataSet.getItemType()).getAllRows();
+                tripBookItems = (ArrayList<TripBookCommon>) new TripBookItemData(activity, dataSet.getItemType()).getAllRows();
             }
         }
     }
@@ -81,8 +86,8 @@ public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAd
         listViewHolder.itemName.setText(listViewHolder.tripBookItem.getTitle());
         ImageWrapper.loadImage(mActivity, listViewHolder.itemImage, Images.imageThumbUrls[position]);
 
-        for (TripBookCommon item : selectedItems){
-            if (item.getId() == listViewHolder.tripBookItem.getId()){
+        for (TripBookCommon item : selectedItems) {
+            if (item.getId() == listViewHolder.tripBookItem.getId()) {
                 Log.d(TAG, "In selectedItems" + listViewHolder.tripBookItem.getTitle());
                 listViewHolder.isSelected = true;
             }
@@ -95,11 +100,10 @@ public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAd
         }
 
 
-        if (listViewHolder.isSelected){
+        if (listViewHolder.isSelected) {
             listViewHolder.itemName.setBackgroundColor(unSelectedColour);
             listViewHolder.itemName.setTextColor(Color.RED);
-        }
-        else {
+        } else {
             listViewHolder.itemName.setBackgroundColor(unSelectedColour);
             listViewHolder.itemName.setTextColor(Color.WHITE);
         }
@@ -151,8 +155,8 @@ public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAd
                 itemName.setTextColor(Color.RED);
                 selectedItems.add(tripBookItem);
             } else {
-                for (int i=0; i< selectedItems.size(); i++){
-                    if (selectedItems.get(i).getId() == tripBookItem.getId()){
+                for (int i = 0; i < selectedItems.size(); i++) {
+                    if (selectedItems.get(i).getId() == tripBookItem.getId()) {
                         selectedItems.remove(i);
                     }
                 }

@@ -103,7 +103,7 @@ public class MapsActivity extends ActionBarActivity {
     }
 
     private void showMarkers() {
-        TripBookItemData data = new TripBookItemData(TripBookItem.TYPE_PLACE);
+        TripBookItemData data = new TripBookItemData(this, TripBookItem.TYPE_PLACE);
 
         for (TripBookCommon common : data.getAllRows()) {
             TripBookItem place = (TripBookItem) common;

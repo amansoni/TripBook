@@ -1,5 +1,6 @@
 package com.amansoni.tripbook.model;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 
 import com.amansoni.tripbook.db.TripBookItemData;
@@ -93,8 +94,8 @@ public class TripBookItem extends TripBookCommon {
         mLinks.add(linkItem);
     }
 
-    public void update() {
-        new TripBookItemData().update(this);
+    public void update(Activity activity) {
+        new TripBookItemData(activity).update(this);
     }
 
 }

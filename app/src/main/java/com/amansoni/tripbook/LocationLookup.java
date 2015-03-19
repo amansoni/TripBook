@@ -161,7 +161,7 @@ public class LocationLookup extends ActionBarActivity implements
 
     private void saveItem() {
 
-        TripBookItemData tripBookItemData = new TripBookItemData();
+        TripBookItemData tripBookItemData = new TripBookItemData(this);
         // save the image
         TripBookItem tripBookItem = new TripBookItem(mLocationAddressTextView.getText().toString(), TripBookItem.TYPE_PLACE);
         //TODO add location to data object
@@ -173,7 +173,7 @@ public class LocationLookup extends ActionBarActivity implements
 //        if (tripBookImage != null)
 //            tripBookItem.addImage(tripBookImage);
 
-        new TripBookItemData().add(tripBookItem);
+        new TripBookItemData(this).add(tripBookItem);
 
     }
 

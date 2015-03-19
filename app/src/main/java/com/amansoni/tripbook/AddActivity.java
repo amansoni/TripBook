@@ -58,6 +58,7 @@ public class AddActivity extends ActionBarActivity {
     protected static EditText mNotes;
     protected static TextView mCurrentDate;
     protected static boolean isDirty = false;
+
     private TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void afterTextChanged(Editable s) {
@@ -126,7 +127,7 @@ public class AddActivity extends ActionBarActivity {
         if (getIntent().getExtras() != null) {
             if (getIntent().getExtras().containsKey("itemKey")) {
                 long itemKey = getIntent().getExtras().getLong("itemKey");
-                mTripbookItem = new TripBookItemData().getItem(itemKey);
+                mTripbookItem = new TripBookItemData(this).getItem(itemKey);
                 mTripName.setText(mTripbookItem.getTitle());
                 mStartDatePicker.setText(mTripbookItem.getCreatedAt());
                 mEndDatePicker.setText(mTripbookItem.getEndDate());
@@ -234,7 +235,7 @@ public class AddActivity extends ActionBarActivity {
         tripBookItem.setDescription(mNotes.getText().toString());
 
         if (mTripbookItem == null) {
-            tripBookItem = new TripBookItemData().add(tripBookItem);
+            tripBookItem = new TripBookItemData(this).add(tripBookItem);
         } else {
             tripBookItem.setLinks(new ArrayList<TripBookCommon>());
         }
@@ -247,7 +248,7 @@ public class AddActivity extends ActionBarActivity {
         for (TripBookCommon item : fragmentImages.mAdapter.getSelectedItems()) {
             tripBookItem.addLink(item);
         }
-        tripBookItem.update();
+        tripBookItem.update(this);
     }
 
     private boolean validate() {

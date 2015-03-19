@@ -5,7 +5,10 @@ package com.amansoni.tripbook.db;
  */
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.amansoni.tripbook.model.TripBookCommon;
@@ -15,28 +18,36 @@ import com.amansoni.tripbook.model.TripBookLink;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TripBookLinkData extends TripBookAbstractData {
+public class TripBookLinkData {
     private static final String TAG = "TripBookLinkData";
+    // Database fields
+    protected SQLiteDatabase database;
+    protected DatabaseHelper dbHelper;
     private Long mParentId;
     private String[] allColumns = {DatabaseHelper.COLUMN_ID,
             DatabaseHelper.COLUMN_LINKS_PARENTID,
             DatabaseHelper.COLUMN_LINKS_CHILDID,
             DatabaseHelper.COLUMN_ITEM_TYPE,
             DatabaseHelper.COLUMN_CREATED_AT};
+    TripBookItemData tripBookItemData;
 
-    public TripBookLinkData() {
-        super();
+    public TripBookLinkData(Context context) {
+        dbHelper = new DatabaseHelper(context);
+        tripBookItemData = new TripBookItemData(context);
+    }
+
+    public TripBookLinkData(DatabaseHelper databaseHelper) {
+        dbHelper = databaseHelper;
     }
 
     /**
      * Use this constructor for the DataAdaptor to only return lists of a particular itemType
      *
-     * @param parentId
      */
-    public TripBookLinkData(Long parentId) {
-        this();
-        mParentId = parentId;
-    }
+//    public TripBookLinkData(Long parentId) {
+//        this();
+//        mParentId = parentId;
+//    }
 
     public TripBookCommon add(TripBookCommon tripBookCommon) {
         TripBookLink tripBookLink = (TripBookLink) tripBookCommon;
@@ -95,7 +106,6 @@ public class TripBookLinkData extends TripBookAbstractData {
     }
 
     private TripBookLink cursorToTripBookLink(Cursor cursor) {
-        TripBookItemData tripBookItemData = new TripBookItemData();
         TripBookLink tripBookLink = new TripBookLink();
         tripBookLink.setId(cursor.getLong(0));
         tripBookLink.setParent(tripBookItemData.getItem(cursor.getLong(1)));
@@ -134,4 +144,11 @@ public class TripBookLinkData extends TripBookAbstractData {
         close();
     }
 
+    public void open() throws SQLException {
+        database = dbHelper.getWritableDatabase();
+    }
+
+    public void close() {
+        dbHelper.close();
+    }
 }

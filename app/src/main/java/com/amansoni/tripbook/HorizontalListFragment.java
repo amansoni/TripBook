@@ -36,11 +36,13 @@ public class HorizontalListFragment extends Fragment {
     private String mItemType = null;
     private long mItemId = 0;
     protected boolean mEditable = false;
+    TripBookItemData tripBookItemData;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        tripBookItemData = new TripBookItemData(getActivity());
 
         // set the item type for the list
         Bundle args = getArguments();
@@ -70,15 +72,13 @@ public class HorizontalListFragment extends Fragment {
         mRecyclerView.scrollToPosition(0);
 
         // setup DataAdapter
-        TripBookItemData ds;
-        if (mItemType == null) {
-            ds = new TripBookItemData();
-        } else if (mItemId == 0) {
-            ds = new TripBookItemData(mItemType);
-        } else {
-            ds = new TripBookItemData(mItemType, mItemId);
+        if (mItemType != null) {
+            tripBookItemData.setItemType(mItemType);
         }
-        mAdapter = new HorizontalListAdapter(getActivity(), ds, mItemId, mEditable, R.color.list_text_selected, R.color.list_text_unselected);
+        if (mItemId != 0) {
+            tripBookItemData.setItemId(mItemId);
+        }
+        mAdapter = new HorizontalListAdapter(getActivity(), tripBookItemData, mItemId, mEditable, R.color.list_text_selected, R.color.list_text_unselected);
         mRecyclerView.setAdapter(mAdapter);
         registerForContextMenu(container);
 
@@ -121,16 +121,16 @@ public class HorizontalListFragment extends Fragment {
             return super.onContextItemSelected(item);
         }
         TripBookItem tripBookItem;
-        if (mItemType == null) {
-            tripBookItem = (TripBookItem) new TripBookItemData().getAllRows().get(position);
-        } else {
-            tripBookItem = (TripBookItem) new TripBookItemData(mItemType).getAllRows().get(position);
-        }
+        tripBookItem = (TripBookItem) tripBookItemData.getAllRows().get(position);
+//        if (mItemType == null) {
+//        } else {
+//            tripBookItem = (TripBookItem) new TripBookItemData(mItemType).getAllRows().get(position);
+//        }
 
         switch (item.getItemId()) {
             case 1:
                 tripBookItem.star();
-                new TripBookItemData().update(tripBookItem);
+                new TripBookItemData(getActivity()).update(tripBookItem);
                 mAdapter.notifyItemChanged(position);
                 synchronized(mAdapter){
                     mAdapter.notify();

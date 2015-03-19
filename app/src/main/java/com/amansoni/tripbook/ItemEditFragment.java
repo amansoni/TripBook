@@ -49,7 +49,7 @@ public class ItemEditFragment extends Fragment implements View.OnClickListener {
         Bundle args = getArguments();
         if (args != null) {
             if (args.containsKey("itemKey")) {
-                tripBookItem = new TripBookItemData().getItem(args.getLong("itemKey"));
+                tripBookItem = new TripBookItemData(getActivity()).getItem(args.getLong("itemKey"));
                 Log.d(TAG, "Got tripBookItem:" + tripBookItem.toString());
             } else if (args.containsKey("itemType")) {
                 tripBookItem = new TripBookItem("new", args.getString("itemType"));
@@ -72,9 +72,9 @@ public class ItemEditFragment extends Fragment implements View.OnClickListener {
         Bundle args = getArguments();
         if (args != null) {
             if (args.containsKey("itemKey")) {
-                tripBookItem = new TripBookItemData().getItem(args.getLong("itemKey"));
+                tripBookItem = new TripBookItemData(getActivity()).getItem(args.getLong("itemKey"));
                 Log.d(TAG, "Got tripBookItem:" + tripBookItem.toString());
-                tripBookItem = new TripBookItemData().getItem(args.getLong("itemKey"));
+                tripBookItem = new TripBookItemData(getActivity()).getItem(args.getLong("itemKey"));
                 // TextView:title
                 imageTitle = ((EditText) view.findViewById(R.id.item_title));
                 imageTitle.setText(tripBookItem.getTitle());
@@ -144,7 +144,7 @@ public class ItemEditFragment extends Fragment implements View.OnClickListener {
 //        TODO
 //        if (tripBookImage != null)
 //            tripBookItem.addImage(tripBookImage);
-        new TripBookItemData().add(tripBookItem);
+        new TripBookItemData(getActivity()).add(tripBookItem);
     }
 
     @Override

@@ -4,12 +4,14 @@ package com.amansoni.tripbook.db;
  * Created by Aman on 11/02/2015.
  */
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import com.amansoni.tripbook.model.TbGeolocation;
@@ -21,10 +23,16 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TripBookItemData extends TripBookAbstractData {
+public class TripBookItemData {
     private static final String TAG = "TripBookItemData";
+    // Database fields
+    protected SQLiteDatabase database;
+    protected DatabaseHelper dbHelper;
     private String mItemType = null;
     private long mLinkedItemId = 0;
+    private long mItemId = 0;
+    Context mContext;
+
     private String[] allColumns = {
             DatabaseHelper.COLUMN_ID,
             DatabaseHelper.COLUMN_ITEM_TITLE,
@@ -39,12 +47,9 @@ public class TripBookItemData extends TripBookAbstractData {
     };
     private List<TripBookCommon> mList = null;
 
-    public TripBookItemData() {
-        super();
-    }
-
     public TripBookItemData(Context context) {
-        super(context);
+        mContext = context;
+        dbHelper = new DatabaseHelper(context);
     }
 
     /**
@@ -52,8 +57,8 @@ public class TripBookItemData extends TripBookAbstractData {
      *
      * @param itemType
      */
-    public TripBookItemData(String itemType) {
-        this();
+    public TripBookItemData(Context context, String itemType) {
+        this(context);
         mItemType = itemType;
     }
 
@@ -62,23 +67,21 @@ public class TripBookItemData extends TripBookAbstractData {
      *
      * @param itemType
      */
-    public TripBookItemData(String itemType, long linkedItemId) {
-        this();
+    public TripBookItemData(Context context, String itemType, long linkedItemId) {
+        this(context);
         mItemType = itemType;
         mLinkedItemId = linkedItemId;
-    }
-
-    public TripBookItemData(FragmentActivity activity, String itemType) {
-        this(activity);
-        mItemType = itemType;
     }
 
     public String getItemType() {
         return mItemType;
     }
 
-    public TripBookItem add(TripBookCommon tripBookCommon) {
-        TripBookItem tripBookItem = (TripBookItem) tripBookCommon;
+    public void setItemType(String itemType) {
+        mItemType = itemType;
+    }
+
+    public TripBookItem add(TripBookItem tripBookItem) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_ITEM_TITLE, tripBookItem.getTitle());
         values.put(DatabaseHelper.COLUMN_ITEM_DESCRIPTION, tripBookItem.getDescription());
@@ -110,9 +113,9 @@ public class TripBookItemData extends TripBookAbstractData {
         return savedItem;
     }
 
-    public TripBookCommon update(TripBookCommon tripBookCommon) {
-        TripBookItem tripBookItem = (TripBookItem) tripBookCommon;
-        TripBookLinkData tripBookLinkData = new TripBookLinkData();
+    public TripBookItem update(TripBookItem tripBookCommon) {
+        TripBookItem tripBookItem = tripBookCommon;
+        TripBookLinkData tripBookLinkData = new TripBookLinkData(mContext);
         tripBookLinkData.removeLinks(tripBookCommon);
         for (TripBookCommon link : ((TripBookItem) tripBookCommon).getLinks()) {
             TripBookLink tripBookLink = new TripBookLink(tripBookCommon, link);
@@ -160,7 +163,6 @@ public class TripBookItemData extends TripBookAbstractData {
             open();
 
             Cursor cursor = null;
-            String whereClause = null;
             if (mItemType != null) {
                 if (mLinkedItemId == 0) {
                     cursor = database.query(DatabaseHelper.TABLE_NAME_ITEM,
@@ -254,20 +256,20 @@ public class TripBookItemData extends TripBookAbstractData {
         TbGeolocation loc1 = new TbGeolocation(Double.parseDouble("52.4778"), Double.parseDouble("-1.8942"));
         Log.d(TAG, "Location added:" + loc1.toString());
         place1.setLocation(loc1);
-        place1.update();
+        place1.update((Activity) context);
         TripBookItem place2 = add(new TripBookItem("City Library", TripBookItem.TYPE_PLACE, true));
         TbGeolocation loc2 = new TbGeolocation(Double.parseDouble("52.4798"), Double.parseDouble("-1.9085"));
         Log.d(TAG, "Location added:" + loc2.toString());
         place2.setLocation(loc2);
         trip.setDescription("Going to do some shopping");
-        place2.update();
+        place2.update((Activity) context);
         trip.setStarred(true);
         trip.setCreatedAt("20 Jan 2015");
         trip.setEndDate("25 Jan 2015");
         trip.addLink(friend);
         trip.addLink(place1);
         trip.addLink(place2);
-        trip.update();
+        trip.update((Activity) context);
 
         add(new TripBookItem("Farhaan", TripBookItem.TYPE_FRIENDS));
         add(new TripBookItem("Hugh", TripBookItem.TYPE_FRIENDS));
@@ -303,5 +305,21 @@ public class TripBookItemData extends TripBookAbstractData {
 //        add(new TripBookItem("Cheltenham Weekend away", TripBookItem.TYPE_TRIP));
 //        add(new TripBookItem("Cannon Hill Park", TripBookItem.TYPE_TRIP));
 
+    }
+
+    public void open() throws SQLException {
+        database = dbHelper.getWritableDatabase();
+    }
+
+    public void close() {
+        dbHelper.close();
+    }
+
+    public void setItemId(long itemId) {
+        mItemId = itemId;
+    }
+
+    public void setLinkedItemId(long linkedItemId) {
+        mLinkedItemId = linkedItemId;
     }
 }

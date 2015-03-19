@@ -186,15 +186,15 @@ public class RecyclerViewFragment extends Fragment {
         }
         TripBookItem tripBookItem;
         if (mItemType == null) {
-            tripBookItem = (TripBookItem) new TripBookItemData().getAllRows().get(position);
+            tripBookItem = (TripBookItem) new TripBookItemData(getActivity()).getAllRows().get(position);
         } else {
-            tripBookItem = (TripBookItem) new TripBookItemData(mItemType).getAllRows().get(position);
+            tripBookItem = (TripBookItem) new TripBookItemData(getActivity(), mItemType).getAllRows().get(position);
         }
 
         switch (item.getItemId()) {
             case 1:
                 tripBookItem.star();
-                new TripBookItemData().update(tripBookItem);
+                new TripBookItemData(getActivity()).update(tripBookItem);
                 mAdapter.notifyItemChanged(position);
                 synchronized(mAdapter){
                     mAdapter.notify();

@@ -116,7 +116,7 @@ public class AddPlaceActivity extends ActionBarActivity {
     }
 
     private void saveItem() {
-        TripBookItemData tripBookItemData = new TripBookItemData();
+        TripBookItemData tripBookItemData = new TripBookItemData(this);
         TripBookItem tripBookItem = new TripBookItem(mTripName.getText().toString(), TripBookItem.TYPE_TRIP);
         tripBookItem.setCreatedAt(mStartDatePicker.getText().toString());
         tripBookItem.setEndDate(mEndDatePicker.getText().toString());

@@ -91,9 +91,9 @@ public class MainActivity extends ActionBarActivity
                 case 1:
                     mTitle = getString(R.string.title_place);
                     itemType = TripBookItem.TYPE_PLACE;
-                    TripBookItemData test = new TripBookItemData(this.getApplicationContext());
+                    TripBookItemData test = new TripBookItemData(this);
                     if (test.getAllRows().size() == 0) {
-                        test.createTestData(this.getApplicationContext());
+                        test.createTestData(this);
                     }
                     break;
                 case 2:
