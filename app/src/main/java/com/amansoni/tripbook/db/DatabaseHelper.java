@@ -24,7 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_NAME_LINKS = "tb_links";
 
     // Common column names
-    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_ID = "_id";
     public static final String COLUMN_CREATED_AT = "created_at";
 
     // TABLE_NAME_ITEM column names

@@ -115,8 +115,8 @@
             android:exported="false" />
 
         <provider
-            android:name="com.amansoni.tripbook.db.TripBookProvider"
-            android:authorities="com.amansoni.tripbook.db.tripbookprovider"
+            android:name=".TripBookProvider"
+            android:authorities="com.amansoni.tripbook.TripBookProvider"
             android:enabled="true"
             android:multiprocess="true">
             </provider>

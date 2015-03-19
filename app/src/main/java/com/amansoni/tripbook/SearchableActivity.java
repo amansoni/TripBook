@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListAdapter;
@@ -18,17 +19,18 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import com.amansoni.tripbook.db.DatabaseHelper;
-import com.amansoni.tripbook.db.TripBookProvider;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class SearchableActivity extends ListActivity {
+    private final String TAG = "SearchableActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate");
 
         // implement Up Navigation with caret in front of App icon in the Action Bar
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+//TODO        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
         checkIntent(intent);
@@ -36,6 +38,8 @@ public class SearchableActivity extends ListActivity {
 
     @Override
     protected void onNewIntent(Intent newIntent) {
+        Log.d(TAG, "onNewIntent");
+
         // update the activity launch intent
         setIntent(newIntent);
         // handle it
@@ -50,6 +54,8 @@ public class SearchableActivity extends ListActivity {
         } else if (Intent.ACTION_VIEW.equals(intentAction)) {
 
             Uri details = intent.getData();
+            Log.d(TAG, "ViewIntent" + details.toString());
+
             Intent detailsIntent = new Intent(Intent.ACTION_VIEW, details);
             startActivity(detailsIntent);
 
@@ -61,12 +67,17 @@ public class SearchableActivity extends ListActivity {
 
         String wildcardQuery = "%" + query + "%";
 
+        Log.d(TAG, "query:" + query);
+        Log.d(TAG, "provider:" + TripBookProvider.CONTENT_URI_SEARCH);
         Cursor cursor = getContentResolver().query(
-                TripBookProvider.CONTENT_URI,
+//                TripBookProvider.CONTENT_URI,
+                TripBookProvider.CONTENT_URI_SEARCH,
                 null,
                 DatabaseHelper.COLUMN_ITEM_TITLE + " LIKE ? OR " + DatabaseHelper.COLUMN_ITEM_TITLE + " LIKE ?",
                 new String[] { wildcardQuery, wildcardQuery },
                 null);
+
+        Log.d(TAG, "query:" + query);
 
         ListAdapter adapter = new SimpleCursorAdapter(
                 this,

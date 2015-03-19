@@ -1,4 +1,4 @@
-package com.amansoni.tripbook.db;
+package com.amansoni.tripbook;
 
 import android.app.SearchManager;
 import android.content.ContentProvider;
@@ -9,43 +9,46 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
+import com.amansoni.tripbook.db.DatabaseHelper;
+
 import java.util.HashMap;
 
 /**
  * Created by Aman on 18/03/2015.
  */
 public class TripBookProvider extends ContentProvider {
-    DatabaseHelper mDatabaseHelper;
     // content mime types
     public static final String BASE_DATA_NAME = "tripbookitems";
     public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.tripbook.search." + BASE_DATA_NAME;
     public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.tripbook.search." + BASE_DATA_NAME;
-    private static final String AUTHORITY = "com.amansoni.tripbook.db.tripbookprovider";
+    public static final Uri CONTENT_URI_SEARCH = Uri.parse("content://com.amansoni.tripbook.TripBookProvider/tripbookitems");
+    private static final String AUTHORITY = "com.amansoni.tripbook.TripBookProvider";
     // common URIs
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_DATA_NAME);
     public static final Uri SEARCH_SUGGEST_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_DATA_NAME + "/" + SearchManager.SUGGEST_URI_PATH_QUERY);
     // matcher
-    private static final int EMPLOYEES = 1; // The incoming URI matches the main table URI pattern
-    private static final int EMPLOYEE_ID = 2; // The incoming URI matches the main table row ID URI pattern
+    private static final int ITEMS = 1; // The incoming URI matches the main table URI pattern
+    private static final int ITEM_ID = 2; // The incoming URI matches the main table row ID URI pattern
     private static final int SEARCH_SUGGEST = 3;
     private static final HashMap<String, String> SEARCH_SUGGEST_PROJECTION_MAP;
 
     static {
         SEARCH_SUGGEST_PROJECTION_MAP = new HashMap<String, String>();
-//        SEARCH_SUGGEST_PROJECTION_MAP.put(DatabaseHelper.COLUMN_ID, DatabaseHelper.COLUMN_ID);
+        SEARCH_SUGGEST_PROJECTION_MAP.put(DatabaseHelper.COLUMN_ID, DatabaseHelper.COLUMN_ID);
         SEARCH_SUGGEST_PROJECTION_MAP.put(SearchManager.SUGGEST_COLUMN_TEXT_1, DatabaseHelper.COLUMN_ITEM_TITLE + " AS " + SearchManager.SUGGEST_COLUMN_TEXT_1);
         SEARCH_SUGGEST_PROJECTION_MAP.put(SearchManager.SUGGEST_COLUMN_TEXT_2, DatabaseHelper.COLUMN_ITEM_DESCRIPTION + " AS " + SearchManager.SUGGEST_COLUMN_TEXT_2);
-//        SEARCH_SUGGEST_PROJECTION_MAP.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, DatabaseHelper.COLUMN_ID + " AS " + SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID);
+        SEARCH_SUGGEST_PROJECTION_MAP.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, DatabaseHelper.COLUMN_ID + " AS " + SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID);
     }
 
     // Uri matcher to decode incoming URIs.
     private final UriMatcher mUriMatcher;
+    DatabaseHelper mDatabaseHelper;
 
     public TripBookProvider() {
         // Create and initialize URI matcher.
         mUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        mUriMatcher.addURI(AUTHORITY, DatabaseHelper.TABLE_NAME_ITEM, EMPLOYEES);
-//        mUriMatcher.addURI(AUTHORITY, DatabaseHelper.TABLE_NAME_ITEM + "/#", EMPLOYEE_ID);
+        mUriMatcher.addURI(AUTHORITY, DatabaseHelper.TABLE_NAME_ITEM, ITEMS);
+        mUriMatcher.addURI(AUTHORITY, DatabaseHelper.TABLE_NAME_ITEM + "/#", ITEM_ID);
 
         // to get suggestions...
         mUriMatcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY, SEARCH_SUGGEST);
@@ -69,10 +72,10 @@ public class TripBookProvider extends ContentProvider {
                 selectionArgs = new String[]{"%" + selectionArgs[0] + "%", "%" + selectionArgs[0] + "%"};
                 queryBuilder.setProjectionMap(SEARCH_SUGGEST_PROJECTION_MAP);
                 break;
-            case EMPLOYEES:
+            case ITEMS:
                 // no filter
                 break;
-            case EMPLOYEE_ID:
+            case ITEM_ID:
                 queryBuilder.appendWhere(DatabaseHelper.COLUMN_ID + "=" + uri.getLastPathSegment());
                 break;
             default:
@@ -87,9 +90,9 @@ public class TripBookProvider extends ContentProvider {
     @Override
     public String getType(Uri uri) {
         switch (mUriMatcher.match(uri)) {
-            case EMPLOYEES:
+            case ITEMS:
                 return CONTENT_TYPE;
-            case EMPLOYEE_ID:
+            case ITEM_ID:
                 return CONTENT_ITEM_TYPE;
             case SEARCH_SUGGEST:
                 return null;
