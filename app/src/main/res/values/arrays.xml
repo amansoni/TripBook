@@ -6,4 +6,18 @@
         <item>Place</item>
         <item>Photo</item>
     </string-array>
+    <string-array name="search_nearby_array">
+        <item>Coffee shops</item>
+        <item>Tourist attractions</item>
+        <item>Restaurants</item>
+        <item>Pubs</item>
+    </string-array>
+    <string-array name="show_place_filter">
+        <item>By trip...</item>
+        <item>This month</item>
+        <item>Past 6 months</item>
+        <item>Past year</item>
+        <item>All</item>
+    </string-array>
+
 </resources>

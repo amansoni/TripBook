@@ -1,4 +1,4 @@
-package com.amansoni.tripbook.recycler;
+package com.amansoni.tripbook.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

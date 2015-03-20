@@ -4,10 +4,15 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.amansoni.tripbook.db.TripBookItemData;
+import com.amansoni.tripbook.dialog.AddItemDialogFragment;
+import com.amansoni.tripbook.dialog.SearchNearbyDialogFragment;
+import com.amansoni.tripbook.dialog.ShowPlaceFilterDialogFragment;
 import com.amansoni.tripbook.model.TripBookCommon;
 import com.amansoni.tripbook.model.TripBookItem;
 import com.google.android.gms.common.ConnectionResult;
@@ -28,13 +33,36 @@ public class MapsActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         Button searchButton = (Button) findViewById(R.id.map_search_nearby);
         Drawable icon = this.getResources().getDrawable(R.drawable.ic_action_search);
         searchButton.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
 
+        searchButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    new SearchNearbyDialogFragment().show(getSupportFragmentManager(), "search_nearby");
+                    return true;
+                }
+                return true; // consume the event
+            }
+        });
+
         Button selectButton = (Button) findViewById(R.id.map_select_places);
         Drawable settings = this.getResources().getDrawable(R.drawable.ic_action_settings);
         selectButton.setCompoundDrawablesWithIntrinsicBounds(settings, null, null, null);
+
+        selectButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    new ShowPlaceFilterDialogFragment().show(getSupportFragmentManager(), "show_place_filter");
+                    return true;
+                }
+                return true; // consume the event
+            }
+        });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setUpMapIfNeeded();

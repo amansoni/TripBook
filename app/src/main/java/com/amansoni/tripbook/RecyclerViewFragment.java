@@ -1,7 +1,5 @@
 package com.amansoni.tripbook;
 
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -21,8 +19,7 @@ import android.widget.Toast;
 
 import com.amansoni.tripbook.db.TripBookItemData;
 import com.amansoni.tripbook.model.TripBookItem;
-import com.amansoni.tripbook.recycler.AddItemDialogFragment;
-import com.shamanland.fab.FloatingActionButton;
+import com.amansoni.tripbook.dialog.AddItemDialogFragment;
 
 /**
  * RecyclerView list fragment. Adds options to change the list view style
