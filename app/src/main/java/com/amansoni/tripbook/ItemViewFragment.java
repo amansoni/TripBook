@@ -28,6 +28,7 @@ import com.amansoni.tripbook.util.ImageWrapper;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by Aman on 13/02/2015.
@@ -35,13 +36,13 @@ import java.io.IOException;
 public class ItemViewFragment extends Fragment {
     private static final String TAG = "ItemViewFragment";
     private static final String IMAGE_CACHE_DIR = "thumbs";
+    TextView tripNotes;
+    TextView tripStart;
+    TextView tripEnd;
     private android.support.v7.widget.ShareActionProvider mShareActionProvider;
     private TripBookItem tripBookItem;
     private boolean mEditable = false;
     private TextView tripName;
-    TextView tripNotes;
-    TextView tripStart;
-    TextView tripEnd;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,15 +93,15 @@ public class ItemViewFragment extends Fragment {
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         ImageWrapper.loadImage(this, imageView, Images.imageThumbUrls[1]);
 
-        if (tripBookItem.getItemType().equals(TripBookItem.TYPE_TRIP)){
+        if (tripBookItem.getItemType().equals(TripBookItem.TYPE_TRIP)) {
             replaceListFragment(R.id.trip_view_friends, TripBookItem.TYPE_FRIENDS);
             replaceListFragment(R.id.trip_view_places, TripBookItem.TYPE_PLACE);
             replaceListFragment(R.id.trip_view_gallery, TripBookItem.TYPE_GALLERY);
-        } else if (tripBookItem.getItemType().equals(TripBookItem.TYPE_PLACE)){
+        } else if (tripBookItem.getItemType().equals(TripBookItem.TYPE_PLACE)) {
             replaceListFragment(R.id.trip_view_places, TripBookItem.TYPE_TRIP);
             replaceListFragment(R.id.trip_view_friends, TripBookItem.TYPE_FRIENDS);
             replaceListFragment(R.id.trip_view_gallery, TripBookItem.TYPE_GALLERY);
-        } else if (tripBookItem.getItemType().equals(TripBookItem.TYPE_FRIENDS)){
+        } else if (tripBookItem.getItemType().equals(TripBookItem.TYPE_FRIENDS)) {
             replaceListFragment(R.id.trip_view_places, TripBookItem.TYPE_TRIP);
             replaceListFragment(R.id.trip_view_friends, TripBookItem.TYPE_PLACE);
             replaceListFragment(R.id.trip_view_gallery, TripBookItem.TYPE_GALLERY);
@@ -126,7 +127,7 @@ public class ItemViewFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (mEditable){
+        if (mEditable) {
             inflater.inflate(R.menu.item_edit, menu);
         } else {
             inflater.inflate(R.menu.item_view, menu);
@@ -188,16 +189,30 @@ public class ItemViewFragment extends Fragment {
         tripBookItem.update(getActivity());
     }
 
-
+    /**
+     * Create a sharable intent using the item being viewed.
+     *
+     * @return the shareIntent
+     */
     protected Intent createShareIntent() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("image/jpg");
-        shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, tripBookItem.getTitle());
-        shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, tripBookItem.getCreatedAt());
-//TODO share appropriate data for the item
+        shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
+        shareIntent.setType("*/*");
+        shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, tripBookItem.getItemType() + " " + tripBookItem.getTitle());
+        String extraText = "From:" + tripBookItem.getCreatedAt() + "\nTo:" + tripBookItem.getEndDate() + "\n" + tripBookItem.getDescription();
+        shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, extraText);
+
+//TODO share appropriate image data for the item
+        ArrayList<Uri> imageUris = new ArrayList<Uri>();
+        for (String filepath : tripBookItem.getImages()){
+            imageUris.add(Uri.parse(filepath )); // Add your image URIs here
+        }
+        shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
+
 //        Uri uri = getLocalBitmapUri(mImageView);
 //        shareIntent.putExtra(Intent.EXTRA_STREAM, uri.toString());
-        startActivity(Intent.createChooser(shareIntent, "Share via"));
+
+        startActivity(Intent.createChooser(shareIntent, "Share via..."));
         return shareIntent;
     }
 

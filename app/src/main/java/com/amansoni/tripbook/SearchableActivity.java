@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import com.amansoni.tripbook.db.DatabaseHelper;
+import com.amansoni.tripbook.model.TripBookItem;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class SearchableActivity extends ListActivity {
@@ -51,16 +52,24 @@ public class SearchableActivity extends ListActivity {
         String intentAction = intent.getAction();
         if (Intent.ACTION_SEARCH.equals(intentAction)) {
             query = intent.getStringExtra(SearchManager.QUERY);
+            fillList(query);
         } else if (Intent.ACTION_VIEW.equals(intentAction)) {
 
             Uri details = intent.getData();
             Log.d(TAG, "ViewIntent" + details.toString());
 
-            Intent detailsIntent = new Intent(Intent.ACTION_VIEW, details);
-            startActivity(detailsIntent);
+//            Intent detailsIntent = new Intent(Intent.ACTION_VIEW, details);
+//            startActivity(detailsIntent);
 
+            // set the db item key and create the view for a single item
+            Bundle args = new Bundle();
+            args.putLong("itemKey", 1);
+            args.putString("itemType", TripBookItem.TYPE_TRIP);
+            Intent tripIntent = new Intent(this, AddActivity.class);
+            tripIntent.putExtras(args);
+            startActivity(tripIntent);
         }
-        fillList(query);
+//        fillList(query);
     }
 
     private void fillList(String query) {
