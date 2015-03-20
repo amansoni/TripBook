@@ -103,8 +103,11 @@ public class SearchableActivity extends ListActivity {
     protected void onListItemClick(ListView l, View view, int position, long id) {
 
 //        Uri details = Uri.withAppendedPath(EmployeeProvider.CONTENT_URI, "" + id);
-//        Intent detailsIntent = new Intent(Intent.ACTION_VIEW, details);
-//        startActivity(detailsIntent);
+        Bundle args = new Bundle();
+        args.putLong("itemKey", id);
+        Intent detailsIntent = new Intent(this, AddActivity.class);
+        detailsIntent.putExtras(args);
+        startActivity(detailsIntent);
 
     }
 
