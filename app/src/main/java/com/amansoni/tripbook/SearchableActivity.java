@@ -68,7 +68,7 @@ public class SearchableActivity extends ListActivity {
             Bundle args = new Bundle();
             args.putLong("itemKey", 1);
             args.putString("itemType", TripBookItem.TYPE_TRIP);
-            Intent tripIntent = new Intent(this, AddActivity.class);
+            Intent tripIntent = new Intent(this, MainActivity.class);
             tripIntent.putExtras(args);
             startActivity(tripIntent);
         }

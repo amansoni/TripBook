@@ -14,27 +14,4 @@
         tools:context="com.amansoni.tripbook.MapsActivity"
         tools:layout="@layout/activity_maps" />
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:id="@+id/map_buttons">
-
-        <Button
-            android:id="@+id/map_search_nearby"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:text="@string/search_nearby" />
-
-        <Button
-            android:id="@+id/map_select_places"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:text="@string/select_places" />
-
-    </LinearLayout>
-
 </RelativeLayout>

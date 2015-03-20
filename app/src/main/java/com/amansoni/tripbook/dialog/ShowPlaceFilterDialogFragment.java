@@ -5,7 +5,9 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 
+import com.amansoni.tripbook.MapsActivity;
 import com.amansoni.tripbook.R;
 
 /**
@@ -29,8 +31,12 @@ public class ShowPlaceFilterDialogFragment extends DialogFragment {
                             case 3:
                                 break;
                         }
+                        MapsActivity callingActivity = (MapsActivity) getActivity();
+                        callingActivity.onFilterPlaceSelected(which);
+                        dialog.dismiss();
                     }
-                });
+                })
+        .setNegativeButton(getResources().getText(android.R.string.cancel).toString(), null);
         return builder.create();
     }
 

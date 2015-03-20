@@ -2,6 +2,8 @@ package com.amansoni.tripbook.list;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
@@ -12,12 +14,17 @@ import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.ListView;
 
 import com.amansoni.tripbook.R;
+import com.amansoni.tripbook.RecyclerViewAdapter;
 import com.amansoni.tripbook.db.TripBookItemData;
 import com.amansoni.tripbook.model.TripBookItem;
 
 //        www.101apps.co.za
 
 public class ListActivity extends ActionBarActivity {
+
+    protected RecyclerView mRecyclerView;
+    protected RecyclerViewAdapter mAdapter;
+    protected RecyclerView.LayoutManager mLayoutManager;
 
     private ListView myListView;
     private boolean isAddFour = false;
@@ -31,6 +38,11 @@ public class ListActivity extends ActionBarActivity {
         setContentView(R.layout.activity_list);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mLayoutManager = new LinearLayoutManager(this);
+        TripBookItemData ds = new TripBookItemData(this, TripBookItem.TYPE_TRIP);
+        mAdapter = new RecyclerViewAdapter(this, ds);
+        mRecyclerView.setAdapter(mAdapter);
 
         myListView = (ListView) findViewById(R.id.listView);
 

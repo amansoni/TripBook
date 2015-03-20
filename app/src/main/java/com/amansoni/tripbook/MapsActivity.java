@@ -1,18 +1,22 @@
 package com.amansoni.tripbook;
 
-import android.graphics.drawable.Drawable;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.Button;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.amansoni.tripbook.db.TripBookItemData;
-import com.amansoni.tripbook.dialog.AddItemDialogFragment;
 import com.amansoni.tripbook.dialog.SearchNearbyDialogFragment;
 import com.amansoni.tripbook.dialog.ShowPlaceFilterDialogFragment;
+import com.amansoni.tripbook.map.GooglePlace;
+import com.amansoni.tripbook.map.GooglePlaceList;
+import com.amansoni.tripbook.map.GooglePlacesUtility;
+import com.amansoni.tripbook.map.PlaceDetailActivity;
 import com.amansoni.tripbook.model.TripBookCommon;
 import com.amansoni.tripbook.model.TripBookItem;
 import com.google.android.gms.common.ConnectionResult;
@@ -22,52 +26,53 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 
-public class MapsActivity extends ActionBarActivity {
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.List;
+
+public class MapsActivity extends ActionBarActivity  implements GoogleMap.OnMarkerClickListener,
+        GoogleMap.OnInfoWindowClickListener{
     protected static final String TAG = "MapsActivity";
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private HashMap<Marker, GooglePlace> nearby;
+    private Marker marker;
 
+    protected static int defaultFilter = 4;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
-        Button searchButton = (Button) findViewById(R.id.map_search_nearby);
-        Drawable icon = this.getResources().getDrawable(R.drawable.ic_action_search);
-        searchButton.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
-
-        searchButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
-                    new SearchNearbyDialogFragment().show(getSupportFragmentManager(), "search_nearby");
-                    return true;
-                }
-                return true; // consume the event
-            }
-        });
-
-        Button selectButton = (Button) findViewById(R.id.map_select_places);
-        Drawable settings = this.getResources().getDrawable(R.drawable.ic_action_settings);
-        selectButton.setCompoundDrawablesWithIntrinsicBounds(settings, null, null, null);
-
-        selectButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
-                    new ShowPlaceFilterDialogFragment().show(getSupportFragmentManager(), "show_place_filter");
-                    return true;
-                }
-                return true; // consume the event
-            }
-        });
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setUpMapIfNeeded();
-        showMarkers();
+        showMarkers(defaultFilter);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.map, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_map_search:
+                new SearchNearbyDialogFragment().show(getSupportFragmentManager(), "search_nearby");
+                return true;
+            case R.id.action_map_places:
+                new ShowPlaceFilterDialogFragment().show(getSupportFragmentManager(), "show_place_filter");
+                return true;
+            default:
+                return false;
+        }
+    }
+
 
     @Override
     protected void onResume() {
@@ -117,6 +122,8 @@ public class MapsActivity extends ActionBarActivity {
                 mMap.setMyLocationEnabled(true);
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(52.487269, -1.890457), 10);
                 mMap.animateCamera(cameraUpdate);
+//                mMap.setOnMarkerClickListener(this);
+                mMap.setOnInfoWindowClickListener(this);
                 break;
             case ConnectionResult.SERVICE_MISSING:
                 Toast.makeText(this, "SERVICE MISSING", Toast.LENGTH_SHORT).show();
@@ -127,26 +134,133 @@ public class MapsActivity extends ActionBarActivity {
             default:
                 Toast.makeText(this, GooglePlayServicesUtil.isGooglePlayServicesAvailable(this), Toast.LENGTH_SHORT).show();
         }
-        showMarkers();
+        showMarkers(defaultFilter);
     }
 
-    private void showMarkers() {
+    private void showMarkers(int filter) {
+        mMap.clear(); // clear all existing markers
         TripBookItemData data = new TripBookItemData(this, TripBookItem.TYPE_PLACE);
 
         for (TripBookCommon common : data.getAllRows()) {
             TripBookItem place = (TripBookItem) common;
             if (place.getLocation() != null) {
                 if (place.getLocation().getLatitude() != 0 && place.getLocation().getLongitude() != 0) {
-                    LatLng position = new LatLng(place.getLocation().getLatitude(), place.getLocation().getLongitude());
-                    mMap.addMarker(new MarkerOptions()
-                            .position(position)
-                            .title(place.getTitle()))
-                            .setSnippet(place.toString());
-                    Log.d(TAG, "Added location for " + place.getTitle() + " " + place.getLocation().toString());
+                    if (filter == defaultFilter) {
+                        LatLng position = new LatLng(place.getLocation().getLatitude(), place.getLocation().getLongitude());
+                        marker = mMap.addMarker(new MarkerOptions()
+                                .position(position));
+
+                        marker.setTitle(place.getTitle());
+                        marker.setSnippet(place.toString());
+
+                        Log.d(TAG, "Added location for " + place.getTitle() + " " + place.getLocation().toString());
+                    }
                 }
             } else {
                 Log.d(TAG, "No location for " + place.getTitle());
             }
         }
+    }
+
+    private Marker createMarker(LatLng ll, String title, String description, float hue) {
+        Marker marker = mMap.addMarker(new MarkerOptions().position(ll).icon(BitmapDescriptorFactory.defaultMarker(hue)));
+        marker.setTitle(title);
+        marker.setSnippet(description);
+
+        return marker;
+    }
+
+
+    public void onFilterPlaceSelected(int filter) {
+        Log.d(TAG, "onFilterPlaceSelected" + filter);
+        showMarkers(filter);
+    }
+
+    public void onNearBySelect(int filter){
+        onMarkerClick(marker);
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        if (nearby == null || nearby.size() == 0) {
+            String placesKey = getResources().getString(R.string.google_places_key);
+            double lat = marker.getPosition().latitude;
+            double lng = marker.getPosition().longitude;
+            String type = URLEncoder.encode("train_station|bus_station");
+            String placesRequest = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" +
+                    lat + "," + lng + "&radius=500&key=" + placesKey;
+            PlacesReadFeed process = new PlacesReadFeed();
+            process.execute(placesRequest);
+        }
+        //if (marker.equals(this.itemMarker) && nearby != null) {
+        if (nearby != null) {
+            for (Marker placeMarker : nearby.keySet()) {
+                placeMarker.setVisible(!placeMarker.isVisible());
+            }
+        } else if (nearby != null && nearby.containsKey(marker)) {
+            Intent intent = new Intent(this, PlaceDetailActivity.class);
+            intent.putExtra("PLACE", nearby.get(marker));
+            startActivity(intent);
+            return true;
+        } else {
+            Log.i(TAG, "Not the item marker so not fetching places");
+        }
+        return false;
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Intent intent = new Intent(this, PlaceDetailActivity.class);
+//        intent.putExtra("PLACE", nearby.get(marker));
+        startActivity(intent);
+    }
+
+    private class PlacesReadFeed extends AsyncTask<String, Void, GooglePlaceList> {
+        private final ProgressDialog dialog = new ProgressDialog(MapsActivity.this);
+
+        @Override
+        protected GooglePlaceList doInBackground(String... urls) {
+            try {
+                //dialog.setMessage("Fetching Places Data");
+                String input = GooglePlacesUtility.readGooglePlaces(urls[0]);
+                Gson gson = new Gson();
+                GooglePlaceList places = gson.fromJson(input, GooglePlaceList.class);
+                Log.d(TAG, "Number of places found is " + places.getResults().size());
+                return places;
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.d(TAG, e.getMessage());
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            this.dialog.setMessage("Getting nearby places...");
+            this.dialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(GooglePlaceList places) {
+            nearby = new HashMap<>();
+            for (GooglePlace place : places.getResults()) {
+                String name = place.getName();
+                List<String> types = place.getTypes();
+                Log.i(TAG, "Found a place called: " + name);
+                GooglePlace.Geometry geometry = place.getGeometry();
+                if (geometry != null) {
+                    GooglePlace.Geometry.Location location = geometry.getLocation();
+                    if (location != null) {
+
+                        nearby.put(createMarker(new LatLng(location.getLat(), location.getLng()),
+                                        types.toString(), name, BitmapDescriptorFactory.HUE_BLUE),
+                                place);
+                    }
+                }
+            }
+            this.dialog.dismiss();
+        }
+
+
     }
 }

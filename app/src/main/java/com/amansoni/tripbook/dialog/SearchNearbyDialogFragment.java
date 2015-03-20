@@ -3,15 +3,11 @@ package com.amansoni.tripbook.dialog;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 
-import com.amansoni.tripbook.AddActivity;
+import com.amansoni.tripbook.MapsActivity;
 import com.amansoni.tripbook.R;
-import com.amansoni.tripbook.model.TripBookItem;
 
 /**
  * Created by Aman on 01/03/2015.
@@ -34,8 +30,12 @@ public class SearchNearbyDialogFragment extends DialogFragment {
                             case 3:
                                 break;
                         }
+                        MapsActivity callingActivity = (MapsActivity) getActivity();
+                        callingActivity.onNearBySelect(which);
+                        dialog.dismiss();
                     }
-                });
+                })
+                .setNegativeButton(getResources().getText(android.R.string.cancel).toString(), null);
         return builder.create();
     }
 

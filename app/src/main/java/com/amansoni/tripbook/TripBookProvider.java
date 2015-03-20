@@ -8,6 +8,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.util.Log;
 
 import com.amansoni.tripbook.db.DatabaseHelper;
 
@@ -79,6 +80,7 @@ public class TripBookProvider extends ContentProvider {
                 queryBuilder.appendWhere(DatabaseHelper.COLUMN_ID + "=" + uri.getLastPathSegment());
                 break;
             default:
+                Log.d("Provider", uri.toString());
                 throw new IllegalArgumentException("Unknown URI");
         }
 
