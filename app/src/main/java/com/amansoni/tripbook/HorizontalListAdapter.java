@@ -31,8 +31,8 @@ public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAd
     private static int mPosition = -1;
     private static long mItemId = 0;
     protected final FragmentActivity mActivity;
-    ArrayList<TripBookCommon> selectedItems;
-    private ArrayList<TripBookCommon> tripBookItems;
+    ArrayList<TripBookItem> selectedItems;
+    private ArrayList<TripBookItem> tripBookItems;
 
     /**
      * Initialize the dataset of the Adapter.
@@ -45,20 +45,20 @@ public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAd
         unSelectedColour = list_text_unselected;
         if (!editable) {
             if (itemId == 0)
-                tripBookItems = (ArrayList<TripBookCommon>) dataSet.getAllRows();
+                tripBookItems = (ArrayList<TripBookItem>) dataSet.getAllRows();
             else{
                 dataSet.setLinkedItemId(itemId);
-                tripBookItems = (ArrayList<TripBookCommon>) dataSet.getAllRows();
+                tripBookItems = (ArrayList<TripBookItem>) dataSet.getAllRows();
             }
             selectedItems = new ArrayList<>();
         } else {
             // get all rows for new items with no selected
             if (itemId == 0) {
                 selectedItems = new ArrayList<>();
-                tripBookItems = (ArrayList<TripBookCommon>) dataSet.getAllRows();
+                tripBookItems = (ArrayList<TripBookItem>) dataSet.getAllRows();
             } else {
-                selectedItems = (ArrayList<TripBookCommon>) dataSet.getAllRows();
-                tripBookItems = (ArrayList<TripBookCommon>) new TripBookItemData(activity, dataSet.getItemType()).getAllRows();
+                selectedItems = (ArrayList<TripBookItem>) dataSet.getAllRows();
+                tripBookItems = (ArrayList<TripBookItem>) new TripBookItemData(activity, dataSet.getItemType()).getAllRows();
             }
         }
     }
@@ -67,7 +67,7 @@ public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAd
         return mPosition;
     }
 
-    public ArrayList<TripBookCommon> getSelectedItems() {
+    public ArrayList<TripBookItem> getSelectedItems() {
         return selectedItems;
     }
 
@@ -123,10 +123,10 @@ public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAd
         public final ImageView itemImage;
         public TripBookItem tripBookItem;
         public boolean isSelected;
-        public ArrayList<TripBookCommon> selectedItems;
+        public ArrayList<TripBookItem> selectedItems;
 
 
-        public ListViewHolder(View view, ArrayList<TripBookCommon> selectedItems) {
+        public ListViewHolder(View view, ArrayList<TripBookItem> selectedItems) {
             super(view);
             itemName = (TextView) view.findViewById(R.id.item_title);
             itemImage = (ImageView) view.findViewById(R.id.item_image);

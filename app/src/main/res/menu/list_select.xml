@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/cab_one"
+        app:showAsAction="always"
+        android:title="One"
+        android:icon="@drawable/ic_action_search"
+        />
+    <item
+        android:id="@+id/cab_two"
+        app:showAsAction="always"
+        android:title="Two" />
+    <item
+        android:id="@+id/cab_three"
+        app:showAsAction="never"
+        android:title="Three">
+        <menu>
+            <item
+                android:id="@+id/sub_one"
+                android:title="Submenu One" />
+            <item
+                android:id="@+id/sub_two"
+                android:title="Submenu Two" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/cab_four"
+        app:showAsAction="never"
+        android:title="Four" />
+</menu>

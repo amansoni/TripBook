@@ -22,8 +22,6 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
@@ -46,7 +44,6 @@ import android.widget.Toast;
 
 import com.amansoni.tripbook.db.TripBookItemData;
 import com.amansoni.tripbook.model.TbGeolocation;
-import com.amansoni.tripbook.model.TripBookImage;
 import com.amansoni.tripbook.model.TripBookItem;
 import com.amansoni.tripbook.util.ImageWrapper;
 import com.google.android.gms.common.ConnectionResult;
@@ -54,9 +51,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
 
-import java.io.File;
 import java.util.Calendar;
 
 public class LocationLookup extends ActionBarActivity implements
@@ -103,7 +98,7 @@ public class LocationLookup extends ActionBarActivity implements
 
         mLocationAddressTextView = (EditText) findViewById(R.id.location_address_view);
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        mImageView = (ImageView) findViewById(R.id.imageView);
+        mImageView = (ImageView) findViewById(R.id.list_row_imageView);
         mDatePicker = (EditText) findViewById(R.id.dateText);
         mTimePicker = (EditText) findViewById(R.id.timeText);
 //        mFetchAddressButton = (Button) findViewById(R.id.fetch_address_button);

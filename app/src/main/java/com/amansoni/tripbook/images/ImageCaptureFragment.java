@@ -30,7 +30,6 @@ import android.widget.Toast;
 
 import com.amansoni.tripbook.R;
 import com.amansoni.tripbook.util.ImageFetcher;
-import com.amansoni.tripbook.util.ImageWorker;
 import com.amansoni.tripbook.util.Utils;
 import com.shamanland.fab.FloatingActionButton;
 
@@ -129,7 +128,7 @@ public class ImageCaptureFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate and locate the main ImageView
         final View v = inflater.inflate(R.layout.image_capture_fragment, container, false);
-        mImageView = (ImageView) v.findViewById(R.id.imageView);
+        mImageView = (ImageView) v.findViewById(R.id.list_row_imageView);
         FloatingActionButton mFab = (FloatingActionButton)v.findViewById(R.id.fab);
         mFab.setOnClickListener(new OnClickListener() {
             @Override

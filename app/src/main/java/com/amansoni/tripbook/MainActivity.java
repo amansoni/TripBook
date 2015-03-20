@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import com.amansoni.tripbook.Navigation.NavigationDrawerFragment;
 import com.amansoni.tripbook.db.TripBookItemData;
 import com.amansoni.tripbook.images.GalleryFragment;
+import com.amansoni.tripbook.list.ListActivity;
 import com.amansoni.tripbook.model.TripBookItem;
 
 
@@ -97,23 +98,27 @@ public class MainActivity extends ActionBarActivity
                     }
                     break;
                 case 2:
-                    mTitle = getString(R.string.title_social);
-                    itemType = TripBookItem.TYPE_FRIENDS;
+                    Intent tripList = new Intent(this, ListActivity.class);
+                    startActivity(tripList);
+//                    mTitle = getString(R.string.title_social);
+//                    itemType = TripBookItem.TYPE_FRIENDS;
                     break;
                 case 3:
                     mTitle = getString(R.string.title_starred);
                     itemType = TripBookItem.TYPE_STARRED;
                     break;
             }
-            // set the list to display
-            args.putString("itemType", itemType);
-            viewNow.setArguments(args);
-            // update the main content by replacing fragments
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, viewNow)
+            if (position != 2 ) {
+                // set the list to display
+                args.putString("itemType", itemType);
+                viewNow.setArguments(args);
+                // update the main content by replacing fragments
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, viewNow)
 //                    .addToBackStack(mTitle.toString())
-                    .commit();
+                        .commit();
+            }
         }
     }
 

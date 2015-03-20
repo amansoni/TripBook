@@ -6,8 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 import com.amansoni.tripbook.R;
@@ -21,7 +19,7 @@ public class PhotoAdapter extends ArrayAdapter<PhotoItem>{
     private int resourceId;
 
     public PhotoAdapter(Context context, int resourceId,
-                        List<PhotoItem> items, boolean useList) {
+                        List<PhotoItem> items) {
         super(context, resourceId, items);
         this.context = context;
         this.resourceId = resourceId;
@@ -54,8 +52,9 @@ public class PhotoAdapter extends ArrayAdapter<PhotoItem>{
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
             holder = new ViewHolder();
-            viewToUse = mInflater.inflate(resourceId, null);
-            holder.photoImageView = (ImageView) viewToUse.findViewById(R.id.imageView);
+            viewToUse = mInflater.inflate(R.layout.list_row, null);
+//            viewToUse = mInflater.inflate(resourceId, null);
+            holder.photoImageView = (ImageView) viewToUse.findViewById(R.id.list_row_imageView);
             viewToUse.setTag(holder);
         } else {
             viewToUse = convertView;

@@ -2,9 +2,11 @@ package com.amansoni.tripbook.model;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import java.net.URI;
 
 import com.amansoni.tripbook.db.TripBookItemData;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,12 +102,19 @@ public class TripBookItem extends TripBookCommon {
 
     public String[] getImages() {
         return new String[]{"file:///storage/emulated/0/Pictures/TripBook/IMG_20150310_080409.jpg",
-        "file:///storage/emulated/0/Pictures/TripBook/IMG_20150310_134840.jpg",
-        "file:///storage/emulated/0/Pictures/TripBook/IMG_20150310_152455.jpg",
-        "file:///storage/emulated/0/Pictures/TripBook/IMG_20150301_170051.jpg",
-        "file:///storage/emulated/0/Pictures/TripBook/IMG_20150309_093228.jpg",
+                "file:///storage/emulated/0/Pictures/TripBook/IMG_20150310_134840.jpg",
+                "file:///storage/emulated/0/Pictures/TripBook/IMG_20150310_152455.jpg",
+                "file:///storage/emulated/0/Pictures/TripBook/IMG_20150301_170051.jpg",
+                "file:///storage/emulated/0/Pictures/TripBook/IMG_20150309_093228.jpg",
         };
     }
 
-
+    public URI getThumbnailUri(){
+        try {
+            return new URI("file:///storage/emulated/0/Pictures/TripBook/IMG_20150310_080409.jpg");
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
