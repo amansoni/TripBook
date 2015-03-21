@@ -96,5 +96,8 @@
 
     <string name="search_nearby_title">Search for ...</string>
     <string name="filter_place_title">View places visited...</string>
+    <string name="element_delete">Delete</string>
+    <string name="date_picker_title">Select date</string>
+    <string name="take_photo">Photo</string>
 
 </resources>

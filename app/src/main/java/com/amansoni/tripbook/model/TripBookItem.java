@@ -17,9 +17,11 @@ public class TripBookItem extends TripBookCommon {
     // itemType constants
     public final static String TYPE_TRIP = "Trips";
     public final static String TYPE_PLACE = "Places";
-    public static final String TYPE_GALLERY = "Images";
+    public static final String TYPE_Image = "Images";
+    public static final String TYPE_GALLERY = "Gallery";
     public static final String TYPE_STARRED = "Favourite";
     public static final String TYPE_FRIENDS = "Friends";
+    public static final String ITEM_ID = "itemId";
     List<TripBookCommon> mLinks;
     // private fields
     private String mTitle;

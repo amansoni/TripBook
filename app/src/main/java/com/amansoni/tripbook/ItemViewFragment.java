@@ -36,13 +36,13 @@ import java.util.ArrayList;
 public class ItemViewFragment extends Fragment {
     private static final String TAG = "ItemViewFragment";
     private static final String IMAGE_CACHE_DIR = "thumbs";
+    private TextView tripName;
     TextView tripNotes;
     TextView tripStart;
     TextView tripEnd;
     private android.support.v7.widget.ShareActionProvider mShareActionProvider;
     private TripBookItem tripBookItem;
     private boolean mEditable = false;
-    private TextView tripName;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -132,6 +132,9 @@ public class ItemViewFragment extends Fragment {
         } else {
             inflater.inflate(R.menu.item_view, menu);
         }
+//        if (menu.getItem(R.id.menu_search)!=null){
+//            menu.getItem(R.id.menu_search).setVisible(false);
+//        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 

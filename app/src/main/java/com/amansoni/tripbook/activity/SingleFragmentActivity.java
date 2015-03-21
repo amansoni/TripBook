@@ -1,8 +1,8 @@
-package com.amansoni.tripbook.map;
+package com.amansoni.tripbook.activity;
 
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 
 import com.amansoni.tripbook.R;
@@ -19,7 +19,7 @@ public abstract class SingleFragmentActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.empty_frame);
 
-        FragmentManager fm = this.getSupportFragmentManager();
+        FragmentManager fm = this.getFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
         if (fragment == null) {
             fragment = createFragment();

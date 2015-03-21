@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.amansoni.tripbook.Navigation.NavigationDrawerFragment;
+import com.amansoni.tripbook.activity.ListItemActivity;
 import com.amansoni.tripbook.db.TripBookItemData;
 import com.amansoni.tripbook.images.GalleryFragment;
 import com.amansoni.tripbook.list.ListActivity;
@@ -98,7 +99,7 @@ public class MainActivity extends ActionBarActivity
                     }
                     break;
                 case 2:
-                    Intent tripList = new Intent(this, ListActivity.class);
+                    Intent tripList = new Intent(this, ListItemActivity.class);
                     startActivity(tripList);
 //                    mTitle = getString(R.string.title_social);
 //                    itemType = TripBookItem.TYPE_FRIENDS;
@@ -168,8 +169,7 @@ public class MainActivity extends ActionBarActivity
             SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
             SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-            searchView.setIconifiedByDefault(false);
-
+            searchView.setIconifiedByDefault(true);
             return true;
         }
         return super.onCreateOptionsMenu(menu);

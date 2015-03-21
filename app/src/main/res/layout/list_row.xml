@@ -16,4 +16,12 @@
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_toRightOf="@+id/list_row_imageView"/>
+
+    <TextView
+        android:id="@+id/list_row_date"
+        android:layout_marginLeft="5dp"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/list_row_imageView"/>
+
 </RelativeLayout>

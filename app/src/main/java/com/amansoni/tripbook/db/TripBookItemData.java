@@ -45,7 +45,7 @@ public class TripBookItemData {
             DatabaseHelper.COLUMN_LOCATION_LATITUDE,
             DatabaseHelper.COLUMN_LOCATION_LONGITUDE
     };
-    private List<TripBookItem> mList = null;
+    private ArrayList<TripBookItem> mList = null;
 
     public TripBookItemData(Context context) {
         mContext = context;
@@ -157,7 +157,7 @@ public class TripBookItemData {
         mList.remove(tripBookCommon);
     }
 
-    public List<TripBookItem> getAllRows() {
+    public ArrayList<TripBookItem> getAllRows() {
         if (mList == null) {
             mList = new ArrayList<>();
             open();

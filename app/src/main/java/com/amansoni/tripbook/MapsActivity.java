@@ -251,7 +251,6 @@ public class MapsActivity extends ActionBarActivity  implements GoogleMap.OnMark
                 if (geometry != null) {
                     GooglePlace.Geometry.Location location = geometry.getLocation();
                     if (location != null) {
-
                         nearby.put(createMarker(new LatLng(location.getLat(), location.getLng()),
                                         types.toString(), name, BitmapDescriptorFactory.HUE_BLUE),
                                 place);

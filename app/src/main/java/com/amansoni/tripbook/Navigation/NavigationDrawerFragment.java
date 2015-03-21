@@ -1,5 +1,6 @@
 package com.amansoni.tripbook.Navigation;
 
+import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
@@ -18,7 +19,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.amansoni.tripbook.R;
 
@@ -277,4 +281,53 @@ public class NavigationDrawerFragment extends Fragment {
          */
         void onNavigationDrawerItemSelected(int position);
     }
+
+    public class DrawerArrayAdapter extends ArrayAdapter<String> {
+        private final Context context;
+        private final String[] values;
+
+        public DrawerArrayAdapter(Context context, String[] values) {
+            super(context, R.layout.navigation_row, values);
+            this.context = context;
+            this.values = values;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LayoutInflater inflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View rowView = inflater.inflate(R.layout.navigation_row, parent, false);
+
+            TextView textView = (TextView) rowView.findViewById(R.id.rowText);
+            textView.setText(values[position]);
+
+            ImageView imageView = (ImageView) rowView.findViewById(R.id.rowIcon);
+            imageView.setImageResource(getTitleIcon(values[position]));
+            return rowView;
+        }
+
+        private int getTitleIcon(String title) {
+
+            if (context.getString(R.string.title_trip) == title){
+                return R.drawable.ic_action_event;
+            }
+            if (context.getString(R.string.title_place) == title){
+                return R.drawable.ic_action_about;
+            }
+            if (context.getString(R.string.title_social) == title){
+                return R.drawable.ic_action_person;
+            }
+            if (context.getString(R.string.title_starred) == title){
+                return R.drawable.ic_action_important;
+            }
+            if (context.getString(R.string.title_gallery) == title){
+                return R.drawable.ic_action_picture;
+            }
+            if (context.getString(R.string.title_map) == title){
+                return R.drawable.ic_action_place;
+            }
+            return R.drawable.ic_action_settings;
+        }
+    }
+
 }

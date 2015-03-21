@@ -38,11 +38,11 @@ public class ListActivity extends ActionBarActivity {
         setContentView(R.layout.activity_list);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        mLayoutManager = new LinearLayoutManager(this);
-        TripBookItemData ds = new TripBookItemData(this, TripBookItem.TYPE_TRIP);
-        mAdapter = new RecyclerViewAdapter(this, ds);
-        mRecyclerView.setAdapter(mAdapter);
+//        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+//        mLayoutManager = new LinearLayoutManager(this);
+//        TripBookItemData ds = new TripBookItemData(this, TripBookItem.TYPE_TRIP);
+//        mAdapter = new RecyclerViewAdapter(this, ds);
+//        mRecyclerView.setAdapter(mAdapter);
 
         myListView = (ListView) findViewById(R.id.listView);
 
