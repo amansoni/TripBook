@@ -17,14 +17,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.amansoni.tripbook.activity.ListItemActivity;
 import com.amansoni.tripbook.activity.MapsActivity;
 import com.amansoni.tripbook.activity.SettingsActivity;
 import com.amansoni.tripbook.fragment.ListItemFragment;
 import com.amansoni.tripbook.fragment.NavigationDrawerFragment;
-import com.amansoni.tripbook.activity.ListItemActivity;
-import com.amansoni.tripbook.model.TripBookItemData;
 import com.amansoni.tripbook.images.GalleryFragment;
 import com.amansoni.tripbook.model.TripBookItem;
+import com.amansoni.tripbook.model.TripBookItemData;
 
 
 public class MainActivity extends ActionBarActivity
@@ -64,16 +64,11 @@ public class MainActivity extends ActionBarActivity
         // first check for activities that are not fragments
 
 
-        // Check if its the settings
-
         if (position == 6) {
-//            mTitle = getString(R.string.title_settings);
-//            viewNow = PlaceholderFragment.newInstance(position);
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
         } else if (position == 5) {
             mTitle = getString(R.string.title_map);
-//            viewNow = PlaceholderFragment.newInstance(position);
             Intent intent = new Intent(this, MapsActivity.class);
             startActivity(intent);
         } else if (position == 4) {
@@ -83,8 +78,7 @@ public class MainActivity extends ActionBarActivity
                     .replace(R.id.container, new GalleryFragment())
                     .commit();
         } else {
-            // display the RecyclerViewFragment for lists
-            Fragment viewNow = new ListItemFragment();
+            // display the ListItemFragment for the appropriate itemtype
             Bundle args = new Bundle();
             String itemType = null;
             switch (position) {
@@ -111,15 +105,15 @@ public class MainActivity extends ActionBarActivity
                     itemType = TripBookItem.TYPE_STARRED;
                     break;
             }
-            if (position != 2 ) {
+            if (position != 2) {
                 // set the list to display
-                args.putString("itemType", itemType);
-                viewNow.setArguments(args);
+                Fragment viewNow = ListItemFragment.newInstance(itemType);
+//                args.putString(TripBookItem.ITEM_TYPE, itemType);
+//                viewNow.setArguments(args);
                 // update the main content by replacing fragments
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, viewNow)
-//                    .addToBackStack(mTitle.toString())
                         .commit();
             }
         }
@@ -200,7 +194,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
 //        mContext = getApplicationContext();
     }

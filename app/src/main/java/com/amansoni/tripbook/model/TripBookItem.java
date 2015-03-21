@@ -2,9 +2,9 @@ package com.amansoni.tripbook.model;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import java.net.URI;
 
-import java.net.URISyntaxException;
+import com.amansoni.tripbook.util.Photo;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,12 +20,15 @@ public class TripBookItem extends TripBookCommon {
     public static final String TYPE_STARRED = "Favourite";
     public static final String TYPE_FRIENDS = "Friends";
     public static final String ITEM_ID = "itemId";
+    public static final String ITEM_TYPE = "itemType";
     List<TripBookCommon> mLinks;
+
     // private fields
     private String mTitle;
     private String mDescription;
     private String mItemType;
     private Bitmap mThumbNail;
+    private Photo mPhoto;
 
     public TripBookItem() {
         super();
@@ -100,6 +103,13 @@ public class TripBookItem extends TripBookCommon {
         new TripBookItemData(activity).update(this);
     }
 
+    public Photo getPhoto() {
+        if (mPhoto == null)
+            mPhoto = new Photo("/storage/emulated/0/Pictures/TripBook/IMG_20150310_134840.jpg");
+//            mPhoto = new Photo("/storage/emulated/0/Pictures/TripBook/IMG_20150310_134840.jpg");
+        return mPhoto;
+    }
+
     public String[] getImages() {
         return new String[]{"file:///storage/emulated/0/Pictures/TripBook/IMG_20150310_080409.jpg",
                 "file:///storage/emulated/0/Pictures/TripBook/IMG_20150310_134840.jpg",
@@ -107,14 +117,5 @@ public class TripBookItem extends TripBookCommon {
                 "file:///storage/emulated/0/Pictures/TripBook/IMG_20150301_170051.jpg",
                 "file:///storage/emulated/0/Pictures/TripBook/IMG_20150309_093228.jpg",
         };
-    }
-
-    public URI getThumbnailUri(){
-        try {
-            return new URI("file:///storage/emulated/0/Pictures/TripBook/IMG_20150310_080409.jpg");
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }

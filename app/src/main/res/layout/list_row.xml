@@ -8,20 +8,31 @@
         android:id="@+id/list_row_imageView"
         android:layout_width="@dimen/list_image_width"
         android:layout_height="@dimen/list_image_height"
-        android:layout_alignParentLeft="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_margin="5dp"/>
 
     <TextView
         android:id="@+id/list_row_title"
         android:layout_marginLeft="5dp"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:layout_toRightOf="@+id/list_row_imageView"/>
+        android:layout_toRightOf="@+id/list_row_imageView"
+        android:textColor="@color/ActionBarPrimary"/>
 
     <TextView
-        android:id="@+id/list_row_date"
+        android:id="@+id/list_row_date_start"
         android:layout_marginLeft="5dp"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:layout_toRightOf="@+id/list_row_imageView"/>
+        android:layout_toRightOf="@+id/list_row_imageView"
+        android:layout_below="@+id/list_row_title"/>
+
+    <TextView
+        android:id="@+id/list_row_date_end"
+        android:layout_marginLeft="5dp"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/list_row_date_start"
+        android:layout_below="@+id/list_row_title"/>
 
 </RelativeLayout>

@@ -1,7 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/recycler_view"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<?xml version="1.0" encoding="UTF-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-</android.support.v7.widget.RecyclerView>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.amansoni.tripbook.util.FloatingActionButton
+        android:id="@+id/add_button"
+        android:layout_width="@dimen/round_button_diameter"
+        android:layout_height="@dimen/round_button_diameter"
+        android:layout_gravity="end|bottom"
+        android:layout_marginBottom="@dimen/add_button_margin"
+        android:layout_marginEnd="@dimen/add_button_margin"
+        android:background="@drawable/fab_background"
+        android:elevation="@dimen/elevation_low"
+        android:stateListAnimator="@animator/fab_anim">
+
+        <ImageView
+            android:layout_width="@dimen/fab_icon_size"
+            android:layout_height="@dimen/fab_icon_size"
+            android:layout_gravity="center"
+            android:duplicateParentState="true"
+            android:src="@drawable/fab_icons" />
+
+    </com.amansoni.tripbook.util.FloatingActionButton>
+
+</FrameLayout>

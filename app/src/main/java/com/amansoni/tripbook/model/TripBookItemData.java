@@ -148,7 +148,7 @@ public class TripBookItemData {
         database.delete(DatabaseHelper.TABLE_NAME_ITEM, DatabaseHelper.COLUMN_ID
                 + " = " + id, null);
         close();
-        mList.remove(tripBookCommon);
+//        mList.remove(tripBookCommon);
     }
 
     public ArrayList<TripBookItem> getAllRows() {

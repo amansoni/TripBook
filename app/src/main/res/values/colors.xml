@@ -13,4 +13,9 @@
     <color name="list_text_unselected">#ffffff</color>
     <color name="list_text_selected">#000000</color>
 
+    <color name="fab_color_1">#ff5252</color>
+    <color name="fab_color_1_muted">#ff8080</color>
+    <color name="fab_color_2">#9c27b0</color>
+    <color name="fab_color_2_muted">#a56ab0</color>
+
 </resources>

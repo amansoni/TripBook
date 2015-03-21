@@ -18,6 +18,7 @@ public class TripBookImage extends TripBookCommon {
     private byte[] mImage;
     private Bitmap mThumbNail;
 
+
     public TripBookImage() {
         super();
     }

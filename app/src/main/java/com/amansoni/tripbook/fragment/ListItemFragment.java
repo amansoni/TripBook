@@ -1,7 +1,10 @@
 package com.amansoni.tripbook.fragment;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
@@ -14,26 +17,36 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.amansoni.tripbook.R;
 import com.amansoni.tripbook.activity.ItemPagerActivity;
 import com.amansoni.tripbook.model.TripBookItem;
 import com.amansoni.tripbook.model.TripBookItemData;
+import com.amansoni.tripbook.util.DividerItemDecoration;
+import com.amansoni.tripbook.util.Photo;
+import com.amansoni.tripbook.util.PictureUtils;
 import com.bignerdranch.android.multiselector.ModalMultiSelectorCallback;
 import com.bignerdranch.android.multiselector.MultiSelector;
 import com.bignerdranch.android.multiselector.SwappingHolder;
+import com.amansoni.tripbook.util.FloatingActionButton;
 
 import java.util.ArrayList;
 
 public class ListItemFragment extends BaseFragment {
     private static final String TAG = "ListItemFragment";
+    private ArrayList<TripBookItem> mTripBookItems;
+    private boolean mSubtitleVisible;
+
+    private String mItemType = TripBookItem.TYPE_TRIP;
     private RecyclerView mRecyclerView;
     private MultiSelector mMultiSelector = new MultiSelector();
-    private ModalMultiSelectorCallback mDeleteMode = new ModalMultiSelectorCallback(mMultiSelector) {
-
+    private ModalMultiSelectorCallback mMultiMode = new ModalMultiSelectorCallback(mMultiSelector) {
         @Override
         public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
             getActivity().getMenuInflater().inflate(R.menu.list_item, menu);
@@ -46,30 +59,66 @@ public class ListItemFragment extends BaseFragment {
                 // Need to finish the action mode before doing the following,
                 // not after. No idea why, but it crashes.
                 actionMode.finish();
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.dialog_cancel_save_title)
+                        .setMessage(R.string.dialog_cancel_save_message)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                for (int i = mTripBookItems.size(); i >= 0; i--) {
+                                    if (mMultiSelector.isSelected(i, 0)) {
+                                        TripBookItem tripBookItem = mTripBookItems.get(i);
+                                        new TripBookItemData(getActivity()).delete(tripBookItem);
+                                        mTripBookItems.remove(i);
+                                        mRecyclerView.getAdapter().notifyItemRemoved(i);
+                                    }
+                                }
+                                mMultiSelector.clearSelections();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null).show();
+                return true;
+            }
+
+            if (menuItem.getItemId() == R.id.action_item_share) {
+                // Need to finish the action mode before doing the following,
+                // not after. No idea why, but it crashes.
+                actionMode.finish();
 
                 for (int i = mTripBookItems.size(); i >= 0; i--) {
                     if (mMultiSelector.isSelected(i, 0)) {
-//                            Crime crime = mTripBookItems.get(i);
-//                            CrimeLab.get(getActivity()).deleteCrime(crime);
-                        mRecyclerView.getAdapter().notifyItemRemoved(i);
+                        TripBookItem tripBookItem = mTripBookItems.get(i);
+//                        TODO share individual items using object hierarchy
                     }
                 }
-
                 mMultiSelector.clearSelections();
                 return true;
-
             }
             return false;
         }
     };
-    private ArrayList<TripBookItem> mTripBookItems;
-    private boolean mSubtitleVisible;
+
+    public static ListItemFragment newInstance(String itemType) {
+        Bundle args = new Bundle();
+        args.putString(TripBookItem.ITEM_TYPE, itemType);
+
+        ListItemFragment fragment = new ListItemFragment();
+        fragment.setArguments(args);
+
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        getActivity().setTitle(R.string.app_name);
+        Bundle args = getArguments();
+        if (args != null) {
+            mItemType = args.getString(TripBookItem.ITEM_TYPE);
+            Log.d(TAG, "Now showing" + mItemType);
+        }
+
+        getActivity().setTitle(mItemType);
         mSubtitleVisible = false;
     }
 
@@ -90,14 +139,13 @@ public class ListItemFragment extends BaseFragment {
             }
 
             if (mMultiSelector.isSelectable()) {
-                if (mDeleteMode != null) {
-                    mDeleteMode.setClearOnPrepare(false);
-                    ((ActionBarActivity) getActivity()).startSupportActionMode(mDeleteMode);
+                if (mMultiMode != null) {
+                    mMultiMode.setClearOnPrepare(false);
+                    ((ActionBarActivity) getActivity()).startSupportActionMode(mMultiMode);
                 }
 
             }
         }
-
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -119,8 +167,24 @@ public class ListItemFragment extends BaseFragment {
 
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mTripBookItems = new TripBookItemData(getActivity()).getAllRows();
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
+
+        TripBookItemData tripBookItemData = new TripBookItemData(getActivity());
+        tripBookItemData.setItemType(mItemType);
+        mTripBookItems = tripBookItemData.getAllRows();
         mRecyclerView.setAdapter(new ItemAdapter());
+
+        FloatingActionButton mAddButton = (FloatingActionButton)v.findViewById(R.id.add_button);
+        mAddButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    new AddItemDialogFragment().show(getFragmentManager(), "addnew");
+                    return true;
+                }
+                return true; // consume the event
+            }
+        });
 
         return v;
     }
@@ -196,16 +260,19 @@ public class ListItemFragment extends BaseFragment {
 
     private class ItemHolder extends SwappingHolder implements View.OnClickListener, View.OnLongClickListener {
         private final TextView mTitleTextView;
-        private final TextView mDateTextView;
-        //        private final CheckBox mSolvedCheckBox;
+        private final TextView mDateStartTextView;
+        private final TextView mDateEndTextView;
+        private final ImageView mImageView;
         private TripBookItem mTripBookItem;
 
         public ItemHolder(View itemView) {
             super(itemView, mMultiSelector);
 
             mTitleTextView = (TextView) itemView.findViewById(R.id.list_row_title);
-            mDateTextView = (TextView) itemView.findViewById(R.id.list_row_date);
-//            mSolvedCheckBox = (CheckBox) itemView.findViewById(R.id.crime_list_item_solvedCheckBox);
+            mDateStartTextView = (TextView) itemView.findViewById(R.id.list_row_date_start);
+            mDateEndTextView = (TextView) itemView.findViewById(R.id.list_row_date_end);
+            mImageView = (ImageView) itemView.findViewById(R.id.list_row_imageView);
+
             itemView.setOnClickListener(this);
             itemView.setLongClickable(true);
             itemView.setOnLongClickListener(this);
@@ -214,36 +281,44 @@ public class ListItemFragment extends BaseFragment {
         public void bindCrime(TripBookItem tripBookItem) {
             mTripBookItem = tripBookItem;
             mTitleTextView.setText(tripBookItem.getTitle());
-            mDateTextView.setText(tripBookItem.getCreatedAt().toString());
-//            mSolvedCheckBox.setChecked(tripBookItem.isSolved());
+            mDateStartTextView.setText("From:" + tripBookItem.getCreatedAt().toString());
+            mDateEndTextView.setText(" To:" + tripBookItem.getEndDate().toString());
+            showImage();
+        }
+
+        private void showImage() {
+            // (re)set the image button's image based on our photo
+            Photo p = mTripBookItem.getPhoto();
+            BitmapDrawable b = null;
+            if (p != null) {
+//                String path = getActivity()
+//                        .getFileStreamPath(p.getFilename()).getAbsolutePath();
+                b = PictureUtils.getScaledDrawable(getActivity(), p.getFilename());
+            }
+            mImageView.setImageDrawable(b);
         }
 
         @Override
         public void onClick(View v) {
-
             if (mTripBookItem == null) {
                 return;
             }
             if (!mMultiSelector.tapSelection(this)) {
                 selectItem(mTripBookItem);
             }
-
         }
-
 
         @Override
         public boolean onLongClick(View v) {
-
-            ((ActionBarActivity) getActivity()).startSupportActionMode(mDeleteMode);
+            ((ActionBarActivity) getActivity()).startSupportActionMode(mMultiMode);
             mMultiSelector.setSelected(this, true);
             return true;
         }
-
-
     }
 
 
     private class ItemAdapter extends RecyclerView.Adapter<ItemHolder> {
+
         @Override
         public ItemHolder onCreateViewHolder(ViewGroup parent, int pos) {
             View view = LayoutInflater.from(parent.getContext())
