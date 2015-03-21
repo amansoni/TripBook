@@ -1,6 +1,6 @@
 package com.amansoni.tripbook.activity;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 
 import com.amansoni.tripbook.fragment.ListItemFragment;
 

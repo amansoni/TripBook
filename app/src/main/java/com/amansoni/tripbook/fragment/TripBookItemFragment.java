@@ -185,7 +185,8 @@ public class TripBookItemFragment extends BaseFragment {
     @Override
     public void onStop() {
         super.onStop();
-        PictureUtils.cleanImageView(mPhotoView);
+//TODO
+//        PictureUtils.cleanImageView(mPhotoView);
     }
 
     @Override

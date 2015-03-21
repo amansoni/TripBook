@@ -2,14 +2,15 @@ package com.amansoni.tripbook.activity;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.support.v4.view.ViewPager;
 
 import com.amansoni.tripbook.R;
 import com.amansoni.tripbook.db.TripBookItemData;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class ItemPagerActivity extends ActionBarActivity {
-    ViewPager mViewPager;
+    android.support.v4.view.ViewPager mViewPager;
 
     public static ActivityOptions getTransition(Activity activity, View TripBookItemView) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -49,8 +50,8 @@ public class ItemPagerActivity extends ActionBarActivity {
 
         final ArrayList<TripBookItem> tripBookItems = new TripBookItemData(this).getAllRows();
 
-        FragmentManager fm = getFragmentManager();
-        mViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
+        FragmentManager fm = getSupportFragmentManager();
+        mViewPager.setAdapter(new android.support.v4.app.FragmentStatePagerAdapter(fm) {
             @Override
             public int getCount() {
                 return tripBookItems.size();

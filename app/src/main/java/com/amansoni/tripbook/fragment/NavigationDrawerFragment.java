@@ -1,4 +1,4 @@
-package com.amansoni.tripbook.Navigation;
+package com.amansoni.tripbook.fragment;
 
 import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
