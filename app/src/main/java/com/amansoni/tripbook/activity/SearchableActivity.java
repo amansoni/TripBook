@@ -1,4 +1,4 @@
-package com.amansoni.tripbook;
+package com.amansoni.tripbook.activity;
 
 /**
  * Created by Aman on 12/03/2015.
@@ -19,6 +19,9 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
+import com.amansoni.tripbook.AddActivity;
+import com.amansoni.tripbook.MainActivity;
+import com.amansoni.tripbook.TripBookProvider;
 import com.amansoni.tripbook.db.DatabaseHelper;
 import com.amansoni.tripbook.model.TripBookItem;
 

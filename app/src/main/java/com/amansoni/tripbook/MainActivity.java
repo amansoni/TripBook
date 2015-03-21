@@ -17,6 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.amansoni.tripbook.activity.MapsActivity;
+import com.amansoni.tripbook.activity.SettingsActivity;
 import com.amansoni.tripbook.fragment.NavigationDrawerFragment;
 import com.amansoni.tripbook.activity.ListItemActivity;
 import com.amansoni.tripbook.db.TripBookItemData;

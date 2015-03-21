@@ -1,4 +1,4 @@
-package com.amansoni.tripbook;
+package com.amansoni.tripbook.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -10,9 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.amansoni.tripbook.R;
 import com.amansoni.tripbook.db.TripBookItemData;
-import com.amansoni.tripbook.dialog.SearchNearbyDialogFragment;
-import com.amansoni.tripbook.dialog.ShowPlaceFilterDialogFragment;
+import com.amansoni.tripbook.fragment.SearchNearbyDialogFragment;
+import com.amansoni.tripbook.fragment.ShowPlaceFilterDialogFragment;
 import com.amansoni.tripbook.map.GooglePlace;
 import com.amansoni.tripbook.map.GooglePlaceList;
 import com.amansoni.tripbook.map.GooglePlacesUtility;

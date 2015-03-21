@@ -1,7 +1,6 @@
-package com.amansoni.tripbook;
+package com.amansoni.tripbook.activity;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -18,7 +17,6 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -28,7 +26,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.amansoni.tripbook.images.GalleryFragment;
+import com.amansoni.tripbook.GoogleClient;
+import com.amansoni.tripbook.R;
 
 import java.util.List;
 

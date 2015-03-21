@@ -1,4 +1,4 @@
-package com.amansoni.tripbook.dialog;
+package com.amansoni.tripbook.fragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -6,7 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
-import com.amansoni.tripbook.MapsActivity;
+import com.amansoni.tripbook.activity.MapsActivity;
 import com.amansoni.tripbook.R;
 
 /**

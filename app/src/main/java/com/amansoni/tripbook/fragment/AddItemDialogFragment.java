@@ -1,4 +1,4 @@
-package com.amansoni.tripbook.dialog;
+package com.amansoni.tripbook.fragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -13,8 +13,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.amansoni.tripbook.AddActivity;
-import com.amansoni.tripbook.ItemEditFragment;
-import com.amansoni.tripbook.LocationLookup;
+import com.amansoni.tripbook.activity.LocationLookup;
 import com.amansoni.tripbook.R;
 import com.amansoni.tripbook.model.TripBookItem;
 

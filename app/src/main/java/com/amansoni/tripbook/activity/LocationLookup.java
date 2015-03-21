@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.amansoni.tripbook;
+package com.amansoni.tripbook.activity;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -42,6 +42,8 @@ import android.widget.ProgressBar;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.amansoni.tripbook.Constants;
+import com.amansoni.tripbook.R;
 import com.amansoni.tripbook.db.TripBookItemData;
 import com.amansoni.tripbook.model.TbGeolocation;
 import com.amansoni.tripbook.model.TripBookItem;

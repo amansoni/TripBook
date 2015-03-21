@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.amansoni.tripbook.db.TripBookItemData;
 import com.amansoni.tripbook.model.TripBookItem;
-import com.amansoni.tripbook.dialog.AddItemDialogFragment;
+import com.amansoni.tripbook.fragment.AddItemDialogFragment;
 
 /**
  * RecyclerView list fragment. Adds options to change the list view style

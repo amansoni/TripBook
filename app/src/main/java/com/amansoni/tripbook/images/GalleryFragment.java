@@ -29,7 +29,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.amansoni.tripbook.BuildConfig;
-import com.amansoni.tripbook.LocationLookup;
+import com.amansoni.tripbook.activity.LocationLookup;
 import com.amansoni.tripbook.R;
 import com.amansoni.tripbook.provider.Images;
 import com.amansoni.tripbook.util.ImageCache;
