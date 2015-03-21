@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.amansoni.tripbook.R;
@@ -45,7 +46,10 @@ public class ItemPagerActivity extends ActionBarActivity {
         }
         setContentView(mViewPager);
 
-        final ArrayList<TripBookItem> tripBookItems = new TripBookItemData(this).getAllRows();
+        String itemType = getIntent().getExtras().getString(TripBookItem.ITEM_TYPE);
+
+        TripBookItemData tripBookItemData = new TripBookItemData(this, itemType);
+        final ArrayList<TripBookItem> tripBookItems = tripBookItemData.getAllRows();
 
         FragmentManager fm = getSupportFragmentManager();
         mViewPager.setAdapter(new android.support.v4.app.FragmentStatePagerAdapter(fm) {

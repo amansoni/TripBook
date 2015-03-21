@@ -190,9 +190,10 @@ public class ListItemFragment extends BaseFragment {
     }
 
     private void selectItem(TripBookItem tripBookItem) {
-        // start an instance of CrimePagerActivity
+        // start an instance of ItemPagerActivity
         Intent i = new Intent(getActivity(), ItemPagerActivity.class);
         i.putExtra(TripBookItem.ITEM_ID, tripBookItem.getId());
+        i.putExtra(TripBookItem.ITEM_TYPE, tripBookItem.getItemType());
 
         startActivityForResult(i, 0);
     }
@@ -283,7 +284,7 @@ public class ListItemFragment extends BaseFragment {
             mTitleTextView.setText(tripBookItem.getTitle());
             mDateStartTextView.setText("From:" + tripBookItem.getCreatedAt().toString());
             mDateEndTextView.setText(" To:" + tripBookItem.getEndDate().toString());
-            showImage();
+//            showImage();
         }
 
         private void showImage() {
