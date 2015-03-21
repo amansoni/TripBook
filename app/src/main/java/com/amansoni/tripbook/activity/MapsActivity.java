@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.amansoni.tripbook.R;
-import com.amansoni.tripbook.db.TripBookItemData;
+import com.amansoni.tripbook.model.TripBookItemData;
 import com.amansoni.tripbook.fragment.SearchNearbyDialogFragment;
 import com.amansoni.tripbook.fragment.ShowPlaceFilterDialogFragment;
 import com.amansoni.tripbook.map.GooglePlace;

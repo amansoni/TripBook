@@ -1,4 +1,4 @@
-package com.amansoni.tripbook.db;
+package com.amansoni.tripbook.model;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

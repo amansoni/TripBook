@@ -1,11 +1,8 @@
 package com.amansoni.tripbook.fragment;
 
 import android.annotation.TargetApi;
-import android.app.ActivityOptions;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,15 +16,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.TextView;
-
 
 import com.amansoni.tripbook.R;
 import com.amansoni.tripbook.activity.ItemPagerActivity;
-import com.amansoni.tripbook.db.TripBookItemData;
 import com.amansoni.tripbook.model.TripBookItem;
-
+import com.amansoni.tripbook.model.TripBookItemData;
 import com.bignerdranch.android.multiselector.ModalMultiSelectorCallback;
 import com.bignerdranch.android.multiselector.MultiSelector;
 import com.bignerdranch.android.multiselector.SwappingHolder;
@@ -48,21 +42,21 @@ public class ListItemFragment extends BaseFragment {
 
         @Override
         public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-            if (menuItem.getItemId()==  R.id.action_delete_item){
-                    // Need to finish the action mode before doing the following,
-                    // not after. No idea why, but it crashes.
-                    actionMode.finish();
+            if (menuItem.getItemId() == R.id.action_delete_item) {
+                // Need to finish the action mode before doing the following,
+                // not after. No idea why, but it crashes.
+                actionMode.finish();
 
-                    for (int i = mTripBookItems.size(); i >= 0; i--) {
-                        if (mMultiSelector.isSelected(i, 0)) {
+                for (int i = mTripBookItems.size(); i >= 0; i--) {
+                    if (mMultiSelector.isSelected(i, 0)) {
 //                            Crime crime = mTripBookItems.get(i);
 //                            CrimeLab.get(getActivity()).deleteCrime(crime);
-                            mRecyclerView.getAdapter().notifyItemRemoved(i);
-                        }
+                        mRecyclerView.getAdapter().notifyItemRemoved(i);
                     }
+                }
 
-                    mMultiSelector.clearSelections();
-                    return true;
+                mMultiSelector.clearSelections();
+                return true;
 
             }
             return false;
@@ -136,24 +130,7 @@ public class ListItemFragment extends BaseFragment {
         Intent i = new Intent(getActivity(), ItemPagerActivity.class);
         i.putExtra(TripBookItem.ITEM_ID, tripBookItem.getId());
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // NOTE: shared element transition here.
-            // Support library fragments do not support the three parameter
-            // startActivityForResult call. So to get this to work, the entire
-            // project had to be shifted over to use stdlib fragments,
-            // and the v13 ViewPager.
-            int index = mTripBookItems.indexOf(tripBookItem);
-            ItemHolder holder = (ItemHolder) mRecyclerView
-                    .findViewHolderForPosition(index);
-
-            ActivityOptions options = ItemPagerActivity.getTransition(
-                    getActivity(), holder.itemView);
-//TODO
-//            startActivityForResult(i, 0, options.toBundle());
-            startActivityForResult(i, 0);
-        } else {
-            startActivityForResult(i, 0);
-        }
+        startActivityForResult(i, 0);
     }
 
     @Override
@@ -220,7 +197,7 @@ public class ListItemFragment extends BaseFragment {
     private class ItemHolder extends SwappingHolder implements View.OnClickListener, View.OnLongClickListener {
         private final TextView mTitleTextView;
         private final TextView mDateTextView;
-//        private final CheckBox mSolvedCheckBox;
+        //        private final CheckBox mSolvedCheckBox;
         private TripBookItem mTripBookItem;
 
         public ItemHolder(View itemView) {

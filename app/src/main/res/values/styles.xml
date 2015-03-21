@@ -5,6 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/ActionBarPrimary</item>
         <item name="colorPrimaryDark">@color/ActionBarDark</item>
+        <item name="android:actionModeBackground">@color/ActionBarPrimary</item>
     </style>
 
     <!-- Navigation Drawer styling -->

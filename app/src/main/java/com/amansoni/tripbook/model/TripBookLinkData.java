@@ -1,4 +1,4 @@
-package com.amansoni.tripbook.db;
+package com.amansoni.tripbook.model;
 
 /**
  * Created by Aman on 11/02/2015.
@@ -10,10 +10,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-
-import com.amansoni.tripbook.model.TripBookCommon;
-import com.amansoni.tripbook.model.TripBookItem;
-import com.amansoni.tripbook.model.TripBookLink;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -23,7 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.amansoni.tripbook.db.TripBookItemData;
+import com.amansoni.tripbook.model.TripBookItemData;
 import com.amansoni.tripbook.model.TripBookImage;
 import com.amansoni.tripbook.model.TripBookItem;
 

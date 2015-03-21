@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.amansoni.tripbook.db.TripBookItemData;
+import com.amansoni.tripbook.model.TripBookItemData;
 import com.amansoni.tripbook.model.TripBookItem;
 import com.amansoni.tripbook.fragment.AddItemDialogFragment;
 

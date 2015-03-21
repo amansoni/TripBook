@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.amansoni.tripbook.db.TripBookItemData;
+import com.amansoni.tripbook.model.TripBookItemData;
 import com.amansoni.tripbook.model.TripBookItem;
 
 /**

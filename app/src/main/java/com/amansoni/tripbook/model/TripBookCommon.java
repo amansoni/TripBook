@@ -1,12 +1,5 @@
 package com.amansoni.tripbook.model;
 
-import android.location.Location;
-
-import com.amansoni.tripbook.Utils;
-import com.google.android.gms.maps.model.LatLng;
-
-import java.util.Date;
-
 /**
  * Created by Aman on 15/02/2015.
  */

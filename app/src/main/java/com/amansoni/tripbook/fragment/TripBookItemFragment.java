@@ -20,10 +20,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.amansoni.tripbook.R;
-import com.amansoni.tripbook.db.TripBookItemData;
+import com.amansoni.tripbook.model.TripBookItemData;
 import com.amansoni.tripbook.model.TripBookItem;
 import com.amansoni.tripbook.util.Photo;
-import com.amansoni.tripbook.util.PictureUtils;
 
 import java.util.Date;
 

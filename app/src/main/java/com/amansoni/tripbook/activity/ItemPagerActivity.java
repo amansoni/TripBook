@@ -6,19 +6,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
-import android.support.v4.view.ViewPager;
 
 import com.amansoni.tripbook.R;
-import com.amansoni.tripbook.db.TripBookItemData;
+import com.amansoni.tripbook.model.TripBookItemData;
 import com.amansoni.tripbook.fragment.TripBookItemFragment;
 import com.amansoni.tripbook.model.TripBookItem;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class ItemPagerActivity extends ActionBarActivity {
     android.support.v4.view.ViewPager mViewPager;

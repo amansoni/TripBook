@@ -44,7 +44,7 @@ import android.widget.Toast;
 
 import com.amansoni.tripbook.Constants;
 import com.amansoni.tripbook.R;
-import com.amansoni.tripbook.db.TripBookItemData;
+import com.amansoni.tripbook.model.TripBookItemData;
 import com.amansoni.tripbook.model.TbGeolocation;
 import com.amansoni.tripbook.model.TripBookItem;
 import com.amansoni.tripbook.util.ImageWrapper;

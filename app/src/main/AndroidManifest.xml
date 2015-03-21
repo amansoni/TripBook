@@ -61,7 +61,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".GoogleClient"
+            android:name=".activity.GoogleClient"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateHidden">
             <meta-data
@@ -113,13 +113,6 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".list.ListActivity"
-            android:label="@string/app_name">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
-        <activity
             android:name=".activity.LocationLookup"
             android:label="@string/app_name">
             <!--<meta-data-->
@@ -136,7 +129,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
-
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
@@ -146,7 +138,7 @@
         <meta-data
             android:name="android.app.default_searchable"
             android:launchMode="singleTop"
-            android:value=".SearchableActivity" />
+            android:value=".activity.SearchableActivity" />
 
         <service
             android:name=".activity.FetchAddressIntentService"

@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import java.net.URI;
 
-import com.amansoni.tripbook.db.TripBookItemData;
-
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;

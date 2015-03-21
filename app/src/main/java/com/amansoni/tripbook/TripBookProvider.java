@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.util.Log;
 
-import com.amansoni.tripbook.db.DatabaseHelper;
+import com.amansoni.tripbook.model.DatabaseHelper;
 
 import java.util.HashMap;
 

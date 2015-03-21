@@ -11,7 +11,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +21,7 @@ import android.widget.SimpleCursorAdapter;
 import com.amansoni.tripbook.AddActivity;
 import com.amansoni.tripbook.MainActivity;
 import com.amansoni.tripbook.TripBookProvider;
-import com.amansoni.tripbook.db.DatabaseHelper;
+import com.amansoni.tripbook.model.DatabaseHelper;
 import com.amansoni.tripbook.model.TripBookItem;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)

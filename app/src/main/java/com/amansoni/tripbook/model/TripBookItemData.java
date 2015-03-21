@@ -1,4 +1,4 @@
-package com.amansoni.tripbook.db;
+package com.amansoni.tripbook.model;
 
 /**
  * Created by Aman on 11/02/2015.
@@ -14,14 +14,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import com.amansoni.tripbook.model.TbGeolocation;
-import com.amansoni.tripbook.model.TripBookCommon;
-import com.amansoni.tripbook.model.TripBookItem;
-import com.amansoni.tripbook.model.TripBookLink;
-
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 public class TripBookItemData {
     private static final String TAG = "TripBookItemData";

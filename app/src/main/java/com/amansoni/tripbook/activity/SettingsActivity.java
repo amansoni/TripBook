@@ -26,7 +26,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.amansoni.tripbook.GoogleClient;
 import com.amansoni.tripbook.R;
 
 import java.util.List;

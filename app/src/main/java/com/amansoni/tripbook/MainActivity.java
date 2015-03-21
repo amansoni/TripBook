@@ -19,9 +19,10 @@ import android.view.ViewGroup;
 
 import com.amansoni.tripbook.activity.MapsActivity;
 import com.amansoni.tripbook.activity.SettingsActivity;
+import com.amansoni.tripbook.fragment.ListItemFragment;
 import com.amansoni.tripbook.fragment.NavigationDrawerFragment;
 import com.amansoni.tripbook.activity.ListItemActivity;
-import com.amansoni.tripbook.db.TripBookItemData;
+import com.amansoni.tripbook.model.TripBookItemData;
 import com.amansoni.tripbook.images.GalleryFragment;
 import com.amansoni.tripbook.model.TripBookItem;
 
@@ -83,7 +84,7 @@ public class MainActivity extends ActionBarActivity
                     .commit();
         } else {
             // display the RecyclerViewFragment for lists
-            Fragment viewNow = new RecyclerViewFragment();
+            Fragment viewNow = new ListItemFragment();
             Bundle args = new Bundle();
             String itemType = null;
             switch (position) {
