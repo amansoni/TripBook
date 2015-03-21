@@ -70,8 +70,8 @@ public class TripBookItemFragment extends BaseFragment {
     @TargetApi(11)
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_add, parent, false);
-
         getActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         mTitleField = (EditText) v.findViewById(R.id.trip_add_name);
         mTitleField.setText(mTripBookItem.getTitle());

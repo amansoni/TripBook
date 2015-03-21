@@ -96,9 +96,6 @@ public class AddActivity extends ActionBarActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        getSupportFragmentManager().beginTransaction().remove(fragmentFriends).commit();
-//        getSupportFragmentManager().beginTransaction().remove(fragmentImages).commit();
-//        getSupportFragmentManager().beginTransaction().remove(fragmentPlace).commit();
     }
 
     @Override
