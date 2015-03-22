@@ -37,6 +37,7 @@ public class ItemPagerActivity extends ActionBarActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
 
 
         mViewPager = new ViewPager(this);

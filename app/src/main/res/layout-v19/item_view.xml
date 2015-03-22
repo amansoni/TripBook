@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:id="@+id/item_view_title"
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center"
+            android:background="@color/ActionBarPrimary"
+            android:editable="false"
+            android:focusable="true"
+            android:text="Item title"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/abc_text_size_headline_material" />
+
+        <ImageButton
+            android:id="@+id/item_view_exit_button"
+            android:layout_width="@dimen/small_button_margin"
+            android:layout_height="@dimen/small_button_margin"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@null"
+            android:contentDescription="@string/close"
+            android:src="@android:drawable/ic_menu_close_clear_cancel" />
+
+        <com.amansoni.tripbook.util.FloatingActionButton
+            android:id="@+id/item_view_edit_button"
+            android:layout_width="@dimen/small_button_diameter"
+            android:layout_height="@dimen/small_button_diameter"
+            android:layout_marginBottom="@dimen/add_button_margin"
+            android:layout_marginEnd="@dimen/add_button_margin"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="85dp"
+            android:background="@drawable/fab_background"
+            android:elevation="@dimen/elevation_low"
+            android:stateListAnimator="@animator/fab_anim">
+
+            <ImageView
+                android:layout_width="@dimen/fab_icon_size"
+                android:layout_height="@dimen/fab_icon_size"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_action_edit" />
+
+        </com.amansoni.tripbook.util.FloatingActionButton>
+
+        <LinearLayout
+            android:id="@+id/item_view_date_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/item_view_edit_button"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/icon_trip_date"
+                android:layout_width="@dimen/small_button_diameter"
+                android:layout_height="@dimen/small_button_diameter"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/ic_action_time" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/item_view_start_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/icon_trip_date"
+                    android:text="start date" />
+
+                <TextView
+                    android:id="@+id/item_view_end_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/item_view_start_date"
+                    android:layout_marginLeft="10dp"
+                    android:text="end date" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item_view_notes_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/item_view_date_layout">
+
+            <ImageButton
+                android:id="@+id/icon_trip_note"
+                android:layout_width="@dimen/small_button_diameter"
+                android:layout_height="@dimen/small_button_diameter"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/ic_action_sort_by_size" />
+
+            <TextView
+                android:id="@+id/item_view_notes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/icon_trip_note"
+                android:text="trip notes text" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item_view_place_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/item_view_notes_layout"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/icon_trip_place"
+                android:layout_width="@dimen/small_button_diameter"
+                android:layout_height="@dimen/small_button_diameter"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/ic_action_place" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/item_view_list_places"
+                android:layout_width="wrap_content"
+                android:layout_height="150dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item_view_social_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/item_view_place_layout"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/icon_trip_friends"
+                android:layout_width="@dimen/small_button_diameter"
+                android:layout_height="@dimen/small_button_diameter"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/ic_action_person" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/item_view_list_friends"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item_view_image_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/item_view_social_layout"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/icon_trip_images"
+                android:layout_width="@dimen/small_button_diameter"
+                android:layout_height="@dimen/small_button_diameter"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/ic_action_picture" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/item_view_list_images"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>

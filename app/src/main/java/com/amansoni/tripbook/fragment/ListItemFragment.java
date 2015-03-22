@@ -20,7 +20,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -279,7 +278,7 @@ public class ListItemFragment extends BaseFragment {
             itemView.setOnLongClickListener(this);
         }
 
-        public void bindCrime(TripBookItem tripBookItem) {
+        public void bindItem(TripBookItem tripBookItem) {
             mTripBookItem = tripBookItem;
             mTitleTextView.setText(tripBookItem.getTitle());
             mDateStartTextView.setText("From:" + tripBookItem.getCreatedAt().toString());
@@ -330,7 +329,7 @@ public class ListItemFragment extends BaseFragment {
         @Override
         public void onBindViewHolder(ItemHolder holder, int pos) {
             TripBookItem tripBookItem = mTripBookItems.get(pos);
-            holder.bindCrime(tripBookItem);
+            holder.bindItem(tripBookItem);
             Log.d(TAG, "binding item" + tripBookItem + "at position" + pos);
         }
 

@@ -4,30 +4,37 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.NavUtils;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.OrientationHelper;
+import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.amansoni.tripbook.HorizontalListAdapter;
 import com.amansoni.tripbook.R;
-import com.amansoni.tripbook.model.TripBookItemData;
 import com.amansoni.tripbook.model.TripBookItem;
+import com.amansoni.tripbook.model.TripBookItemData;
+import com.amansoni.tripbook.util.FloatingActionButton;
 import com.amansoni.tripbook.util.Photo;
+import com.amansoni.tripbook.util.PictureUtils;
 
 import java.util.Date;
 
 public class TripBookItemFragment extends BaseFragment {
-    public static final String EXTRA_CRIME_ID = "criminalintent.CRIME_ID";
     private static final String DIALOG_DATE = "date";
     private static final String DIALOG_IMAGE = "image";
     private static final int REQUEST_DATE = 0;
@@ -36,10 +43,13 @@ public class TripBookItemFragment extends BaseFragment {
 
     TripBookItem mTripBookItem;
     TextView mTitleField;
-    TextView mNotesField;
     TextView mStartDateField;
+    TextView mEndDateField;
+    TextView mNotesField;
     ImageView mPhotoView;
-    ImageButton mPhotoButton;
+    RecyclerView mListPlaces;
+    RecyclerView mListFriends;
+    RecyclerView mListImages;
 
 
     public static TripBookItemFragment newInstance(long tripBookItemId) {
@@ -55,6 +65,7 @@ public class TripBookItemFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActionBar().hide();
 
         long itemId = getArguments().getLong(TripBookItem.ITEM_ID);
         mTripBookItem = new TripBookItemData(getActivity()).getItem(itemId);
@@ -66,37 +77,73 @@ public class TripBookItemFragment extends BaseFragment {
         mStartDateField.setText(mTripBookItem.getCreatedAt().toString());
     }
 
+    public void closeFragment() {
+        getActivity().finish();
+    }
+
     @Override
     @TargetApi(11)
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_add, parent, false);
+        View v = inflater.inflate(R.layout.item_view, parent, false);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        mTitleField = (EditText) v.findViewById(R.id.trip_add_name);
-        mTitleField.setText(mTripBookItem.getTitle());
-        mTitleField.addTextChangedListener(new TextWatcher() {
-            public void onTextChanged(CharSequence c, int start, int before, int count) {
-                mTripBookItem.setTitle(c.toString());
-            }
-
-            public void beforeTextChanged(CharSequence c, int start, int count, int after) {
-                // this space intentionally left blank
-            }
-
-            public void afterTextChanged(Editable c) {
-                // this one too
+        ImageButton exitButton = (ImageButton) v.findViewById(R.id.item_view_exit_button);
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeFragment();
             }
         });
 
-//        mSolvedCheckBox = (CheckBox) v.findViewById(R.id.crime_solved);
-//        mSolvedCheckBox.setChecked(mTripBookItem.isSolved());
-//        mSolvedCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                // set the crime's solved property
-//                mTripBookItem.setSolved(isChecked);
+        FloatingActionButton editButton = (FloatingActionButton) v.findViewById(R.id.item_view_edit_button);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeFragment();
+            }
+        });
+
+        ImageView mPhotoView;
+        mTitleField = (TextView) v.findViewById(R.id.item_view_title);
+        mTitleField.setText(mTripBookItem.getTitle());
+        mTitleField.setGravity(Gravity.CENTER);
+
+        mStartDateField = (TextView) v.findViewById(R.id.item_view_start_date);
+        mStartDateField.setText("Starts on: " + mTripBookItem.getCreatedAt());
+
+        mEndDateField = (TextView) v.findViewById(R.id.item_view_end_date);
+        if (mTripBookItem.getEndDate().length() > 0) {
+            mEndDateField.setText("Ends on: " + mTripBookItem.getEndDate());
+        } else {
+            mEndDateField.setVisibility(View.GONE);
+        }
+
+        mNotesField = (TextView) v.findViewById(R.id.item_view_notes);
+        mNotesField.setText(mTripBookItem.getDescription());
+
+        mListImages = (RecyclerView) v.findViewById(R.id.item_view_list_images);
+        setUpRecyclerView(mListImages, TripBookItem.TYPE_GALLERY);
+
+        mListFriends = (RecyclerView) v.findViewById(R.id.item_view_list_friends);
+        setUpRecyclerView(mListFriends, TripBookItem.TYPE_FRIENDS);
+
+        mListPlaces = (RecyclerView) v.findViewById(R.id.item_view_list_places);
+        setUpRecyclerView(mListPlaces, TripBookItem.TYPE_PLACE);
+
+//        mTitleField.addTextChangedListener(new TextWatcher() {
+//            public void onTextChanged(CharSequence c, int start, int before, int count) {
+//                mTripBookItem.setTitle(c.toString());
+//            }
+//
+//            public void beforeTextChanged(CharSequence c, int start, int count, int after) {
+//                // this space intentionally left blank
+//            }
+//
+//            public void afterTextChanged(Editable c) {
+//                // this one too
 //            }
 //        });
+
 //        mDateButton = (Button) v.findViewById(R.id.crime_date);
 //        updateDate();
 //        mDateButton.setOnClickListener(new View.OnClickListener() {
@@ -168,16 +215,27 @@ public class TripBookItemFragment extends BaseFragment {
         return v;
     }
 
+    private void setUpRecyclerView(RecyclerView recyclerView, String itemType){
+        TripBookItemData tripBookItemData = new TripBookItemData(getActivity(), itemType);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.scrollToPosition(0);
+
+        HorizontalListAdapter mAdapter = new HorizontalListAdapter(getActivity(), tripBookItemData,
+                mTripBookItem.getId(), false, R.color.list_text_selected, R.color.list_text_unselected);
+        recyclerView.setAdapter(mAdapter);
+    }
+
     //TODO
     private void showPhoto() {
         // (re)set the image button's image based on our photo
-//        Photo p = mTripBookItem.getPhoto();
-//        BitmapDrawable b = null;
-//        if (p != null) {
+        Photo p = mTripBookItem.getPhoto();
+        BitmapDrawable b = null;
+        if (p != null) {
 //            String path = getActivity()
 //                    .getFileStreamPath(p.getFilename()).getAbsolutePath();
-//            b = PictureUtils.getScaledDrawable(getActivity(), path);
-//        }
+            b = PictureUtils.getScaledDrawable(getActivity(), p.getFilename());
+        }
 //        mPhotoView.setImageDrawable(b);
     }
 
@@ -208,7 +266,7 @@ public class TripBookItemFragment extends BaseFragment {
             if (filename != null) {
                 Photo p = new Photo(filename);
 //                TODO
-//                mTripBookItem.setPhoto(p);
+                mTripBookItem.setPhoto(p);
                 showPhoto();
             }
         } else if (requestCode == REQUEST_CONTACT) {
@@ -270,4 +328,5 @@ public class TripBookItemFragment extends BaseFragment {
                 return super.onOptionsItemSelected(item);
         }
     }
+
 }

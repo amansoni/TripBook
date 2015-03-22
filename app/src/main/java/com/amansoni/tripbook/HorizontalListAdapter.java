@@ -45,20 +45,20 @@ public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAd
         unSelectedColour = list_text_unselected;
         if (!editable) {
             if (itemId == 0)
-                tripBookItems = (ArrayList<TripBookItem>) dataSet.getAllRows();
+                tripBookItems = dataSet.getAllRows();
             else{
                 dataSet.setLinkedItemId(itemId);
-                tripBookItems = (ArrayList<TripBookItem>) dataSet.getAllRows();
+                tripBookItems = dataSet.getAllRows();
             }
             selectedItems = new ArrayList<>();
         } else {
             // get all rows for new items with no selected
             if (itemId == 0) {
                 selectedItems = new ArrayList<>();
-                tripBookItems = (ArrayList<TripBookItem>) dataSet.getAllRows();
+                tripBookItems = dataSet.getAllRows();
             } else {
-                selectedItems = (ArrayList<TripBookItem>) dataSet.getAllRows();
-                tripBookItems = (ArrayList<TripBookItem>) new TripBookItemData(activity, dataSet.getItemType()).getAllRows();
+                selectedItems = dataSet.getAllRows();
+                tripBookItems = new TripBookItemData(activity, dataSet.getItemType()).getAllRows();
             }
         }
     }

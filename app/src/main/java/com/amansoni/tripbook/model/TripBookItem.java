@@ -110,6 +110,10 @@ public class TripBookItem extends TripBookCommon {
         return mPhoto;
     }
 
+    public void setPhoto(Photo photo) {
+        this.mPhoto = photo;
+    }
+
     public String[] getImages() {
         return new String[]{"file:///storage/emulated/0/Pictures/TripBook/IMG_20150310_080409.jpg",
                 "file:///storage/emulated/0/Pictures/TripBook/IMG_20150310_134840.jpg",
