@@ -105,20 +105,20 @@ public class ItemEditFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_cancel) {
-            // return to the list showing this item type
-            Fragment viewNow = new RecyclerViewFragment();
-            Bundle args = new Bundle();
-            // set the list to display
-            args.putString("itemType", tripBookItem.getItemType());
-            viewNow.setArguments(args);
-            // update the main content by replacing fragments
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, viewNow)
-                    .commit();
-            return true;
-        }
+//        if (item.getItemId() == R.id.action_cancel) {
+//            // return to the list showing this item type
+//            Fragment viewNow = new RecyclerViewFragment();
+//            Bundle args = new Bundle();
+//            // set the list to display
+//            args.putString("itemType", tripBookItem.getItemType());
+//            viewNow.setArguments(args);
+//            // update the main content by replacing fragments
+//            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//            fragmentManager.beginTransaction()
+//                    .replace(R.id.container, viewNow)
+//                    .commit();
+//            return true;
+//        }
 
         if (item.getItemId() == R.id.action_item_save) {
             saveItem();

@@ -146,7 +146,7 @@ public class HorizontalListAdapter extends RecyclerView.Adapter<HorizontalListAd
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(view.getContext(), "position = " + getPosition() + isSelected, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(view.getContext(), "position = " + getPosition() + isSelected, Toast.LENGTH_SHORT).show();
 
             if (mEditable) {
                 isSelected = !isSelected;

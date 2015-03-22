@@ -317,7 +317,7 @@ public class NavigationDrawerFragment extends Fragment {
                 return R.drawable.ic_action_about;
             }
             if (context.getString(R.string.title_social) == title){
-                return R.drawable.ic_action_person;
+                return R.drawable.ic_action_group;
             }
             if (context.getString(R.string.title_starred) == title){
                 return R.drawable.ic_action_important;

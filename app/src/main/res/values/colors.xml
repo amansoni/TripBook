@@ -9,7 +9,7 @@
     <color name="floating_button">#29C436</color>
 
     <color name="navigation_row_selected">#4199bac4</color>
-    <color name="navigation_row">#888888</color>
+    <color name="navigation_row">#444444</color>
     <color name="list_text_unselected">#ffffff</color>
     <color name="list_text_selected">#000000</color>
 
@@ -17,5 +17,6 @@
     <color name="fab_color_1_muted">#ff8080</color>
     <color name="fab_color_2">#9c27b0</color>
     <color name="fab_color_2_muted">#a56ab0</color>
+    <color name="seperator_line">#999999</color>
 
 </resources>

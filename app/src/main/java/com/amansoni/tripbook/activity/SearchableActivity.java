@@ -18,7 +18,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-import com.amansoni.tripbook.AddActivity;
 import com.amansoni.tripbook.MainActivity;
 import com.amansoni.tripbook.TripBookProvider;
 import com.amansoni.tripbook.model.DatabaseHelper;
@@ -70,7 +69,7 @@ public class SearchableActivity extends ListActivity {
             Bundle args = new Bundle();
             args.putLong("itemKey", 1);
             args.putString("itemType", TripBookItem.TYPE_TRIP);
-            Intent tripIntent = new Intent(this, AddActivity.class);
+            Intent tripIntent = new Intent(this, AddItemActivity.class);
             tripIntent.putExtras(args);
             startActivity(tripIntent);
         }
@@ -109,7 +108,7 @@ public class SearchableActivity extends ListActivity {
 //        Uri details = Uri.withAppendedPath(EmployeeProvider.CONTENT_URI, "" + id);
         Bundle args = new Bundle();
         args.putLong("itemKey", id);
-        Intent detailsIntent = new Intent(this, AddActivity.class);
+        Intent detailsIntent = new Intent(this, AddItemActivity.class);
         detailsIntent.putExtras(args);
         startActivity(detailsIntent);
 

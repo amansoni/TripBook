@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amansoni.tripbook.activity.AddItemActivity;
 import com.amansoni.tripbook.model.TripBookItemData;
 import com.amansoni.tripbook.model.TripBookItem;
 import com.amansoni.tripbook.provider.Images;
@@ -143,7 +144,7 @@ public class ItemViewFragment extends Fragment {
         if (item.getItemId() == R.id.action_item_edit) {
 //            Toast.makeText(getActivity(), "Edit Item", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "Setting bundle for itemEditFragment:" + item.toString());
-            Intent editIntent = new Intent(getActivity(), AddActivity.class);
+            Intent editIntent = new Intent(getActivity(), AddItemActivity.class);
             Bundle args = new Bundle();
             args.putString("itemType", tripBookItem.getItemType());
             args.putLong("itemKey", tripBookItem.getId());
@@ -158,10 +159,10 @@ public class ItemViewFragment extends Fragment {
             createShareIntent();
             return true;
         }
-        if (item.getItemId() == R.id.action_cancel) {
-            getActivity().getSupportFragmentManager().popBackStack();
-            return true;
-        }
+//        if (item.getItemId() == R.id.action_cancel) {
+//            getActivity().getSupportFragmentManager().popBackStack();
+//            return true;
+//        }
 
         if (item.getItemId() == R.id.action_item_save) {
             saveItem();

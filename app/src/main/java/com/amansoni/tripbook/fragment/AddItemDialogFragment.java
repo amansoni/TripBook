@@ -12,7 +12,7 @@ import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.amansoni.tripbook.AddActivity;
+import com.amansoni.tripbook.activity.AddItemActivity;
 import com.amansoni.tripbook.activity.LocationLookup;
 import com.amansoni.tripbook.R;
 import com.amansoni.tripbook.model.TripBookItem;
@@ -40,19 +40,19 @@ public class AddItemDialogFragment extends DialogFragment {
                         Bundle args = new Bundle();
                         switch (which){
                             case 0: // Friend
-                                Intent friendIntent = new Intent(getActivity(), AddActivity.class);
+                                Intent friendIntent = new Intent(getActivity(), AddItemActivity.class);
                                 args.putString("itemType", TripBookItem.TYPE_FRIENDS);
                                 friendIntent.putExtras(args);
                                 startActivity(friendIntent);
                                 break;
                             case 1: // Trip
-                                Intent tripIntent = new Intent(getActivity(), AddActivity.class);
+                                Intent tripIntent = new Intent(getActivity(), AddItemActivity.class);
                                 args.putString("itemType", TripBookItem.TYPE_TRIP);
                                 tripIntent.putExtras(args);
                                 startActivity(tripIntent);
                                 break;
                             case 2: // Place
-                                Intent placeIntent = new Intent(getActivity(), AddActivity.class);
+                                Intent placeIntent = new Intent(getActivity(), AddItemActivity.class);
                                 args.putString("itemType", TripBookItem.TYPE_PLACE);
                                 placeIntent.putExtras(args);
                                 startActivity(placeIntent);

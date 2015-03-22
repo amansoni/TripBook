@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.amansoni.tripbook;
+package com.amansoni.tripbook.activity;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -39,15 +39,17 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.amansoni.tripbook.model.TripBookItemData;
+import com.amansoni.tripbook.HorizontalListFragment;
+import com.amansoni.tripbook.R;
 import com.amansoni.tripbook.model.TripBookCommon;
 import com.amansoni.tripbook.model.TripBookItem;
+import com.amansoni.tripbook.model.TripBookItemData;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class AddActivity extends ActionBarActivity {
+public class AddItemActivity extends ActionBarActivity {
 
     protected static final String TAG = "AddActivity";
 
@@ -141,15 +143,15 @@ public class AddActivity extends ActionBarActivity {
         fragmentFriends = new HorizontalListFragment();
         fragmentPlace = new HorizontalListFragment();
         fragmentImages = new HorizontalListFragment();
-        if (mItemType.equals(TripBookItem.TYPE_TRIP)){
+        if (mItemType.equals(TripBookItem.TYPE_TRIP)) {
             replaceListFragment(fragmentFriends, R.id.trip_view_friends, TripBookItem.TYPE_FRIENDS);
             replaceListFragment(fragmentPlace, R.id.trip_view_places, TripBookItem.TYPE_PLACE);
             replaceListFragment(fragmentImages, R.id.trip_view_gallery, TripBookItem.TYPE_GALLERY);
-        } else if (mItemType.equals(TripBookItem.TYPE_PLACE)){
-            replaceListFragment(fragmentPlace,R.id.trip_view_places, TripBookItem.TYPE_TRIP);
+        } else if (mItemType.equals(TripBookItem.TYPE_PLACE)) {
+            replaceListFragment(fragmentPlace, R.id.trip_view_places, TripBookItem.TYPE_TRIP);
             replaceListFragment(fragmentFriends, R.id.trip_view_friends, TripBookItem.TYPE_FRIENDS);
-            replaceListFragment(fragmentImages,R.id.trip_view_gallery, TripBookItem.TYPE_GALLERY);
-        } else if (mItemType.equals(TripBookItem.TYPE_FRIENDS)){
+            replaceListFragment(fragmentImages, R.id.trip_view_gallery, TripBookItem.TYPE_GALLERY);
+        } else if (mItemType.equals(TripBookItem.TYPE_FRIENDS)) {
             replaceListFragment(fragmentPlace, R.id.trip_view_places, TripBookItem.TYPE_TRIP);
             replaceListFragment(fragmentPlace, R.id.trip_view_friends, TripBookItem.TYPE_PLACE);
             replaceListFragment(fragmentImages, R.id.trip_view_gallery, TripBookItem.TYPE_GALLERY);
@@ -179,35 +181,45 @@ public class AddActivity extends ActionBarActivity {
         getMenuInflater().inflate(R.menu.item_edit, menu);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
+
+        View mActionBarView = getLayoutInflater().inflate(R.layout.edit_item_custom_actiobar, null);
+        actionBar.setCustomView(mActionBarView);
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+
         String title = getResources().getString(R.string.add_item_title);
         if (mTripbookItem != null)
             title = "Edit " + mTripbookItem.getTitle();
         else
-            title = title + mItemType;
+            title = title + " " + mItemType;
 
-        actionBar.setTitle(title);
+        ((TextView) mActionBarView.findViewById(R.id.text_title)).setText(title);
+//        actionBar.setTitle(title);
         return true;
+    }
+
+    public void cancelAction(View view) {
+        if (isDirty)
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.dialog_cancel_save_title)
+                    .setMessage(R.string.dialog_cancel_save_message)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            finish();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, null).show();
+        else
+            finish();
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_cancel) {
-            if (isDirty)
-                new AlertDialog.Builder(this)
-                        .setTitle(R.string.dialog_cancel_save_title)
-                        .setMessage(R.string.dialog_cancel_save_message)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                finish();
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, null).show();
-            else
-                finish();
-            return true;
-        }
+//        if (item.getItemId() == R.id.action_cancel) {
+//            cancelAction(null);
+//        }
 
         if (item.getItemId() == R.id.action_item_save) {
             if (validate()) {

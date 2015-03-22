@@ -4,37 +4,42 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.amansoni.tripbook.HorizontalListAdapter;
+import com.amansoni.tripbook.activity.AddItemActivity;
 import com.amansoni.tripbook.R;
+import com.amansoni.tripbook.model.TripBookCommon;
 import com.amansoni.tripbook.model.TripBookItem;
 import com.amansoni.tripbook.model.TripBookItemData;
+import com.amansoni.tripbook.provider.Images;
 import com.amansoni.tripbook.util.FloatingActionButton;
+import com.amansoni.tripbook.util.ImageWrapper;
 import com.amansoni.tripbook.util.Photo;
 import com.amansoni.tripbook.util.PictureUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 
-public class TripBookItemFragment extends BaseFragment {
+public class ItemViewFragment extends BaseFragment {
     private static final String DIALOG_DATE = "date";
     private static final String DIALOG_IMAGE = "image";
     private static final int REQUEST_DATE = 0;
@@ -52,11 +57,11 @@ public class TripBookItemFragment extends BaseFragment {
     RecyclerView mListImages;
 
 
-    public static TripBookItemFragment newInstance(long tripBookItemId) {
+    public static ItemViewFragment newInstance(long tripBookItemId) {
         Bundle args = new Bundle();
         args.putLong(TripBookItem.ITEM_ID, tripBookItemId);
 
-        TripBookItemFragment fragment = new TripBookItemFragment();
+        ItemViewFragment fragment = new ItemViewFragment();
         fragment.setArguments(args);
 
         return fragment;
@@ -99,6 +104,14 @@ public class TripBookItemFragment extends BaseFragment {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent editIntent = new Intent(getActivity(), AddItemActivity.class);
+                Bundle args = new Bundle();
+                args.putString("itemType", mTripBookItem.getItemType());
+                args.putLong("itemKey", mTripBookItem.getId());
+                args.putBoolean("editable", true);
+                editIntent.putExtras(args);
+                startActivity(editIntent);
+
                 closeFragment();
             }
         });
@@ -122,7 +135,8 @@ public class TripBookItemFragment extends BaseFragment {
         mNotesField.setText(mTripBookItem.getDescription());
 
         mListImages = (RecyclerView) v.findViewById(R.id.item_view_list_images);
-        setUpRecyclerView(mListImages, TripBookItem.TYPE_GALLERY);
+//TODO        setUpRecyclerView(mListImages, TripBookItem.TYPE_GALLERY);
+        setUpRecyclerView(mListImages, TripBookItem.TYPE_PLACE);
 
         mListFriends = (RecyclerView) v.findViewById(R.id.item_view_list_friends);
         setUpRecyclerView(mListFriends, TripBookItem.TYPE_FRIENDS);
@@ -215,13 +229,13 @@ public class TripBookItemFragment extends BaseFragment {
         return v;
     }
 
-    private void setUpRecyclerView(RecyclerView recyclerView, String itemType){
+    private void setUpRecyclerView(RecyclerView recyclerView, String itemType) {
         TripBookItemData tripBookItemData = new TripBookItemData(getActivity(), itemType);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.scrollToPosition(0);
 
-        HorizontalListAdapter mAdapter = new HorizontalListAdapter(getActivity(), tripBookItemData,
+        LinkedItemListAdapter mAdapter = new LinkedItemListAdapter(getActivity(), tripBookItemData,
                 mTripBookItem.getId(), false, R.color.list_text_selected, R.color.list_text_unselected);
         recyclerView.setAdapter(mAdapter);
     }
@@ -315,7 +329,6 @@ public class TripBookItemFragment extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
-        mTripBookItem.update(getActivity());
     }
 
     @Override
@@ -328,5 +341,155 @@ public class TripBookItemFragment extends BaseFragment {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    private class LinkedItemListAdapter extends RecyclerView.Adapter<LinkedItemListAdapter.ListViewHolder> {
+        private static final String TAG = "LinkedItemListAdapter";
+        protected final FragmentActivity mActivity;
+        protected boolean mEditable = false;
+        protected int selectedColour = 0;
+        protected int unSelectedColour = 0;
+        ArrayList<TripBookItem> selectedItems;
+        private int mPosition = -1;
+        private long mItemId = 0;
+        private ArrayList<TripBookItem> tripBookItems;
+
+        /**
+         * Initialize the dataset of the Adapter.
+         */
+        public LinkedItemListAdapter(FragmentActivity activity, TripBookItemData dataSet, long itemId, boolean editable, int list_text_selected, int list_text_unselected) {
+            mActivity = activity;
+            mItemId = itemId;
+            mEditable = editable;
+            selectedColour = list_text_selected;
+            unSelectedColour = list_text_unselected;
+            if (!editable) {
+                if (itemId == 0)
+                    tripBookItems = dataSet.getAllRows();
+                else {
+                    dataSet.setLinkedItemId(itemId);
+                    tripBookItems = dataSet.getAllRows();
+                }
+                selectedItems = new ArrayList<>();
+            } else {
+                // get all rows for new items with no selected
+                if (itemId == 0) {
+                    selectedItems = new ArrayList<>();
+                    tripBookItems = dataSet.getAllRows();
+                } else {
+                    selectedItems = dataSet.getAllRows();
+                    tripBookItems = new TripBookItemData(activity, dataSet.getItemType()).getAllRows();
+                }
+            }
+        }
+
+        public int getPosition() {
+            return mPosition;
+        }
+
+        public ArrayList<TripBookItem> getSelectedItems() {
+            return selectedItems;
+        }
+
+        @Override
+        public ListViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+            // Create a new view.
+            View v = LayoutInflater.from(viewGroup.getContext())
+                    .inflate(R.layout.linked_item_list, viewGroup, false);
+            return new ListViewHolder(v, selectedItems);
+        }
+
+        @Override
+        public void onBindViewHolder(ListViewHolder listViewHolder, final int position) {
+            Log.d(TAG, "Element " + position + " set.");
+            listViewHolder.tripBookItem = ((TripBookItem) tripBookItems.get(position));
+            listViewHolder.itemName.setText(listViewHolder.tripBookItem.getTitle());
+            ImageWrapper.loadImage(mActivity, listViewHolder.itemImage, Images.imageThumbUrls[position]);
+
+            for (TripBookCommon item : selectedItems) {
+                if (item.getId() == listViewHolder.tripBookItem.getId()) {
+                    Log.d(TAG, "In selectedItems" + listViewHolder.tripBookItem.getTitle());
+                    listViewHolder.isSelected = true;
+                }
+            }
+            if (selectedItems.contains(listViewHolder.tripBookItem)) {
+                Log.d(TAG, "In selectedItems" + listViewHolder.tripBookItem.getTitle());
+                listViewHolder.isSelected = true;
+            } else {
+                Log.d(TAG, "Not selectedItems" + listViewHolder.tripBookItem.getTitle());
+            }
+
+
+            if (listViewHolder.isSelected) {
+                listViewHolder.itemName.setBackgroundColor(unSelectedColour);
+                listViewHolder.itemName.setTextColor(Color.RED);
+            } else {
+                listViewHolder.itemName.setBackgroundColor(unSelectedColour);
+                listViewHolder.itemName.setTextColor(Color.WHITE);
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return tripBookItems.size();
+        }
+
+        /**
+         * Custom ListViewHolder)
+         */
+        class ListViewHolder extends RecyclerView.ViewHolder
+                implements View.OnClickListener, View.OnLongClickListener, View.OnCreateContextMenuListener {
+            public final TextView itemName;
+            public final ImageView itemImage;
+            public TripBookItem tripBookItem;
+            public boolean isSelected;
+            public ArrayList<TripBookItem> selectedItems;
+
+
+            public ListViewHolder(View view, ArrayList<TripBookItem> selectedItems) {
+                super(view);
+                itemName = (TextView) view.findViewById(R.id.item_title);
+                itemImage = (ImageView) view.findViewById(R.id.item_image);
+                isSelected = false;
+                this.selectedItems = selectedItems;
+                view.setOnClickListener(this);
+                view.setOnLongClickListener(this);
+                view.setOnCreateContextMenuListener(this);
+            }
+
+            @Override
+            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+                //menuInfo is null
+//            menu.add(Menu.NONE, 1, Menu.NONE, R.string.title_starred);
+//            menu.add(Menu.NONE, 2, Menu.NONE, R.string.title_gallery);
+            }
+
+            @Override
+            public void onClick(View view) {
+//                Toast.makeText(view.getContext(), "position = " + getPosition() + isSelected, Toast.LENGTH_SHORT).show();
+
+                if (mEditable) {
+                    isSelected = !isSelected;
+                }
+                if (isSelected) {
+                    itemName.setTextColor(Color.RED);
+                    selectedItems.add(tripBookItem);
+                } else {
+                    for (int i = 0; i < selectedItems.size(); i++) {
+                        if (selectedItems.get(i).getId() == tripBookItem.getId()) {
+                            selectedItems.remove(i);
+                        }
+                    }
+                    itemName.setTextColor(Color.WHITE);
+                }
+            }
+
+            @Override
+            public boolean onLongClick(View view) {
+                LinkedItemListAdapter.this.mPosition = getPosition();
+                return false;
+            }
+        }
+    }
+
 
 }

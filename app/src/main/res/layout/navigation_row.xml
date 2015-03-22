@@ -21,6 +21,7 @@
         android:paddingLeft="12dp"
         android:paddingTop="4dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/navigation_row"
         android:text="@string/title_trip"
         android:id="@+id/rowText"/>
 

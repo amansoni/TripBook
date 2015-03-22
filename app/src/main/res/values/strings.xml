@@ -1,8 +1,8 @@
 <resources>
-    <!--<string name="app_name">TripBook</string>-->
+    <string name="app_name">TripBook</string>
 
     <!--Facebook strings-->
-    <string name="app_name">My Travel Planner</string>
+    <!--<string name="app_name">My Travel Planner</string>-->
     <string name="cancelled">Cancelled</string>
     <string name="permission_not_granted">Unable to perform selected action because permissions were not granted.</string>
     <string name="ok">OK</string>
@@ -20,10 +20,10 @@
     <string name="exception">Exception: %1$s</string>
 
     <!-- navigation drawer items-->
-    <string name="title_trip">Trip</string>
-    <string name="title_place">Place</string>
-    <string name="title_social">Friend</string>
-    <string name="title_starred">Starred</string>
+    <string name="title_trip">Trips</string>
+    <string name="title_place">Places</string>
+    <string name="title_social">Friends</string>
+    <string name="title_starred">Favourite</string>
     <string name="title_gallery">Gallery</string>
     <string name="title_map">Map</string>
     <string name="title_settings">Settings</string>
@@ -106,8 +106,9 @@
     <string name="dialog_cancel_save_message">Do you really want to discard this item?</string>
     <string name="dialog_cancel_save_title">Discard Item?</string>
     <string name="search_title">Search TripBook</string>
-    <string name="search_hint">enter name or description</string>
-    <string name="hint_trip_name">A name is required</string>
+    <string name="search_hint">search names and notes</string>
+    <string name="hint_trip_name">Enter title or description(required)</string>
+    <string name="hint_notes">Enter notes for the item. These notes are searchable. </string>
     <string name="enddate_before_startdate">The end date must be at least the same as the start date</string>
     <string name="search_nearby">Search nearby</string>
     <string name="select_places">Places to view</string>

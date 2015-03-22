@@ -50,4 +50,12 @@
     <dimen name="fab_icon_size">24dp</dimen>
     <dimen name="fab_press_translation_z">9dp</dimen>
 
+    <!-- Default horizontal list item height -->
+    <dimen name="vertical_list_item_height">40dp</dimen>
+    <dimen name="vertical_list_image_width">40dp</dimen>
+    <dimen name="vertical_list_image_height">40dp</dimen>
+    <dimen name="item_entry_top_margins">5dp</dimen>
+    <dimen name="item_entry_top_margins_lists">6dp</dimen>
+    <dimen name="item_view_list_height">100dp</dimen>
+
 </resources>

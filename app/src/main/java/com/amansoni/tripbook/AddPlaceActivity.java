@@ -93,19 +93,19 @@ public class AddPlaceActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_cancel) {
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.dialog_cancel_save_title)
-                    .setMessage(R.string.dialog_cancel_save_message)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            finish();
-                        }
-                    })
-                    .setNegativeButton(android.R.string.no, null).show();
-            return true;
-        }
+//        if (item.getItemId() == R.id.action_cancel) {
+//            new AlertDialog.Builder(this)
+//                    .setTitle(R.string.dialog_cancel_save_title)
+//                    .setMessage(R.string.dialog_cancel_save_message)
+//                    .setIcon(android.R.drawable.ic_dialog_alert)
+//                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+//                        public void onClick(DialogInterface dialog, int whichButton) {
+//                            finish();
+//                        }
+//                    })
+//                    .setNegativeButton(android.R.string.no, null).show();
+//            return true;
+//        }
 
         if (item.getItemId() == R.id.action_item_save) {
             saveItem();

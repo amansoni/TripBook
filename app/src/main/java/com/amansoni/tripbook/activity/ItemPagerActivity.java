@@ -8,12 +8,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.View;
 
 import com.amansoni.tripbook.R;
 import com.amansoni.tripbook.model.TripBookItemData;
-import com.amansoni.tripbook.fragment.TripBookItemFragment;
+import com.amansoni.tripbook.fragment.ItemViewFragment;
 import com.amansoni.tripbook.model.TripBookItem;
 
 import java.util.ArrayList;
@@ -62,7 +61,7 @@ public class ItemPagerActivity extends ActionBarActivity {
             @Override
             public Fragment getItem(int pos) {
                 long TripBookItemId = tripBookItems.get(pos).getId();
-                return TripBookItemFragment.newInstance(TripBookItemId);
+                return ItemViewFragment.newInstance(TripBookItemId);
             }
         });
 
