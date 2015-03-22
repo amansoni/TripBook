@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.amansoni.tripbook.activity.FacebookActivity;
 import com.amansoni.tripbook.activity.ListItemActivity;
 import com.amansoni.tripbook.activity.MapsActivity;
 import com.amansoni.tripbook.activity.SettingsActivity;
@@ -95,8 +96,8 @@ public class MainActivity extends ActionBarActivity
                     }
                     break;
                 case 2:
-                    Intent tripList = new Intent(this, ListItemActivity.class);
-                    startActivity(tripList);
+                    Intent facebookIntent = new Intent(this, FacebookActivity.class);
+                    startActivity(facebookIntent);
 //                    mTitle = getString(R.string.title_social);
 //                    itemType = TripBookItem.TYPE_FRIENDS;
                     break;
