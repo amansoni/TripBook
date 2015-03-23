@@ -20,13 +20,14 @@ import java.util.HashMap;
 public class TripBookProvider extends ContentProvider {
     // content mime types
     public static final String BASE_DATA_NAME = "tripbookitems";
-    public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.tripbook.search." + BASE_DATA_NAME;
-    public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.tripbook.search." + BASE_DATA_NAME;
-    public static final Uri CONTENT_URI_SEARCH = Uri.parse("content://com.amansoni.tripbook.provider.TripBookProvider/tripbookitems");
+    public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
+            + "/vnd.tripbook.search." + BASE_DATA_NAME;
+    public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
+            + "/vnd.tripbook.search." + BASE_DATA_NAME;
+    public static final Uri CONTENT_URI_SEARCH =
+            Uri.parse("content://com.amansoni.tripbook.provider.TripBookProvider/tripbookitems");
     private static final String AUTHORITY = "com.amansoni.tripbook.provider.TripBookProvider";
-    // common URIs
-    public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_DATA_NAME);
-    public static final Uri SEARCH_SUGGEST_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_DATA_NAME + "/" + SearchManager.SUGGEST_URI_PATH_QUERY);
+
     // matcher
     private static final int ITEMS = 1; // The incoming URI matches the main table URI pattern
     private static final int ITEM_ID = 2; // The incoming URI matches the main table row ID URI pattern
@@ -63,7 +64,8 @@ public class TripBookProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
+                        String sortOrder) {
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(DatabaseHelper.TABLE_NAME_ITEM);
@@ -84,7 +86,8 @@ public class TripBookProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unknown URI");
         }
 
-        Cursor cursor = queryBuilder.query(mDatabaseHelper.getReadableDatabase(), projection, selection, selectionArgs, null, null, sortOrder);
+        Cursor cursor = queryBuilder.query(mDatabaseHelper.getReadableDatabase(), projection,
+                selection, selectionArgs, null, null, sortOrder);
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }

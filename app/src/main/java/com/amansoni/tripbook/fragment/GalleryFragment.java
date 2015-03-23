@@ -365,9 +365,8 @@ public class GalleryFragment extends Fragment implements AdapterView.OnItemClick
             String[] whereArgs = new String[]{folder};
 
             final String[] projection = {MediaStore.Images.Media.DATA};
-//            final String selection = MediaStore.Images.Media.BUCKET_ID + " = ?";
-//            final String[] selectionArgs = { CAMERA_IMAGE_BUCKET_ID };
-            final Cursor cursor = mContext.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            final Cursor cursor = mContext.getContentResolver().
+                    query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     projection,
                     where,
                     whereArgs,
