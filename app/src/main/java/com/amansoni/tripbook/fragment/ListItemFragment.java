@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
@@ -28,12 +29,12 @@ import com.amansoni.tripbook.activity.ItemPagerActivity;
 import com.amansoni.tripbook.model.TripBookItem;
 import com.amansoni.tripbook.model.TripBookItemData;
 import com.amansoni.tripbook.util.DividerItemDecoration;
+import com.amansoni.tripbook.util.FloatingActionButton;
 import com.amansoni.tripbook.util.Photo;
 import com.amansoni.tripbook.util.PictureUtils;
 import com.bignerdranch.android.multiselector.ModalMultiSelectorCallback;
 import com.bignerdranch.android.multiselector.MultiSelector;
 import com.bignerdranch.android.multiselector.SwappingHolder;
-import com.amansoni.tripbook.util.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -83,13 +84,7 @@ public class ListItemFragment extends BaseFragment {
                 // Need to finish the action mode before doing the following,
                 // not after. No idea why, but it crashes.
                 actionMode.finish();
-
-                for (int i = mTripBookItems.size(); i >= 0; i--) {
-                    if (mMultiSelector.isSelected(i, 0)) {
-                        TripBookItem tripBookItem = mTripBookItems.get(i);
-//                        TODO share individual items using object hierarchy
-                    }
-                }
+                createShareIntent();
                 mMultiSelector.clearSelections();
                 return true;
             }
@@ -105,6 +100,60 @@ public class ListItemFragment extends BaseFragment {
         fragment.setArguments(args);
 
         return fragment;
+    }
+
+    /**
+     * Create a sharable intent using the item being viewed.
+     *
+     * @return the shareIntent
+     */
+    protected Intent createShareIntent() {
+        ArrayList<Uri> imageUris = new ArrayList<Uri>();
+        String subject = "Please check out these " + mItemType + " details from TripBook";
+        String extraText = "";
+
+        for (int i = mTripBookItems.size(); i >= 0; i--) {
+            if (mMultiSelector.isSelected(i, 0)) {
+                TripBookItem tripBookItem = mTripBookItems.get(i);
+                // add full list of image uris for all items
+                for (String filepath : tripBookItem.getImages()) {
+                    imageUris.add(Uri.parse(filepath)); // Add your image URIs here
+                }
+                extraText = extraText + tripBookItem.toString();
+                // get the linked place information
+                TripBookItemData linkedItemData = new TripBookItemData(getActivity());
+                linkedItemData.setItemType(TripBookItem.TYPE_PLACE);
+                linkedItemData.setItemId(tripBookItem.getId());
+                ArrayList<TripBookItem> places = linkedItemData.getAllRows();
+                if (places.size() > 0) {
+                    extraText = extraText + "\nPlaces to visit";
+                    for (TripBookItem place : places) {
+                        extraText = extraText + "\n" + place.toString();
+                    }
+                }
+                linkedItemData.setItemType(TripBookItem.TYPE_PLACE);
+                ArrayList<TripBookItem> friends = linkedItemData.getAllRows();
+                if (friends.size() > 0) {
+                    extraText = extraText + "\nFriends coming with";
+                    for (TripBookItem friend : friends) {
+                        extraText = extraText + "\n" + friend.getTitle();
+                    }
+                }
+
+            }
+        }
+
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
+        shareIntent.setType("*/*");
+
+        shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
+//        shareIntent.putStringArrayListExtra(Intent.EXTRA_TEXT, extra_text);
+        shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, extraText);
+        shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
+
+        startActivity(Intent.createChooser(shareIntent, "Share using..."));
+        return shareIntent;
     }
 
     @Override
@@ -173,11 +222,11 @@ public class ListItemFragment extends BaseFragment {
         mTripBookItems = tripBookItemData.getAllRows();
         mRecyclerView.setAdapter(new ItemAdapter());
 
-        FloatingActionButton mAddButton = (FloatingActionButton)v.findViewById(R.id.add_button);
+        FloatingActionButton mAddButton = (FloatingActionButton) v.findViewById(R.id.add_button);
         mAddButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     new AddItemDialogFragment().show(getFragmentManager(), "addnew");
                     return true;
                 }
