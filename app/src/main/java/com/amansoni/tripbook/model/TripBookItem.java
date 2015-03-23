@@ -13,12 +13,12 @@ import java.util.List;
  */
 public class TripBookItem extends TripBookCommon {
     // itemType constants
-    public final static String TYPE_TRIP = "Trips";
-    public final static String TYPE_PLACE = "Places";
-    public static final String TYPE_Image = "Images";
+    public final static String TYPE_TRIP = "Trip";
+    public final static String TYPE_PLACE = "Place";
+    public static final String TYPE_Image = "Image";
     public static final String TYPE_GALLERY = "Gallery";
     public static final String TYPE_STARRED = "Favourite";
-    public static final String TYPE_FRIENDS = "Friends";
+    public static final String TYPE_FRIENDS = "Friend";
     public static final String ITEM_ID = "itemId";
     public static final String ITEM_TYPE = "itemType";
     List<TripBookCommon> mLinks;
@@ -50,9 +50,37 @@ public class TripBookItem extends TripBookCommon {
 
     @Override
     public String toString() {
-        String s = "";
-        s = "Last visit " + this.getCreatedAt();
-        return mTitle;
+//        return mItemType + ": " + mTitle;
+        String s = mItemType + ": " + mTitle;
+        if (isStarred)
+            s = s + " (favourite)";
+
+        if (mDescription != null && mDescription.length() > 0)
+            s = s + "\n" + mDescription;
+
+        if (mEndDate != null && mEndDate.length() > 0)
+            s = s + "\nFrom: " + mCreatedAt + " to " + mEndDate;
+        else {
+            if (mCreatedAt != null && mCreatedAt.length()>0)
+                s = s + " Date: " + mCreatedAt;
+        }
+        return s;
+//        String sPlace = "";
+//        String sFriend = "";
+//        switch (mItemType){
+//            case TYPE_TRIP:
+//
+//                } else {
+//                    s = TYPE_TRIP + ": " + mTitle + "\n" + mDescription + "\nOn:" + mCreatedAt;
+//                }
+//                break;
+//            case TYPE_PLACE:
+//                break;
+//            case TYPE_GALLERY:
+//                break;
+//        }
+//        s = "Last visit " + this.getCreatedAt();
+
     }
 
     public String getItemType() {
@@ -105,7 +133,7 @@ public class TripBookItem extends TripBookCommon {
 
     public Photo getPhoto() {
         if (mPhoto == null)
-            mPhoto = new Photo("/storage/emulated/0/Pictures/TripBook/IMG_20150310_134840.jpg");
+            mPhoto = new Photo("/storage/emulated/0/Pictures/TripBook/IMG_20150309_093228.jpg");
 //            mPhoto = new Photo("/storage/emulated/0/Pictures/TripBook/IMG_20150310_134840.jpg");
         return mPhoto;
     }

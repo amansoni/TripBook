@@ -15,9 +15,10 @@
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:background="#000000">
 
-    <com.amansoni.tripbook.images.RecyclingImageView
+    <com.amansoni.tripbook.util.RecyclingImageView
         android:id="@+id/list_row_imageView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

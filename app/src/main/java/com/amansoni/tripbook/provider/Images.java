@@ -16,9 +16,6 @@
 
 package com.amansoni.tripbook.provider;
 
-import com.amansoni.tripbook.images.PhotoAdapter;
-import com.amansoni.tripbook.images.PhotoGalleryImageProvider;
-
 /**
  * Some simple test data to use for this sample app.
  */

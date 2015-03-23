@@ -1,13 +1,15 @@
-package com.amansoni.tripbook.images;
+package com.amansoni.tripbook.fragment;
 
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.TypedValue;
@@ -15,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -27,15 +30,19 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.amansoni.tripbook.BuildConfig;
-import com.amansoni.tripbook.activity.LocationLookup;
 import com.amansoni.tripbook.R;
-import com.amansoni.tripbook.provider.Images;
+import com.amansoni.tripbook.activity.LocationLookup;
+import com.amansoni.tripbook.activity.ImageDetailActivity;
 import com.amansoni.tripbook.util.ImageCache;
 import com.amansoni.tripbook.util.ImageFetcher;
+import com.amansoni.tripbook.util.ImageResizer;
+import com.amansoni.tripbook.util.RecyclingImageView;
 import com.amansoni.tripbook.util.Utils;
+import com.shamanland.fab.FloatingActionButton;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -45,10 +52,15 @@ import java.util.Date;
  * cache is retained over configuration changes like orientation change so the images are populated
  * quickly if, for example, the user rotates the device.
  */
-public class ItemGalleryFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class GalleryFragment extends Fragment implements AdapterView.OnItemClickListener {
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
-    private static final String TAG = "ItemGalleryFragment";
+    public static final String CAMERA_IMAGE_BUCKET_NAME =
+            Environment.getExternalStorageDirectory().toString()
+                    + "/DCIM/Camera";
+    public static final String CAMERA_IMAGE_BUCKET_ID =
+            getBucketId(CAMERA_IMAGE_BUCKET_NAME);
+    private static final String TAG = "GalleryFragment";
     private static final String IMAGE_CACHE_DIR = "thumbs";
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
@@ -56,12 +68,21 @@ public class ItemGalleryFragment extends Fragment implements AdapterView.OnItemC
     private int mImageThumbSpacing;
     private ImageAdapter mAdapter;
     private ImageFetcher mImageFetcher;
+    private ImageResizer mImageResizer;
     private Uri fileUri;
 
     /**
      * Empty constructor as per the Fragment documentation
      */
-    public ItemGalleryFragment() {
+    public GalleryFragment() {
+    }
+
+    /**
+     * Matches code in MediaProvider.computeBucketValues. Should be a common
+     * function.
+     */
+    public static String getBucketId(String path) {
+        return String.valueOf(path.toLowerCase().hashCode());
     }
 
     /**
@@ -123,16 +144,20 @@ public class ItemGalleryFragment extends Fragment implements AdapterView.OnItemC
         cacheParams.setMemCacheSizePercent(0.25f); // Set memory cache to 25% of app memory
 
         // The ImageFetcher takes care of loading images into our ImageView children asynchronously
-        mImageFetcher = new ImageFetcher(getActivity(), mImageThumbSize);
-        mImageFetcher.setLoadingImage(R.drawable.empty_photo);
-        mImageFetcher.addImageCache(getActivity().getSupportFragmentManager(), cacheParams);
+//        mImageFetcher = new ImageFetcher(getActivity(), mImageThumbSize);
+//        mImageFetcher.setLoadingImage(R.drawable.empty_photo);
+//        mImageFetcher.addImageCache(getActivity().getSupportFragmentManager(), cacheParams);
+        mImageResizer = new ImageResizer(getActivity(), mImageThumbSize);
+        mImageResizer.setLoadingImage(R.drawable.empty_photo);
+        mImageResizer.addImageCache(getActivity().getSupportFragmentManager(), cacheParams);
+
     }
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        final View v = inflater.inflate(R.layout.item_image_list, container, false);
+        final View v = inflater.inflate(R.layout.image_grid_fragment, container, false);
         final GridView mGridView = (GridView) v.findViewById(R.id.gridView);
         mGridView.setAdapter(mAdapter);
         mGridView.setOnItemClickListener(this);
@@ -143,10 +168,12 @@ public class ItemGalleryFragment extends Fragment implements AdapterView.OnItemC
                 if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
                     // Before Honeycomb pause image loading on scroll to help with performance
                     if (!Utils.hasHoneycomb()) {
-                        mImageFetcher.setPauseWork(true);
+                        mImageResizer.setPauseWork(true);
+//                        mImageFetcher.setPauseWork(true);
                     }
                 } else {
-                    mImageFetcher.setPauseWork(false);
+                    mImageResizer.setPauseWork(false);
+//                    mImageFetcher.setPauseWork(false);
                 }
             }
 
@@ -187,6 +214,26 @@ public class ItemGalleryFragment extends Fragment implements AdapterView.OnItemC
                         }
                     }
                 });
+
+        FloatingActionButton mFab = (FloatingActionButton) v.findViewById(R.id.fab);
+//        mFab.setBackgroundColor(getResources().getColor(R.color.floating_button));
+        //mFab.setBackground(getResources().getDrawable(R.drawable.oval));;
+        mFab.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    // create Intent to take a picture and return control to the calling application
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                    fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a file to save the image
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
+
+                    // start the image capture Intent
+                    startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+                }
+                return true; // consume the event
+            }
+        });
 
         return v;
     }
@@ -233,22 +280,27 @@ public class ItemGalleryFragment extends Fragment implements AdapterView.OnItemC
     @Override
     public void onResume() {
         super.onResume();
-        mImageFetcher.setExitTasksEarly(false);
+//        mImageFetcher.setExitTasksEarly(false);
+        mImageResizer.setExitTasksEarly(false);
         mAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mImageFetcher.setPauseWork(false);
-        mImageFetcher.setExitTasksEarly(true);
-        mImageFetcher.flushCache();
+        mImageResizer.setPauseWork(false);
+        mImageResizer.setExitTasksEarly(true);
+        mImageResizer.flushCache();
+//        mImageFetcher.setPauseWork(false);
+//        mImageFetcher.setExitTasksEarly(true);
+//        mImageFetcher.flushCache();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mImageFetcher.closeCache();
+        mImageResizer.clearCache();
+//        mImageFetcher.closeCache();
     }
 
     @TargetApi(VERSION_CODES.JELLY_BEAN)
@@ -297,6 +349,7 @@ public class ItemGalleryFragment extends Fragment implements AdapterView.OnItemC
         private int mNumColumns = 0;
         private int mActionBarHeight = 0;
         private GridView.LayoutParams mImageViewLayoutParams;
+        private ArrayList<String> imageFiles;
 
         public ImageAdapter(Context context) {
             super();
@@ -311,6 +364,32 @@ public class ItemGalleryFragment extends Fragment implements AdapterView.OnItemC
                         tv.data, context.getResources().getDisplayMetrics());
                 mActionBarHeight = 1;
             }
+            getCameraImages();
+        }
+
+        private void getCameraImages() {
+            String folder = getResources().getString(R.string.image_path);
+            folder = folder + "%";
+            String where = MediaStore.Images.Media.DATA + " LIKE ?";
+            String[] whereArgs = new String[]{folder};
+
+            final String[] projection = {MediaStore.Images.Media.DATA};
+//            final String selection = MediaStore.Images.Media.BUCKET_ID + " = ?";
+//            final String[] selectionArgs = { CAMERA_IMAGE_BUCKET_ID };
+            final Cursor cursor = mContext.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    projection,
+                    where,
+                    whereArgs,
+                    null);
+            imageFiles = new ArrayList<>(cursor.getCount());
+            if (cursor.moveToFirst()) {
+                final int dataColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                do {
+                    final String data = cursor.getString(dataColumn);
+                    imageFiles.add(data);
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
         }
 
         @Override
@@ -321,13 +400,14 @@ public class ItemGalleryFragment extends Fragment implements AdapterView.OnItemC
             }
 
             // Size + number of columns for top empty row
-            return Images.imageThumbUrls.length + mNumColumns;
+//            return Images.imageThumbUrls.length + mNumColumns;
+            return imageFiles.size() + mNumColumns;
         }
 
         @Override
         public Object getItem(int position) {
             return position < mNumColumns ?
-                    null : Images.imageThumbUrls[position - mNumColumns];
+                    null : imageFiles.get(position - mNumColumns);
         }
 
         @Override
@@ -382,7 +462,8 @@ public class ItemGalleryFragment extends Fragment implements AdapterView.OnItemC
 
             // Finally load the image asynchronously into the ImageView, this also takes care of
             // setting a placeholder image while the background thread runs
-            mImageFetcher.loadImage(Images.imageThumbUrls[position - mNumColumns], imageView);
+            mImageResizer.loadImage(imageFiles.get(position - mNumColumns), imageView);
+//            mImageFetcher.loadImage(Images.imageThumbUrls[position - mNumColumns], imageView);
             return imageView;
             //END_INCLUDE(load_gridview_item)
         }
@@ -400,7 +481,8 @@ public class ItemGalleryFragment extends Fragment implements AdapterView.OnItemC
             mItemHeight = height;
             mImageViewLayoutParams =
                     new GridView.LayoutParams(LayoutParams.MATCH_PARENT, mItemHeight);
-            mImageFetcher.setImageSize(height);
+            //mImageFetcher.setImageSize(height);
+            mImageResizer.setImageSize(500);
             notifyDataSetChanged();
         }
 

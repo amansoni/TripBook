@@ -1,210 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".AddActivity">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true">
 
-    <EditText
-        android:id="@+id/trip_add_name"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="6dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginRight="5dp"
-        android:background="@color/navigation_row_selected"
-        android:hint="@string/hint_trip_name"
-        android:inputType="textAutoCorrect"
-        android:selectAllOnFocus="true" />
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context=".AddActivity">
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dip"
-        android:layout_below="@+id/trip_add_name"
-        android:background="@color/seperator_line" />
+        <EditText
+            android:id="@+id/trip_add_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="1dp"
+            android:background="@color/navigation_row_selected"
+            android:hint="@string/hint_trip_name"
+            android:inputType="textAutoCorrect"
+            android:selectAllOnFocus="true" />
 
-    <ImageButton
-        android:id="@+id/icon_trip_date"
-        android:layout_width="@dimen/small_button_diameter"
-        android:layout_height="@dimen/small_button_diameter"
-        android:layout_alignLeft="@+id/trip_add_name"
-        android:layout_below="@+id/trip_add_name"
-        android:src="@drawable/ic_action_time" />
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:layout_below="@+id/trip_add_name"
+            android:background="@color/seperator_line" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/trip_add_name"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_toRightOf="@+id/icon_trip_date"
-        android:text="@string/label_start" />
+        <ImageButton
+            android:id="@+id/icon_trip_date"
+            android:layout_width="@dimen/small_button_diameter"
+            android:layout_height="@dimen/small_button_diameter"
+            android:layout_alignLeft="@+id/trip_add_name"
+            android:layout_below="@+id/trip_add_name"
+            android:src="@drawable/ic_action_time" />
 
-    <TextView
-        android:id="@+id/trip_add_start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/trip_add_name"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_toRightOf="@+id/textView"
-        android:background="@color/navigation_row_selected"
-        android:ems="10"
-        android:focusable="true"
-        android:gravity="center" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/trip_add_name"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/icon_trip_date"
+            android:text="@string/label_start" />
 
-    <TextView
-        android:id="@+id/textViewEnd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/label_end" />
+        <TextView
+            android:id="@+id/trip_add_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/trip_add_name"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/textView"
+            android:background="@color/navigation_row_selected"
+            android:ems="10"
+            android:focusable="true"
+            android:gravity="center" />
 
-    <TextView
-        android:id="@+id/trip_add_end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/trip_add_start"
-        android:layout_below="@+id/textView"
-        android:layout_marginTop="10dp"
-        android:layout_toRightOf="@+id/textViewEnd"
-        android:background="@color/navigation_row_selected"
-        android:ems="10"
-        android:gravity="center" />
+        <TextView
+            android:id="@+id/textViewEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/textView"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/label_end" />
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dip"
-        android:layout_below="@+id/trip_add_end"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="45dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/seperator_line" />
+        <TextView
+            android:id="@+id/trip_add_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/trip_add_start"
+            android:layout_below="@+id/textView"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/textViewEnd"
+            android:background="@color/navigation_row_selected"
+            android:ems="10"
+            android:gravity="center" />
 
-    <ImageButton
-        android:id="@+id/icon_trip_note"
-        android:layout_width="@dimen/small_button_diameter"
-        android:layout_height="@dimen/small_button_diameter"
-        android:layout_alignLeft="@+id/trip_add_name"
-        android:layout_below="@+id/textViewEnd"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/ic_action_sort_by_size"/>
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:layout_below="@+id/trip_add_end"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="45dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/seperator_line" />
 
-    <EditText
-        android:id="@+id/trip_add_notes"
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/textarea_height"
-        android:layout_alignLeft="@+id/trip_add_name"
-        android:layout_below="@+id/trip_add_end"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginRight="5dp"
-        android:background="@color/navigation_row_selected"
-        android:ems="10"
-        android:gravity="top"
-        android:hint="@string/hint_notes"
-        android:inputType="textMultiLine"
-        android:linksClickable="false" />
+        <ImageButton
+            android:id="@+id/icon_trip_note"
+            android:layout_width="@dimen/small_button_diameter"
+            android:layout_height="@dimen/small_button_diameter"
+            android:layout_alignLeft="@+id/trip_add_name"
+            android:layout_below="@+id/textViewEnd"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_action_sort_by_size" />
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dip"
-        android:layout_below="@+id/trip_add_notes"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="45dp"
-        android:layout_marginTop="2dp"
-        android:background="@color/seperator_line" />
+        <EditText
+            android:id="@+id/trip_add_notes"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/textarea_height"
+            android:layout_alignLeft="@+id/trip_add_name"
+            android:layout_below="@+id/trip_add_end"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/navigation_row_selected"
+            android:ems="10"
+            android:gravity="top"
+            android:hint="@string/hint_notes"
+            android:inputType="textMultiLine"
+            android:linksClickable="false" />
 
-    <ImageButton
-        android:id="@+id/icon_trip_place"
-        android:layout_width="@dimen/small_button_diameter"
-        android:layout_height="@dimen/small_button_diameter"
-        android:layout_gravity="top"
-        android:layout_alignLeft="@+id/trip_add_name"
-        android:layout_marginTop="35dp"
-        android:src="@drawable/ic_action_place"
-        android:layout_below="@+id/trip_add_notes"
-        />
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:layout_below="@+id/trip_add_notes"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="45dp"
+            android:layout_marginTop="2dp"
+            android:background="@color/seperator_line" />
 
-    <LinearLayout
-        android:id="@+id/trip_view_places"
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/horizontal_list_view_height"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/trip_add_notes"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="2dp"
-        android:orientation="horizontal"
-        android:layout_marginRight="5dp"
-        />
+        <ImageButton
+            android:id="@+id/icon_trip_place"
+            android:layout_width="@dimen/small_button_diameter"
+            android:layout_height="@dimen/small_button_diameter"
+            android:layout_alignLeft="@+id/trip_add_name"
+            android:layout_below="@+id/trip_add_notes"
+            android:layout_gravity="top"
+            android:layout_marginTop="35dp"
+            android:src="@drawable/ic_action_place" />
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dip"
-        android:layout_below="@+id/trip_view_places"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="45dp"
-        android:layout_marginTop="2dp"
-        android:background="@color/seperator_line" />
+        <LinearLayout
+            android:id="@+id/trip_view_places"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/horizontal_list_view_height"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/trip_add_notes"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="2dp"
+            android:orientation="horizontal" />
 
-    <ImageButton
-        android:id="@+id/icon_trip_friends"
-        android:layout_width="@dimen/small_button_diameter"
-        android:layout_height="@dimen/small_button_diameter"
-        android:layout_alignLeft="@+id/trip_add_name"
-        android:src="@drawable/ic_action_group"
-        android:layout_marginTop="39dp"
-        android:layout_below="@+id/trip_view_places"
-        />
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:layout_below="@+id/trip_view_places"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="45dp"
+            android:layout_marginTop="2dp"
+            android:background="@color/seperator_line" />
 
-    <LinearLayout
-        android:id="@+id/trip_view_friends"
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/horizontal_list_view_height"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/trip_view_places"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginRight="5dp"
-        android:orientation="horizontal" />
+        <ImageButton
+            android:id="@+id/icon_trip_friends"
+            android:layout_width="@dimen/small_button_diameter"
+            android:layout_height="@dimen/small_button_diameter"
+            android:layout_alignLeft="@+id/trip_add_name"
+            android:layout_below="@+id/trip_view_places"
+            android:layout_marginTop="39dp"
+            android:src="@drawable/ic_action_group" />
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dip"
-        android:layout_below="@+id/trip_view_friends"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="45dp"
-        android:layout_marginTop="2dp"
-        android:background="@color/seperator_line" />
+        <LinearLayout
+            android:id="@+id/trip_view_friends"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/horizontal_list_view_height"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/trip_view_places"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="2dp"
+            android:orientation="horizontal" />
 
-    <ImageButton
-        android:id="@+id/icon_trip_images"
-        android:layout_width="@dimen/small_button_diameter"
-        android:layout_height="@dimen/small_button_diameter"
-        android:layout_alignLeft="@+id/trip_add_name"
-        android:layout_below="@+id/trip_view_friends"
-        android:src="@drawable/ic_action_picture"
-        android:layout_marginTop="40dp"
-        />
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:layout_below="@+id/trip_view_friends"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="45dp"
+            android:layout_marginTop="2dp"
+            android:background="@color/seperator_line" />
 
-    <LinearLayout
-        android:id="@+id/trip_view_gallery"
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/horizontal_list_view_height"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginRight="5dp"
-        android:layout_below="@+id/trip_view_friends"
-        android:orientation="horizontal" />
+        <ImageButton
+            android:id="@+id/icon_trip_images"
+            android:layout_width="@dimen/small_button_diameter"
+            android:layout_height="@dimen/small_button_diameter"
+            android:layout_alignLeft="@+id/trip_add_name"
+            android:layout_below="@+id/trip_view_friends"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/ic_action_picture" />
 
-
-</RelativeLayout>
+        <LinearLayout
+            android:id="@+id/trip_view_gallery"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/horizontal_list_view_height"
+            android:layout_below="@+id/trip_view_friends"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="2dp"
+            android:orientation="horizontal" />
+    </RelativeLayout>
+</ScrollView>

@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -30,8 +29,7 @@ import com.amansoni.tripbook.model.TripBookItem;
 import com.amansoni.tripbook.model.TripBookItemData;
 import com.amansoni.tripbook.util.DividerItemDecoration;
 import com.amansoni.tripbook.util.FloatingActionButton;
-import com.amansoni.tripbook.util.Photo;
-import com.amansoni.tripbook.util.PictureUtils;
+import com.amansoni.tripbook.util.ImageResizer;
 import com.bignerdranch.android.multiselector.ModalMultiSelectorCallback;
 import com.bignerdranch.android.multiselector.MultiSelector;
 import com.bignerdranch.android.multiselector.SwappingHolder;
@@ -330,21 +328,17 @@ public class ListItemFragment extends BaseFragment {
         public void bindItem(TripBookItem tripBookItem) {
             mTripBookItem = tripBookItem;
             mTitleTextView.setText(tripBookItem.getTitle());
-            mDateStartTextView.setText("From:" + tripBookItem.getCreatedAt().toString());
-            mDateEndTextView.setText(" To:" + tripBookItem.getEndDate().toString());
-//            showImage();
-        }
-
-        private void showImage() {
-            // (re)set the image button's image based on our photo
-            Photo p = mTripBookItem.getPhoto();
-            BitmapDrawable b = null;
-            if (p != null) {
-//                String path = getActivity()
-//                        .getFileStreamPath(p.getFilename()).getAbsolutePath();
-                b = PictureUtils.getScaledDrawable(getActivity(), p.getFilename());
+            String s;
+            if (tripBookItem.getEndDate() != null && tripBookItem.getEndDate().length() > 0)
+                s = "From: " + tripBookItem.getCreatedAt() + " to " + tripBookItem.getEndDate();
+            else {
+                if (tripBookItem.getCreatedAt() != null && tripBookItem.getCreatedAt().length() > 0)
+                    s = "Date: " + tripBookItem.getCreatedAt();
+                else
+                    s = "(unplanned)";
             }
-            mImageView.setImageDrawable(b);
+            mDateStartTextView.setText(s);
+            mImageView.setImageBitmap(ImageResizer.decodeSampledBitmapFromFile(tripBookItem.getPhoto().getFilename(), 250, 250));
         }
 
         @Override

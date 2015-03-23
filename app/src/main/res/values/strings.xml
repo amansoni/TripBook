@@ -118,5 +118,6 @@
     <string name="element_delete">Delete</string>
     <string name="date_picker_title">Select date</string>
     <string name="take_photo">Photo</string>
+    <string name="image_path">/storage/emulated/0/Pictures/TripBook/</string>
 
 </resources>

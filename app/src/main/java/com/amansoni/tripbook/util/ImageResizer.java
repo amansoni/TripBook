@@ -96,16 +96,25 @@ public class ImageResizer extends ImageWorker {
                 mImageHeight, getImageCache());
     }
 
+    private Bitmap processBitmap(String filename) {
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "processBitmap from file - " + filename);
+        }
+//        return decodeSampledBitmapFromFile(filename, mImageWidth, mImageHeight, getImageCache());
+        return decodeSampledBitmapFromFile(filename, mImageWidth, mImageHeight);
+    }
+
     @Override
     protected Bitmap processBitmap(Object data) {
-        int check=0;
-        try{
-            check = Integer.parseInt(String.valueOf(data));
-            return processBitmap(check);
-        } catch (Exception e){
-            return decodeSampledBitmapFromFile(data.toString(), mImageWidth,
-                    mImageHeight, getImageCache());
-        }
+        return processBitmap(String.valueOf(data));
+//        int check=0;
+//        try{
+////            check = Integer.parseInt(String.valueOf(data));
+////            return processBitmap(check);
+//        } catch (Exception e){
+//            return decodeSampledBitmapFromFile(data.toString(), mImageWidth,
+//                    mImageHeight, getImageCache());
+//        }
     }
 
     /**
@@ -148,12 +157,11 @@ public class ImageResizer extends ImageWorker {
      * @param filename The full path of the file to decode
      * @param reqWidth The requested width of the resulting bitmap
      * @param reqHeight The requested height of the resulting bitmap
-     * @param cache The ImageCache used to find candidate bitmaps for use with inBitmap
      * @return A bitmap sampled down from the original with the same aspect ratio and dimensions
      *         that are equal to or greater than the requested width and height
      */
     public static Bitmap decodeSampledBitmapFromFile(String filename,
-            int reqWidth, int reqHeight, ImageCache cache) {
+            int reqWidth, int reqHeight) {
 
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
@@ -164,9 +172,9 @@ public class ImageResizer extends ImageWorker {
         options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
 
         // If we're running on Honeycomb or newer, try to use inBitmap
-        if (Utils.hasHoneycomb()) {
-            addInBitmapOptions(options, cache);
-        }
+//        if (Utils.hasHoneycomb()) {
+//            addInBitmapOptions(options, cache);
+//        }
 
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;

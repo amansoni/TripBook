@@ -21,7 +21,7 @@ import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.StrictMode;
 
-import com.amansoni.tripbook.images.GalleryFragment;
+import com.amansoni.tripbook.fragment.GalleryFragment;
 
 /**
  * Class containing some static utility methods.

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.amansoni.tripbook.images;
+package com.amansoni.tripbook.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,18 +25,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.amansoni.tripbook.R;
+import com.amansoni.tripbook.activity.ImageDetailActivity;
 import com.amansoni.tripbook.util.ImageFetcher;
+import com.amansoni.tripbook.util.ImageResizer;
 import com.amansoni.tripbook.util.ImageWorker;
 import com.amansoni.tripbook.util.Utils;
 
 /**
- * This fragment will populate the children of the ViewPager from {@link ImageDetailActivity}.
+ * This fragment will populate the children of the ViewPager from {@link com.amansoni.tripbook.activity.ImageDetailActivity}.
  */
 public class ImageDetailFragment extends Fragment {
     private static final String IMAGE_DATA_EXTRA = "extra_image_data";
     private String mImageUrl;
     private ImageView mImageView;
-    private ImageFetcher mImageFetcher;
+    private ImageResizer mImageResizer;
 
     /**
      * Factory method to generate a new instance of the fragment given an image number.
@@ -85,8 +87,8 @@ public class ImageDetailFragment extends Fragment {
         // Use the parent activity to load the image asynchronously into the ImageView (so a single
         // cache can be used over all pages in the ViewPager
         if (ImageDetailActivity.class.isInstance(getActivity())) {
-            mImageFetcher = ((ImageDetailActivity) getActivity()).getImageFetcher();
-            mImageFetcher.loadImage(mImageUrl, mImageView);
+            mImageResizer = ((ImageDetailActivity) getActivity()).getImageResizer();
+            mImageResizer.loadImage(mImageUrl, mImageView);
         }
 
         // Pass clicks on the ImageView to the parent activity to handle

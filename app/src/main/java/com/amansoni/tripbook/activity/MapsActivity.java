@@ -212,7 +212,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleMap.OnMark
     @Override
     public void onInfoWindowClick(Marker marker) {
         Intent intent = new Intent(this, PlaceDetailActivity.class);
-//        intent.putExtra("PLACE", nearby.get(marker));
+        intent.putExtra("PLACE", nearby.get(marker));
         startActivity(intent);
     }
 

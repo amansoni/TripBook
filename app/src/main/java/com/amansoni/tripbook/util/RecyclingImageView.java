@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.amansoni.tripbook.images;
+package com.amansoni.tripbook.util;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;

@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package com.amansoni.tripbook.images;
+package com.amansoni.tripbook.activity;
 
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.database.Cursor;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.NavUtils;
@@ -36,17 +38,22 @@ import android.view.WindowManager.LayoutParams;
 
 import com.amansoni.tripbook.BuildConfig;
 import com.amansoni.tripbook.R;
-import com.amansoni.tripbook.util.ImageFetcher;
-import com.amansoni.tripbook.util.Utils;
-import com.amansoni.tripbook.util.ImageCache;
+import com.amansoni.tripbook.fragment.ImageDetailFragment;
 import com.amansoni.tripbook.provider.Images;
+import com.amansoni.tripbook.util.ImageCache;
+import com.amansoni.tripbook.util.ImageFetcher;
+import com.amansoni.tripbook.util.ImageResizer;
+import com.amansoni.tripbook.util.Utils;
 
-public class ImageDetailActivity extends FragmentActivity implements OnClickListener {
+import java.util.ArrayList;
+
+public class ImageDetailActivity extends ActionBarActivity implements OnClickListener {
     public static final String IMAGE_CACHE_DIR = "images";
     public static final String EXTRA_IMAGE = "extra_image";
 
     private ImagePagerAdapter mAdapter;
     private ImageFetcher mImageFetcher;
+    private ImageResizer mImageResizer;
     private ViewPager mPager;
 
     @TargetApi(VERSION_CODES.HONEYCOMB)
@@ -77,12 +84,16 @@ public class ImageDetailActivity extends FragmentActivity implements OnClickList
         cacheParams.setMemCacheSizePercent(0.25f); // Set memory cache to 25% of app memory
 
         // The ImageFetcher takes care of loading images into our ImageView children asynchronously
-        mImageFetcher = new ImageFetcher(this, longest);
-        mImageFetcher.addImageCache(getSupportFragmentManager(), cacheParams);
-        mImageFetcher.setImageFadeIn(false);
+//        mImageFetcher = new ImageFetcher(this, longest);
+//        mImageFetcher.addImageCache(getSupportFragmentManager(), cacheParams);
+//        mImageFetcher.setImageFadeIn(false);
+
+        mImageResizer = new ImageResizer(this,longest);
+        mImageResizer.addImageCache(getSupportFragmentManager(), cacheParams);
+        mImageResizer.setImageFadeIn(true);
 
         // Set up ViewPager and backing adapter
-        mAdapter = new ImagePagerAdapter(getSupportFragmentManager(), Images.imageThumbUrls.length);
+        mAdapter = new ImagePagerAdapter(getSupportFragmentManager(), this);
         mPager = (ViewPager) findViewById(R.id.pager);
         mPager.setAdapter(mAdapter);
         mPager.setPageMargin((int) getResources().getDimension(R.dimen.horizontal_page_margin));
@@ -95,54 +106,54 @@ public class ImageDetailActivity extends FragmentActivity implements OnClickList
         // immersive photo viewing experience
         if (Utils.hasHoneycomb()) {
 //            TODO
-//            final ActionBar actionBar = getSupportActionBar();
-//
-//            // Hide title text and set home as up
-//            actionBar.setDisplayShowTitleEnabled(false);
-//            actionBar.setDisplayHomeAsUpEnabled(true);
-//
-//            // Hide and show the ActionBar as the visibility changes
-//            mPager.setOnSystemUiVisibilityChangeListener(
-//                    new View.OnSystemUiVisibilityChangeListener() {
-//                        @Override
-//                        public void onSystemUiVisibilityChange(int vis) {
-//                            if ((vis & View.SYSTEM_UI_FLAG_LOW_PROFILE) != 0) {
-//                                actionBar.hide();
-//                            } else {
-//                                actionBar.show();
-//                            }
-//                        }
-//                    });
-//
-//            // Start low profile mode and hide ActionBar
-//            mPager.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-//            actionBar.hide();
-//        }
-//
-//        // Set the current item based on the extra passed in to this activity
-//        final int extraCurrentItem = getIntent().getIntExtra(EXTRA_IMAGE, -1);
-//        if (extraCurrentItem != -1) {
-//            mPager.setCurrentItem(extraCurrentItem);
+            final ActionBar actionBar = getSupportActionBar();
+
+            // Hide title text and set home as up
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+
+            // Hide and show the ActionBar as the visibility changes
+            mPager.setOnSystemUiVisibilityChangeListener(
+                    new View.OnSystemUiVisibilityChangeListener() {
+                        @Override
+                        public void onSystemUiVisibilityChange(int vis) {
+                            if ((vis & View.SYSTEM_UI_FLAG_LOW_PROFILE) != 0) {
+                                actionBar.hide();
+                            } else {
+                                actionBar.show();
+                            }
+                        }
+                    });
+
+            // Start low profile mode and hide ActionBar
+            mPager.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+            actionBar.hide();
+        }
+
+        // Set the current item based on the extra passed in to this activity
+        final int extraCurrentItem = getIntent().getIntExtra(EXTRA_IMAGE, -1);
+        if (extraCurrentItem != -1) {
+            mPager.setCurrentItem(extraCurrentItem);
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mImageFetcher.setExitTasksEarly(false);
+        mImageResizer.setExitTasksEarly(false);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mImageFetcher.setExitTasksEarly(true);
-        mImageFetcher.flushCache();
+        mImageResizer.setExitTasksEarly(true);
+        mImageResizer.flushCache();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mImageFetcher.closeCache();
+        mImageResizer.closeCache();
     }
 
     @Override
@@ -169,32 +180,8 @@ public class ImageDetailActivity extends FragmentActivity implements OnClickList
     /**
      * Called by the ViewPager child fragments to load images via the one ImageFetcher
      */
-    public ImageFetcher getImageFetcher() {
-        return mImageFetcher;
-    }
-
-    /**
-     * The main adapter that backs the ViewPager. A subclass of FragmentStatePagerAdapter as there
-     * could be a large number of items in the ViewPager and we don't want to retain them all in
-     * memory at once but create/destroy them on the fly.
-     */
-    private class ImagePagerAdapter extends FragmentStatePagerAdapter {
-        private final int mSize;
-
-        public ImagePagerAdapter(FragmentManager fm, int size) {
-            super(fm);
-            mSize = size;
-        }
-
-        @Override
-        public int getCount() {
-            return mSize;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return ImageDetailFragment.newInstance(Images.imageUrls[position]);
-        }
+    public ImageResizer getImageResizer() {
+        return mImageResizer;
     }
 
     /**
@@ -209,6 +196,57 @@ public class ImageDetailActivity extends FragmentActivity implements OnClickList
             mPager.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
         } else {
             mPager.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+        }
+    }
+
+    /**
+     * The main adapter that backs the ViewPager. A subclass of FragmentStatePagerAdapter as there
+     * could be a large number of items in the ViewPager and we don't want to retain them all in
+     * memory at once but create/destroy them on the fly.
+     */
+    private class ImagePagerAdapter extends FragmentStatePagerAdapter {
+        private final int mSize;
+        private Context mContext;
+        private ArrayList<String> imageFiles;
+
+        public ImagePagerAdapter(FragmentManager fm, Context context) {
+            super(fm);
+            mContext = context;
+            getCameraImages();
+            mSize = imageFiles.size();
+        }
+
+        @Override
+        public int getCount() {
+            return mSize;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return ImageDetailFragment.newInstance(imageFiles.get(position));
+        }
+
+        private void getCameraImages() {
+            String folder = getResources().getString(R.string.image_path);
+            folder = folder + "%";
+            String where = MediaStore.Images.Media.DATA + " LIKE ?";
+            String[] whereArgs = new String[]{folder};
+
+            final String[] projection = {MediaStore.Images.Media.DATA};
+            final Cursor cursor = mContext.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    projection,
+                    where,
+                    whereArgs,
+                    null);
+            imageFiles = new ArrayList<>(cursor.getCount());
+            if (cursor.moveToFirst()) {
+                final int dataColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                do {
+                    final String data = cursor.getString(dataColumn);
+                    imageFiles.add(data);
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
         }
     }
 }

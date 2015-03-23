@@ -51,6 +51,14 @@ public class PlaceDetailFragment extends Fragment {
         //rssItem = new RssItem();
         //int position = getActivity().getIntent().getIntExtra("POSITION", 0);
         place = (GooglePlace) getArguments().getSerializable("PLACE");
+
+        String placesKey = getActivity().getResources().getString(R.string.google_places_key);
+
+        String placesRequest = "https://maps.googleapis.com/maps/api/place/details/json?" +
+                "key=" + placesKey + "&reference=" + place.getReference();
+        PlacesDetailReadFeed detailTask = new PlacesDetailReadFeed();
+        detailTask.execute(placesRequest);
+
         this.setHasOptionsMenu(true);
         getActivity().setTitle(place.getName());
     }
@@ -66,8 +74,8 @@ public class PlaceDetailFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        String placesKey = getActivity().getResources().getString(R.string.google_maps_key);
-        ;
+        String placesKey = getActivity().getResources().getString(R.string.google_places_key);
+
         String placesRequest = "https://maps.googleapis.com/maps/api/place/details/json?" +
                 "key=" + placesKey + "&reference=" + place.getReference();
         PlacesDetailReadFeed detailTask = new PlacesDetailReadFeed();

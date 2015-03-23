@@ -34,7 +34,6 @@ import com.amansoni.tripbook.provider.Images;
 import com.amansoni.tripbook.util.FloatingActionButton;
 import com.amansoni.tripbook.util.ImageWrapper;
 import com.amansoni.tripbook.util.Photo;
-import com.amansoni.tripbook.util.PictureUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -248,7 +247,7 @@ public class ItemViewFragment extends BaseFragment {
         if (p != null) {
 //            String path = getActivity()
 //                    .getFileStreamPath(p.getFilename()).getAbsolutePath();
-            b = PictureUtils.getScaledDrawable(getActivity(), p.getFilename());
+//            b = PictureUtils.getScaledDrawable(getActivity(), p.getFilename());
         }
 //        mPhotoView.setImageDrawable(b);
     }

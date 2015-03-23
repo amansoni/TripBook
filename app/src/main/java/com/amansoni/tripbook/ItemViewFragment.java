@@ -213,10 +213,7 @@ public class ItemViewFragment extends Fragment {
         }
         shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
 
-//        Uri uri = getLocalBitmapUri(mImageView);
-//        shareIntent.putExtra(Intent.EXTRA_STREAM, uri.toString());
-
-        startActivity(Intent.createChooser(shareIntent, "Share via..."));
+        startActivity(Intent.createChooser(shareIntent, "Share using..."));
         return shareIntent;
     }
 

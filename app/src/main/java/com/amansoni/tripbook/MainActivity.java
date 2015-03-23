@@ -18,12 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.amansoni.tripbook.activity.FacebookActivity;
-import com.amansoni.tripbook.activity.ListItemActivity;
 import com.amansoni.tripbook.activity.MapsActivity;
 import com.amansoni.tripbook.activity.SettingsActivity;
 import com.amansoni.tripbook.fragment.ListItemFragment;
 import com.amansoni.tripbook.fragment.NavigationDrawerFragment;
-import com.amansoni.tripbook.images.GalleryFragment;
+import com.amansoni.tripbook.fragment.GalleryFragment;
 import com.amansoni.tripbook.model.TripBookItem;
 import com.amansoni.tripbook.model.TripBookItemData;
 

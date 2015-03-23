@@ -1,5 +1,6 @@
 package com.amansoni.tripbook.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.Fragment;
@@ -60,6 +61,18 @@ public class ImageWrapper {
 
     public static void loadImageFromFile(Context context, ImageView imageView, String imageSource, int size){
         ImageResizer imageResizer = new ImageResizer(context, size);
+        imageView.setImageBitmap(imageResizer.processBitmap(imageSource));
+    }
+
+    public static void loadImageFromFile(FragmentActivity activity, ImageView imageView, String imageSource, int height, int width){
+        ImageCache.ImageCacheParams cacheParams =
+                new ImageCache.ImageCacheParams(activity, IMAGE_CACHE_DIR);
+
+        cacheParams.setMemCacheSizePercent(0.25f); // Set memory cache to 25% of app memory
+
+        ImageResizer imageResizer = new ImageResizer(activity, width, height);
+        imageResizer.setLoadingImage(R.drawable.empty_photo);
+        imageResizer.addImageCache(activity.getSupportFragmentManager(), cacheParams);
         imageView.setImageBitmap(imageResizer.processBitmap(imageSource));
     }
 
