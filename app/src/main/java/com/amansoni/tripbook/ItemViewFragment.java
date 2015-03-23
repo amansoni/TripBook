@@ -21,9 +21,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amansoni.tripbook.activity.AddItemActivity;
+import com.amansoni.tripbook.fragment.HorizontalListFragment;
 import com.amansoni.tripbook.model.TripBookItemData;
 import com.amansoni.tripbook.model.TripBookItem;
-import com.amansoni.tripbook.provider.Images;
 import com.amansoni.tripbook.util.ImageWrapper;
 
 import java.io.File;
@@ -92,7 +92,10 @@ public class ItemViewFragment extends Fragment {
 
         ImageView imageView = (ImageView) view.findViewById(R.id.item_main_image);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        ImageWrapper.loadImage(this, imageView, Images.imageThumbUrls[1]);
+//        ImageWrapper.loadImageFromFile(this, imageView, tripBookItem.getPhoto().getFilename(), 400);
+        ImageWrapper.loadImageFromFile(this, imageView, tripBookItem.getThumbnail(), 400);
+
+//        ImageWrapper.loadImage(this, imageView, tripBookItem.getPhoto().getFilename());
 
         if (tripBookItem.getItemType().equals(TripBookItem.TYPE_TRIP)) {
             replaceListFragment(R.id.trip_view_friends, TripBookItem.TYPE_FRIENDS);
@@ -216,30 +219,4 @@ public class ItemViewFragment extends Fragment {
         startActivity(Intent.createChooser(shareIntent, "Share using..."));
         return shareIntent;
     }
-
-    public Uri getLocalBitmapUri(ImageView imageView) {
-        // Extract Bitmap from ImageView drawable
-        Drawable drawable = imageView.getDrawable();
-        Bitmap bmp = null;
-        if (drawable instanceof BitmapDrawable) {
-            bmp = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-        } else {
-            return null;
-        }
-        // Store image to default external storage directory
-        Uri bmpUri = null;
-        try {
-            File file = new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_DOWNLOADS), "share_image_" + System.currentTimeMillis() + ".png");
-            file.getParentFile().mkdirs();
-            FileOutputStream out = new FileOutputStream(file);
-            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
-            out.close();
-            bmpUri = Uri.fromFile(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bmpUri;
-    }
-
 }

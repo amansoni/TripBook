@@ -12,9 +12,12 @@ import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.amansoni.tripbook.MainActivity;
 import com.amansoni.tripbook.activity.AddItemActivity;
+import com.amansoni.tripbook.activity.ListItemActivity;
 import com.amansoni.tripbook.activity.LocationLookup;
 import com.amansoni.tripbook.R;
+import com.amansoni.tripbook.activity.MapsActivity;
 import com.amansoni.tripbook.model.TripBookItem;
 
 import java.io.File;
@@ -58,14 +61,17 @@ public class AddItemDialogFragment extends DialogFragment {
                                 startActivity(placeIntent);
                                 break;
                             case 3: // Photo
+                                MainActivity callingActivity = (MainActivity) getActivity();
+                                callingActivity.takePhotoActivity();
+                                dialog.dismiss();
                                 // create Intent to take a picture and return control to the calling application
-                                Intent photoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-                                fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a file to save the image
-                                photoIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
-
-                                // start the image capture Intent
-                                startActivityForResult(photoIntent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+//                                Intent photoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//
+//                                fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a file to save the image
+//                                photoIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
+//
+//                                // start the image capture Intent
+//                                getActivity().startActivityForResult(photoIntent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 
                                 break;
                         }
@@ -116,7 +122,6 @@ public class AddItemDialogFragment extends DialogFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == getActivity().RESULT_OK) {
-
                 Intent intent = new Intent(getActivity(), LocationLookup.class);
                 intent.putExtra(LocationLookup.IMAGE_URI, fileUri.getPath());
                 startActivity(intent);

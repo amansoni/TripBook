@@ -21,6 +21,8 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -35,15 +37,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.amansoni.tripbook.HorizontalListFragment;
+import com.amansoni.tripbook.fragment.HorizontalListFragment;
 import com.amansoni.tripbook.R;
 import com.amansoni.tripbook.model.TripBookCommon;
 import com.amansoni.tripbook.model.TripBookItem;
 import com.amansoni.tripbook.model.TripBookItemData;
+import com.amansoni.tripbook.util.ImageWrapper;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -52,15 +56,22 @@ import java.util.Date;
 public class AddItemActivity extends ActionBarActivity {
 
     protected static final String TAG = "AddActivity";
-
-    protected static TripBookItem mTripbookItem;
-    protected static EditText mTripName;
-    protected static TextView mStartDatePicker;
-    protected static TextView mEndDatePicker;
-    protected static EditText mNotes;
-    protected static TextView mCurrentDate;
-    protected static boolean isDirty = false;
-
+    protected static String mItemType;
+    protected static ArrayList<TripBookItem> selectedItems;
+    protected static HorizontalListFragment fragmentFriends;
+    protected static HorizontalListFragment fragmentImages;
+    protected static HorizontalListFragment fragmentPlace;
+    protected static HorizontalListFragment fragmentTrip;
+    static java.text.DateFormat dateFormat;
+    private final int SELECT_PHOTO = 1;
+    protected ImageView mMainImage;
+    protected TripBookItem mTripbookItem;
+    protected EditText mTripName;
+    protected TextView mStartDatePicker;
+    protected TextView mEndDatePicker;
+    protected EditText mNotes;
+    protected TextView mCurrentDate;
+    protected boolean isDirty = false;
     private TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void afterTextChanged(Editable s) {
@@ -77,14 +88,7 @@ public class AddItemActivity extends ActionBarActivity {
             isDirty = true;
         }
     };
-    protected static String mItemType;
-    protected static ArrayList<TripBookItem> selectedItems;
-    protected static HorizontalListFragment fragmentFriends;
-    protected static HorizontalListFragment fragmentImages;
-    protected static HorizontalListFragment fragmentPlace;
-    protected static HorizontalListFragment fragmentTrip;
-
-    static java.text.DateFormat dateFormat;
+    private String mImageFilePath;
     private View.OnTouchListener dateOnTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -94,6 +98,31 @@ public class AddItemActivity extends ActionBarActivity {
             return true;
         }
     };
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+
+        switch (requestCode) {
+            case SELECT_PHOTO:
+                if (resultCode == RESULT_OK) {
+//                    try {
+                    final Uri imageUri = imageReturnedIntent.getData();
+                    mImageFilePath = ImageWrapper.getRealPathFromURI(this, imageUri);
+                    ImageWrapper.loadImageFromFile(this, mMainImage, mImageFilePath, 400);
+                    mTripbookItem.setThumbnail(mImageFilePath);
+//                        final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+//                        final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+//                        mMainImage.setImageBitmap(selectedImage);
+//                    } catch (FileNotFoundException e) {
+//                        e.printStackTrace();
+//                    }
+
+                }
+        }
+    }
+
 
     @Override
     public void onDestroy() {
@@ -122,7 +151,17 @@ public class AddItemActivity extends ActionBarActivity {
         mNotes.addTextChangedListener(textWatcher);
 
         mCurrentDate = mStartDatePicker;
-        // check it its and edit
+        mMainImage = (ImageView) findViewById(R.id.trip_add_main_image);
+        mMainImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+            }
+        });
+
+        // check if its an edit to load the existing data
         if (getIntent().getExtras() != null) {
             if (getIntent().getExtras().containsKey("itemKey")) {
                 long itemKey = getIntent().getExtras().getLong("itemKey");
@@ -131,6 +170,7 @@ public class AddItemActivity extends ActionBarActivity {
                 mStartDatePicker.setText(mTripbookItem.getCreatedAt());
                 mEndDatePicker.setText(mTripbookItem.getEndDate());
                 mNotes.setText(mTripbookItem.getDescription());
+                ImageWrapper.loadImageFromFile(this, mMainImage, mTripbookItem.getThumbnail(), 400);
             }
             if (getIntent().getExtras().containsKey("itemType")) {
                 mItemType = getIntent().getExtras().getString("itemType");
@@ -138,6 +178,7 @@ public class AddItemActivity extends ActionBarActivity {
                 mItemType = TripBookItem.TYPE_TRIP;
             }
         }
+
 
         selectedItems = new ArrayList<>();
         fragmentFriends = new HorizontalListFragment();
@@ -347,8 +388,8 @@ public class AddItemActivity extends ActionBarActivity {
         public void onDateSet(DatePicker view, int year, int month, int day) {
             // Do something with the date chosen by the user
             year = -1900 + year;
-            mCurrentDate.setText(dateFormat.format(new Date(year, month, day)));
-            isDirty = true;
+            ((AddItemActivity)getActivity()).mCurrentDate.setText(dateFormat.format(new Date(year, month, day)));
+            ((AddItemActivity)getActivity()).isDirty = true;
             //mCurrentDate.setText(day + "/" + month + "/" + year);
         }
     }

@@ -59,7 +59,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COLUMN_ITEM_STARRED + " INTEGER,"
             + COLUMN_CREATED_AT + " DATETIME,"
             + COLUMN_END_DATE + " DATETIME,"
-            + COLUMN_IMAGE_THUMBNAIL + " BLOB,"
+            + COLUMN_IMAGE_THUMBNAIL + " TEXT,"
             + COLUMN_LOCATION_LATITUDE + " REAL,"
             + COLUMN_LOCATION_LONGITUDE + " REAL"
             + ")";

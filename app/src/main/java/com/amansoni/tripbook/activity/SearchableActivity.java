@@ -19,7 +19,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import com.amansoni.tripbook.MainActivity;
-import com.amansoni.tripbook.TripBookProvider;
+import com.amansoni.tripbook.provider.TripBookProvider;
 import com.amansoni.tripbook.model.DatabaseHelper;
 import com.amansoni.tripbook.model.TripBookItem;
 

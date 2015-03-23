@@ -240,17 +240,17 @@ public class ItemViewFragment extends BaseFragment {
     }
 
     //TODO
-    private void showPhoto() {
-        // (re)set the image button's image based on our photo
-        Photo p = mTripBookItem.getPhoto();
-        BitmapDrawable b = null;
-        if (p != null) {
-//            String path = getActivity()
-//                    .getFileStreamPath(p.getFilename()).getAbsolutePath();
-//            b = PictureUtils.getScaledDrawable(getActivity(), p.getFilename());
-        }
-//        mPhotoView.setImageDrawable(b);
-    }
+//    private void showPhoto() {
+//        // (re)set the image button's image based on our photo
+//        Photo p = mTripBookItem.getPhoto();
+//        BitmapDrawable b = null;
+//        if (p != null) {
+////            String path = getActivity()
+////                    .getFileStreamPath(p.getFilename()).getAbsolutePath();
+////            b = PictureUtils.getScaledDrawable(getActivity(), p.getFilename());
+//        }
+////        mPhotoView.setImageDrawable(b);
+//    }
 
     @Override
     public void onStop() {
@@ -262,7 +262,7 @@ public class ItemViewFragment extends BaseFragment {
     @Override
     public void onStart() {
         super.onStart();
-        showPhoto();
+//        showPhoto();
     }
 
     @Override
@@ -279,8 +279,8 @@ public class ItemViewFragment extends BaseFragment {
             if (filename != null) {
                 Photo p = new Photo(filename);
 //                TODO
-                mTripBookItem.setPhoto(p);
-                showPhoto();
+                mTripBookItem.setThumbnail(filename);
+//                showPhoto();
             }
         } else if (requestCode == REQUEST_CONTACT) {
             Uri contactUri = data.getData();
@@ -402,7 +402,9 @@ public class ItemViewFragment extends BaseFragment {
             Log.d(TAG, "Element " + position + " set.");
             listViewHolder.tripBookItem = ((TripBookItem) tripBookItems.get(position));
             listViewHolder.itemName.setText(listViewHolder.tripBookItem.getTitle());
-            ImageWrapper.loadImage(mActivity, listViewHolder.itemImage, Images.imageThumbUrls[position]);
+            ImageWrapper.loadImageFromFile(mActivity, listViewHolder.itemImage, listViewHolder.tripBookItem.getThumbnail(), 400);
+//
+//            ImageWrapper.loadImage(mActivity, listViewHolder.itemImage, listViewHolder.tripBookItem.getPhoto().getFilename());
 
             for (TripBookCommon item : selectedItems) {
                 if (item.getId() == listViewHolder.tripBookItem.getId()) {

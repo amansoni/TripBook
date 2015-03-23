@@ -84,6 +84,18 @@
             android:ems="10"
             android:gravity="center" />
 
+        <ImageView
+            android:id="@+id/trip_add_main_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/trip_add_name"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/trip_add_end"
+            android:src="@drawable/empty_photo"
+            />
+
+
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dip"
@@ -206,5 +218,7 @@
             android:layout_marginRight="5dp"
             android:layout_marginTop="2dp"
             android:orientation="horizontal" />
+
+
     </RelativeLayout>
 </ScrollView>

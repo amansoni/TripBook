@@ -110,7 +110,7 @@ public class LocationLookup extends ActionBarActivity implements
         mAddressOutput = "";
         updateValuesFromBundle(savedInstanceState);
         mImageFilePath = getIntent().getExtras().getString(IMAGE_URI);
-        showImage();
+        ImageWrapper.loadImageFromFile(this, mImageView, mImageFilePath, 400);
         updateUIWidgets();
         buildGoogleApiClient();
 //        setHasOptionsMenu(true);
@@ -157,23 +157,12 @@ public class LocationLookup extends ActionBarActivity implements
     }
 
     private void saveItem() {
-
         TripBookItemData tripBookItemData = new TripBookItemData(this);
-        // save the image
-        TripBookItem tripBookItem = new TripBookItem(mLocationAddressTextView.getText().toString(), TripBookItem.TYPE_PLACE);
-        //TODO add location to data object
+        TripBookItem tripBookItem = new TripBookItem(mLocationAddressTextView.getText().toString(), TripBookItem.TYPE_GALLERY);
         tripBookItem.setLocation(new TbGeolocation(mLastLocation.getLongitude(), mLastLocation.getLatitude()));
         tripBookItem = tripBookItemData.add(tripBookItem);
-
-        //TODO add image(s)
-//        TripBookImage tripBookImage = new TripBookImage(mImageFilePath);
-//        if (tripBookImage != null)
-//            tripBookItem.addImage(tripBookImage);
-
         new TripBookItemData(this).add(tripBookItem);
-
     }
-
 
     /**
      * Updates fields based on data stored in the bundle.
@@ -295,7 +284,7 @@ public class LocationLookup extends ActionBarActivity implements
      * Updates the address in the UI.
      */
     protected void showImage() {
-        ImageWrapper.loadImageFromFile(this, mImageView, mImageFilePath, mImageView.getHeight());
+        ImageWrapper.loadImageFromFile(this, mImageView, mImageFilePath, 400);
 //        File imgFile = new File(mImageFilePath);
 //        Log.d(TAG, mImageFilePath);
 //

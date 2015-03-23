@@ -100,7 +100,6 @@ public class ImageResizer extends ImageWorker {
         if (BuildConfig.DEBUG) {
             Log.d(TAG, "processBitmap from file - " + filename);
         }
-//        return decodeSampledBitmapFromFile(filename, mImageWidth, mImageHeight, getImageCache());
         return decodeSampledBitmapFromFile(filename, mImageWidth, mImageHeight);
     }
 

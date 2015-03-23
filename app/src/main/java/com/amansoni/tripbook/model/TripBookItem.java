@@ -27,7 +27,7 @@ public class TripBookItem extends TripBookCommon {
     private String mTitle;
     private String mDescription;
     private String mItemType;
-    private Bitmap mThumbNail;
+    private String mThumbNail;
     private Photo mPhoto;
 
     public TripBookItem() {
@@ -107,11 +107,11 @@ public class TripBookItem extends TripBookCommon {
         this.mDescription = description;
     }
 
-    public Bitmap getThumbnail() {
+    public String getThumbnail() {
         return mThumbNail;
     }
 
-    public void setThumbnail(Bitmap thumbNail) {
+    public void setThumbnail(String thumbNail) {
         mThumbNail = thumbNail;
     }
 
@@ -131,16 +131,19 @@ public class TripBookItem extends TripBookCommon {
         new TripBookItemData(activity).update(this);
     }
 
-    public Photo getPhoto() {
-        if (mPhoto == null)
-            mPhoto = new Photo("/storage/emulated/0/Pictures/TripBook/IMG_20150309_093228.jpg");
-//            mPhoto = new Photo("/storage/emulated/0/Pictures/TripBook/IMG_20150310_134840.jpg");
-        return mPhoto;
-    }
-
-    public void setPhoto(Photo photo) {
-        this.mPhoto = photo;
-    }
+//    public Photo getPhoto() {
+//        if (mPhoto == null)
+//            mPhoto = new Photo("/storage/emulated/0/Pictures/TripBook/IMG_20150309_093228.jpg");
+////            mPhoto = new Photo("/storage/emulated/0/Pictures/TripBook/IMG_20150310_134840.jpg");
+//        return mPhoto;
+//    }
+//
+//    public void setDisplayImageFilePath(String displayImageFilePath) {
+//        this.mThumbNail = displayImageFilePath;
+//    }
+//    public void setPhoto(Photo photo) {
+//        this.mPhoto = photo;
+//    }
 
     public String[] getImages() {
         return new String[]{"file:///storage/emulated/0/Pictures/TripBook/IMG_20150310_080409.jpg",
@@ -150,4 +153,6 @@ public class TripBookItem extends TripBookCommon {
                 "file:///storage/emulated/0/Pictures/TripBook/IMG_20150309_093228.jpg",
         };
     }
+
+
 }

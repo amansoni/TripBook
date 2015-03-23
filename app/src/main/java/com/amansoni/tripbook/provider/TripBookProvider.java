@@ -1,4 +1,4 @@
-package com.amansoni.tripbook;
+package com.amansoni.tripbook.provider;
 
 import android.app.SearchManager;
 import android.content.ContentProvider;
@@ -22,8 +22,8 @@ public class TripBookProvider extends ContentProvider {
     public static final String BASE_DATA_NAME = "tripbookitems";
     public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.tripbook.search." + BASE_DATA_NAME;
     public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.tripbook.search." + BASE_DATA_NAME;
-    public static final Uri CONTENT_URI_SEARCH = Uri.parse("content://com.amansoni.tripbook.TripBookProvider/tripbookitems");
-    private static final String AUTHORITY = "com.amansoni.tripbook.TripBookProvider";
+    public static final Uri CONTENT_URI_SEARCH = Uri.parse("content://com.amansoni.tripbook.provider.TripBookProvider/tripbookitems");
+    private static final String AUTHORITY = "com.amansoni.tripbook.provider.TripBookProvider";
     // common URIs
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_DATA_NAME);
     public static final Uri SEARCH_SUGGEST_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_DATA_NAME + "/" + SearchManager.SUGGEST_URI_PATH_QUERY);

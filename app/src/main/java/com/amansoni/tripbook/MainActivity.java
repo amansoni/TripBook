@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -16,8 +18,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.amansoni.tripbook.activity.FacebookActivity;
+import com.amansoni.tripbook.activity.LocationLookup;
 import com.amansoni.tripbook.activity.MapsActivity;
 import com.amansoni.tripbook.activity.SettingsActivity;
 import com.amansoni.tripbook.fragment.ListItemFragment;
@@ -44,6 +48,8 @@ public class MainActivity extends ActionBarActivity
         return mContext;
     }
 
+    private Uri fileUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +63,35 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+    }
+
+    public void takePhotoActivity(){
+        // create Intent to take a picture and return control to the calling application
+        Intent photoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        fileUri = GalleryFragment.getOutputMediaFileUri(GalleryFragment.MEDIA_TYPE_IMAGE); // create a file to save the image
+        photoIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
+
+        // start the image capture Intent
+        startActivityForResult(photoIntent, GalleryFragment.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == GalleryFragment.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+
+                Intent intent = new Intent(this, LocationLookup.class);
+                intent.putExtra(LocationLookup.IMAGE_URI, fileUri.getPath());
+                startActivity(intent);
+
+            } else if (resultCode == RESULT_CANCELED) {
+                // User cancelled the image capture
+            } else {
+                // Image capture failed, advise user
+                Toast.makeText(this, "There was an error capturing the image", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     @Override
@@ -151,7 +186,6 @@ public class MainActivity extends ActionBarActivity
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

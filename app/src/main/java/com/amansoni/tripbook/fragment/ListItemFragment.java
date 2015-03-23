@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,9 +23,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amansoni.tripbook.R;
 import com.amansoni.tripbook.activity.ItemPagerActivity;
+import com.amansoni.tripbook.activity.LocationLookup;
 import com.amansoni.tripbook.model.TripBookItem;
 import com.amansoni.tripbook.model.TripBookItemData;
 import com.amansoni.tripbook.util.DividerItemDecoration;
@@ -247,6 +250,21 @@ public class ListItemFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         mRecyclerView.getAdapter().notifyDataSetChanged();
+        if (requestCode == GalleryFragment.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == getActivity().RESULT_OK) {
+
+                Intent intent = new Intent(getActivity(), LocationLookup.class);
+                String filename = data.getExtras().get(MediaStore.EXTRA_OUTPUT).toString();
+                intent.putExtra(LocationLookup.IMAGE_URI, filename);
+                startActivity(intent);
+
+            } else if (resultCode == getActivity().RESULT_CANCELED) {
+                // User cancelled the image capture
+            } else {
+                // Image capture failed, advise user
+                Toast.makeText(getActivity(), "There was an error capturing the image", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     @Override
@@ -338,7 +356,7 @@ public class ListItemFragment extends BaseFragment {
                     s = "(unplanned)";
             }
             mDateStartTextView.setText(s);
-            mImageView.setImageBitmap(ImageResizer.decodeSampledBitmapFromFile(tripBookItem.getPhoto().getFilename(), 250, 250));
+            mImageView.setImageBitmap(ImageResizer.decodeSampledBitmapFromFile(tripBookItem.getThumbnail(), 250, 250));
         }
 
         @Override

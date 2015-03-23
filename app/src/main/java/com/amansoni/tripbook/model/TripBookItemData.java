@@ -83,12 +83,7 @@ public class TripBookItemData {
         values.put(DatabaseHelper.COLUMN_ITEM_STARRED, tripBookItem.isStarred());
         values.put(DatabaseHelper.COLUMN_END_DATE, tripBookItem.getEndDate().toString());
         values.put(DatabaseHelper.COLUMN_CREATED_AT, tripBookItem.getCreatedAt());
-        if (tripBookItem.getThumbnail() != null) {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            tripBookItem.getThumbnail().compress(Bitmap.CompressFormat.PNG, 100, stream);
-            byte[] byteArray = stream.toByteArray();
-            values.put(DatabaseHelper.COLUMN_IMAGE_THUMBNAIL, byteArray);
-        }
+        values.put(DatabaseHelper.COLUMN_IMAGE_THUMBNAIL, tripBookItem.getThumbnail());
         if (tripBookItem.getLocation() != null) {
             values.put(DatabaseHelper.COLUMN_LOCATION_LATITUDE, tripBookItem.getLocation().getLatitude());
             values.put(DatabaseHelper.COLUMN_LOCATION_LONGITUDE, tripBookItem.getLocation().getLongitude());
@@ -123,7 +118,7 @@ public class TripBookItemData {
         values.put(DatabaseHelper.COLUMN_END_DATE, tripBookItem.getEndDate().toString());
         values.put(DatabaseHelper.COLUMN_CREATED_AT, tripBookItem.getCreatedAt());
         if (tripBookItem.getThumbnail() != null)
-            values.put(DatabaseHelper.COLUMN_IMAGE_THUMBNAIL, tripBookItem.getThumbnail().getRowBytes());
+            values.put(DatabaseHelper.COLUMN_IMAGE_THUMBNAIL, tripBookItem.getThumbnail());
         if (tripBookItem.getLocation() != null) {
             values.put(DatabaseHelper.COLUMN_LOCATION_LATITUDE, tripBookItem.getLocation().getLatitude());
             values.put(DatabaseHelper.COLUMN_LOCATION_LONGITUDE, tripBookItem.getLocation().getLongitude());
@@ -199,14 +194,14 @@ public class TripBookItemData {
         TripBookItem.setStarred((cursor.getInt(4) == 0 ? false : true));
         TripBookItem.setEndDate(cursor.getString(5));
         TripBookItem.setCreatedAt(cursor.getString(6));
-        byte[] data = cursor.getBlob(7);
-        if (data != null) {
-            Bitmap thumbNail;
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inMutable = true;
-            thumbNail = BitmapFactory.decodeByteArray(data, 0, data.length, options);
-            TripBookItem.setThumbnail(thumbNail);
-        }
+        TripBookItem.setThumbnail(cursor.getString(7));
+//        byte[] data = cursor.getBlob(7);
+//        if (data != null) {
+//            Bitmap thumbNail;
+//            BitmapFactory.Options options = new BitmapFactory.Options();
+//            options.inMutable = true;
+//            thumbNail = BitmapFactory.decodeByteArray(data, 0, data.length, options);
+//        }
         double longitude = cursor.getDouble(8);
         double latitude = cursor.getDouble(9);
         if (longitude != 0 && latitude != 0) {

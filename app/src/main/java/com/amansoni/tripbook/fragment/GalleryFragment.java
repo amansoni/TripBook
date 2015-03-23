@@ -31,8 +31,8 @@ import android.widget.Toast;
 
 import com.amansoni.tripbook.BuildConfig;
 import com.amansoni.tripbook.R;
-import com.amansoni.tripbook.activity.LocationLookup;
 import com.amansoni.tripbook.activity.ImageDetailActivity;
+import com.amansoni.tripbook.activity.LocationLookup;
 import com.amansoni.tripbook.util.ImageCache;
 import com.amansoni.tripbook.util.ImageFetcher;
 import com.amansoni.tripbook.util.ImageResizer;
@@ -62,7 +62,7 @@ public class GalleryFragment extends Fragment implements AdapterView.OnItemClick
             getBucketId(CAMERA_IMAGE_BUCKET_NAME);
     private static final String TAG = "GalleryFragment";
     private static final String IMAGE_CACHE_DIR = "thumbs";
-    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+    public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
     private int mImageThumbSize;
     private int mImageThumbSpacing;
@@ -88,7 +88,7 @@ public class GalleryFragment extends Fragment implements AdapterView.OnItemClick
     /**
      * Create a file Uri for saving an image or video
      */
-    private static Uri getOutputMediaFileUri(int type) {
+    public static Uri getOutputMediaFileUri(int type) {
         return Uri.fromFile(getOutputMediaFile(type));
     }
 
@@ -247,20 +247,11 @@ public class GalleryFragment extends Fragment implements AdapterView.OnItemClick
                 intent.putExtra(LocationLookup.IMAGE_URI, fileUri.getPath());
                 startActivity(intent);
 
-//                // Image captured and saved to fileUri specified in the Intent
-//                Fragment viewNow = ImageDetailFragment.newInstance(fileUri.getPath());
-//
-//                Toast.makeText(getActivity(), "Image saved to:\n" + fileUri.getPath(), Toast.LENGTH_LONG).show();
-//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//                fragmentManager.beginTransaction()
-//                        .replace(R.id.container, viewNow)
-////                    .addToBackStack(mTitle.toString())
-//                        .commit();
-
             } else if (resultCode == getActivity().RESULT_CANCELED) {
                 // User cancelled the image capture
             } else {
                 // Image capture failed, advise user
+                Toast.makeText(getActivity(), "There was an error capturing the image", Toast.LENGTH_LONG).show();
             }
         }
 

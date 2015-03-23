@@ -347,8 +347,8 @@ public class FacebookActivity extends FragmentActivity {
 
     private FacebookDialog.ShareDialogBuilder createShareDialogBuilderForLink() {
         return new FacebookDialog.ShareDialogBuilder(this)
-                .setName("Hello Facebook")
-                .setDescription("The 'Hello Facebook' sample application showcases simple Facebook integration")
+                .setName("Prototype sharing from TripBook")
+                .setDescription("A sample TripBook post to demonstrate integration.")
                 .setLink("http://developers.facebook.com/android");
     }
 
