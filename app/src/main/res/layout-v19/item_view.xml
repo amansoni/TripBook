@@ -12,7 +12,6 @@
         android:layout_marginRight="5dp">
 
         <TextView
-            android:id="@+id/item_view_title"
             android:layout_width="fill_parent"
             android:layout_height="100dp"
             android:layout_alignParentLeft="true"
@@ -20,19 +19,55 @@
             android:layout_gravity="center"
             android:background="@color/ActionBarPrimary"
             android:editable="false"
+            android:focusable="true"/>
+
+        <!--<TextView-->
+            <!--android:id="@+id/item_view_title"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="100dp"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_alignParentTop="true"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:background="@color/ActionBarPrimary"-->
+            <!--android:editable="false"-->
+            <!--android:focusable="true"-->
+            <!--android:text="Item title"-->
+            <!--android:textColor="@android:color/white"-->
+            <!--android:textSize="@dimen/abc_text_size_headline_material" />-->
+
+        <ImageView
+            android:id="@+id/item_view_title_image"
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_action_place_dark"
+            />
+
+        <TextView
+            android:id="@+id/item_view_title"
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center"
+            android:background="#07000000"
+            android:editable="false"
             android:focusable="true"
             android:text="Item title"
             android:textColor="@android:color/white"
             android:textSize="@dimen/abc_text_size_headline_material" />
 
+
         <ImageButton
             android:id="@+id/item_view_exit_button"
-            android:layout_width="@dimen/small_button_margin"
-            android:layout_height="@dimen/small_button_margin"
+            android:layout_width="@dimen/close_button_margin"
+            android:layout_height="@dimen/close_button_margin"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
             android:background="@null"
             android:contentDescription="@string/close"
             android:src="@android:drawable/ic_menu_close_clear_cancel" />

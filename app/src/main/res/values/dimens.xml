@@ -38,6 +38,7 @@
     <dimen name="round_button_diameter">56dp</dimen>
 
     <!--Floating button-->
+    <dimen name="close_button_margin">20dp</dimen>
     <dimen name="small_button_margin">16dp</dimen>
     <dimen name="small_button_diameter">36dp</dimen>
     <dimen name="horizontal_list_view_height">100dp</dimen>

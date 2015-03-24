@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.amansoni.tripbook.R;
-import com.amansoni.tripbook.model.TripBookItemData;
 import com.amansoni.tripbook.fragment.SearchNearbyDialogFragment;
 import com.amansoni.tripbook.fragment.ShowPlaceFilterDialogFragment;
 import com.amansoni.tripbook.map.GooglePlace;
@@ -20,6 +19,7 @@ import com.amansoni.tripbook.map.GooglePlacesUtility;
 import com.amansoni.tripbook.map.PlaceDetailActivity;
 import com.amansoni.tripbook.model.TripBookCommon;
 import com.amansoni.tripbook.model.TripBookItem;
+import com.amansoni.tripbook.model.TripBookItemData;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdate;
@@ -37,14 +37,15 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 
-public class MapsActivity extends ActionBarActivity  implements GoogleMap.OnMarkerClickListener,
-        GoogleMap.OnInfoWindowClickListener{
+public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarkerClickListener,
+        GoogleMap.OnInfoWindowClickListener {
     protected static final String TAG = "MapsActivity";
+    protected static int defaultFilter = 4;
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private HashMap<Marker, GooglePlace> nearby;
+    private HashMap<Marker, TripBookItem> tripPlace;
     private Marker marker;
 
-    protected static int defaultFilter = 4;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,6 +142,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleMap.OnMark
     private void showMarkers(int filter) {
         mMap.clear(); // clear all existing markers
         TripBookItemData data = new TripBookItemData(this, TripBookItem.TYPE_PLACE);
+        tripPlace = new HashMap<>();
 
         for (TripBookCommon common : data.getAllRows()) {
             TripBookItem place = (TripBookItem) common;
@@ -153,6 +155,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleMap.OnMark
 
                         marker.setTitle(place.getTitle());
                         marker.setSnippet(place.toString());
+                        tripPlace.put(marker, place);
 
                         Log.d(TAG, "Added location for " + place.getTitle() + " " + place.getLocation().toString());
                     }
@@ -177,7 +180,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleMap.OnMark
         showMarkers(filter);
     }
 
-    public void onNearBySelect(int filter){
+    public void onNearBySelect(int filter) {
         onMarkerClick(marker);
     }
 
@@ -211,9 +214,19 @@ public class MapsActivity extends ActionBarActivity  implements GoogleMap.OnMark
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        Intent intent = new Intent(this, PlaceDetailActivity.class);
-        intent.putExtra("PLACE", nearby.get(marker));
-        startActivity(intent);
+        if (tripPlace != null && tripPlace.containsKey(marker)) {
+            // is the a place that has already been added to places
+            TripBookItem tripBookItem = tripPlace.get(marker);
+            Intent i = new Intent(this, ItemPagerActivity.class);
+            i.putExtra(TripBookItem.ITEM_ID, tripBookItem.getId());
+            i.putExtra(TripBookItem.ITEM_TYPE, tripBookItem.getItemType());
+            startActivity(i);
+        } else if (nearby != null && nearby.containsKey(marker)) {
+            // is this a Google Place Marker only
+            Intent intent = new Intent(this, PlaceDetailActivity.class);
+            intent.putExtra("PLACE", nearby.get(marker));
+            startActivity(intent);
+        }
     }
 
     private class PlacesReadFeed extends AsyncTask<String, Void, GooglePlaceList> {

@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.amansoni.tripbook.R;
@@ -114,36 +115,59 @@ public class ItemViewFragment extends BaseFragment {
             }
         });
 
-        ImageView mPhotoView;
+
         mTitleField = (TextView) v.findViewById(R.id.item_view_title);
         mTitleField.setText(mTripBookItem.getTitle());
         mTitleField.setGravity(Gravity.CENTER);
 
-        mStartDateField = (TextView) v.findViewById(R.id.item_view_start_date);
-        mStartDateField.setText("Starts on: " + mTripBookItem.getCreatedAt());
+        mPhotoView = (ImageView) v.findViewById(R.id.item_view_title_image);
+        if (mTripBookItem.getThumbnail() != null && mTripBookItem.getThumbnail().length() > 0)
+            ImageWrapper.loadImageFromFile(this, mPhotoView, mTripBookItem.getThumbnail(), 400);
 
-        mEndDateField = (TextView) v.findViewById(R.id.item_view_end_date);
-        if (mTripBookItem.getEndDate().length() > 0) {
-            mEndDateField.setText("Ends on: " + mTripBookItem.getEndDate());
+
+        if (mTripBookItem.getCreatedAt()!= null && mTripBookItem.getCreatedAt().length() > 0) {
+            mStartDateField = (TextView) v.findViewById(R.id.item_view_start_date);
+            mStartDateField.setText("Starts on: " + mTripBookItem.getCreatedAt());
+
+            mEndDateField = (TextView) v.findViewById(R.id.item_view_end_date);
+            if (mTripBookItem.getEndDate().length() > 0) {
+                mEndDateField.setText("Ends on: " + mTripBookItem.getEndDate());
+            } else {
+                mEndDateField.setVisibility(View.GONE);
+            }
         } else {
-            mEndDateField.setVisibility(View.GONE);
+            ((LinearLayout) v.findViewById(R.id.item_view_date_layout)).setVisibility(View.GONE);
         }
 
-        mNotesField = (TextView) v.findViewById(R.id.item_view_notes);
-        mNotesField.setText(mTripBookItem.getDescription());
+        if (mTripBookItem.getDescription()!=null && mTripBookItem.getDescription().length() > 0) {
+            mNotesField = (TextView) v.findViewById(R.id.item_view_notes);
+            mNotesField.setText(mTripBookItem.getDescription());
+        }else {
+            ((LinearLayout) v.findViewById(R.id.item_view_notes_layout)).setVisibility(View.GONE);
+        }
 
         mListImages = (RecyclerView) v.findViewById(R.id.item_view_list_images);
 //TODO        setUpRecyclerView(mListImages, TripBookItem.TYPE_GALLERY);
         setUpRecyclerView(mListImages, TripBookItem.TYPE_GALLERY);
+        if (mListImages.getAdapter().getItemCount() == 0){
+            ((LinearLayout) v.findViewById(R.id.item_view_image_layout)).setVisibility(View.GONE);
+        }
 
         mListFriends = (RecyclerView) v.findViewById(R.id.item_view_list_friends);
         setUpRecyclerView(mListFriends, TripBookItem.TYPE_FRIENDS);
+        if (mListFriends.getAdapter().getItemCount() == 0){
+            ((LinearLayout) v.findViewById(R.id.item_view_social_layout)).setVisibility(View.GONE);
+        }
 
         mListPlaces = (RecyclerView) v.findViewById(R.id.item_view_list_places);
         if (mTripBookItem.getItemType().equals(TripBookItem.TYPE_TRIP))
             setUpRecyclerView(mListPlaces, TripBookItem.TYPE_PLACE);
         else
             setUpRecyclerView(mListPlaces, TripBookItem.TYPE_TRIP);
+        if (mListPlaces.getAdapter().getItemCount() == 0){
+            ((LinearLayout) v.findViewById(R.id.item_view_place_layout)).setVisibility(View.GONE);
+        }
+
 
 //        mTitleField.addTextChangedListener(new TextWatcher() {
 //            public void onTextChanged(CharSequence c, int start, int before, int count) {
