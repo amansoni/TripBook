@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,6 +44,7 @@ public class ListItemFragment extends BaseFragment {
     private static final String TAG = "ListItemFragment";
     private ArrayList<TripBookItem> mTripBookItems;
     private boolean mSubtitleVisible;
+    android.support.v4.widget.SwipeRefreshLayout mSwipeRefreshLayout;
 
     private String mItemType = TripBookItem.TYPE_TRIP;
     private RecyclerView mRecyclerView;
@@ -234,8 +236,33 @@ public class ListItemFragment extends BaseFragment {
                 return true; // consume the event
             }
         });
+        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Refresh items
+                refreshItems();
+            }
+        });
 
         return v;
+    }
+    void refreshItems() {
+        // Load items
+        TripBookItemData tripBookItemData = new TripBookItemData(getActivity());
+        tripBookItemData.setItemType(mItemType);
+        mTripBookItems = tripBookItemData.getAllRows();
+        mRecyclerView.getAdapter().notifyDataSetChanged();
+        // Load complete
+        onItemsLoadComplete();
+    }
+
+    void onItemsLoadComplete() {
+        // Update the adapter and notify data set changed
+        // ...
+
+        // Stop refresh animation
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     private void selectItem(TripBookItem tripBookItem) {
