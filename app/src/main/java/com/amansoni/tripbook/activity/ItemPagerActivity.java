@@ -46,9 +46,13 @@ public class ItemPagerActivity extends ActionBarActivity {
         }
         setContentView(mViewPager);
 
-        String itemType = getIntent().getExtras().getString(TripBookItem.ITEM_TYPE);
+        TripBookItemData tripBookItemData = new TripBookItemData(this);
+        long itemId = getIntent().getExtras().getLong(TripBookItem.ITEM_ID);
 
-        TripBookItemData tripBookItemData = new TripBookItemData(this, itemType);
+        String itemType = tripBookItemData.getItem(itemId).getItemType();
+        tripBookItemData.setItemType(itemType);
+//        String itemType = getIntent().getExtras().getString(TripBookItem.ITEM_TYPE);
+
         final ArrayList<TripBookItem> tripBookItems = tripBookItemData.getAllRows();
 
         FragmentManager fm = getSupportFragmentManager();

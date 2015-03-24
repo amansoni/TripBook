@@ -61,15 +61,16 @@ public class SearchableActivity extends ListActivity {
 
             Uri details = intent.getData();
             Log.d(TAG, "ViewIntent" + details.toString());
+            String key = details.toString().substring(details.toString().lastIndexOf("/") + 1);
 
 //            Intent detailsIntent = new Intent(Intent.ACTION_VIEW, details);
 //            startActivity(detailsIntent);
 
             // set the db item key and create the view for a single item
             Bundle args = new Bundle();
-            args.putLong("itemKey", 1);
-            args.putString("itemType", TripBookItem.TYPE_TRIP);
-            Intent tripIntent = new Intent(this, AddItemActivity.class);
+            args.putLong(TripBookItem.ITEM_ID, Long.parseLong(key));
+            args.putString(TripBookItem.ITEM_TYPE, TripBookItem.TYPE_TRIP);
+            Intent tripIntent = new Intent(this, ItemPagerActivity.class);
             tripIntent.putExtras(args);
             startActivity(tripIntent);
         }
