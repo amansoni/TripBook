@@ -151,6 +151,7 @@ public class TripBookItemData {
             mList = new ArrayList<>();
             open();
 
+            String orderBy =  DatabaseHelper.COLUMN_ID + " DESC";
             Cursor cursor = null;
             if (mItemType != null) {
                 if (mItemType.equals(TripBookItem.TYPE_STARRED)){
@@ -158,7 +159,7 @@ public class TripBookItemData {
                             allColumns, DatabaseHelper.COLUMN_ITEM_STARRED + " = ?", new String[]{"1"}, null, null, null);
                 } else if (mLinkedItemId == 0) {
                     cursor = database.query(DatabaseHelper.TABLE_NAME_ITEM,
-                            allColumns, DatabaseHelper.COLUMN_ITEM_TYPE + " = ?", new String[]{mItemType}, null, null, null);
+                            allColumns, DatabaseHelper.COLUMN_ITEM_TYPE + " = ?", new String[]{mItemType}, null, null, orderBy);
                 } else {
                     final String MY_QUERY = "SELECT c.* FROM " + DatabaseHelper.TABLE_NAME_ITEM
                             + " a INNER JOIN " + DatabaseHelper.TABLE_NAME_LINKS + " b ON b." +
@@ -211,8 +212,8 @@ public class TripBookItemData {
         if (longitude != 0 && latitude != 0) {
             TbGeolocation loc = new TbGeolocation(longitude, latitude);
             TripBookItem.setLocation(loc);
-            Log.d(TAG, "cursorToTripBookItem" + loc.toString());
         }
+        Log.d(TAG, "thumbnail " + TripBookItem.getThumbnail());
         return TripBookItem;
     }
 

@@ -131,20 +131,6 @@ public class TripBookItem extends TripBookCommon {
         new TripBookItemData(activity).update(this);
     }
 
-//    public Photo getPhoto() {
-//        if (mPhoto == null)
-//            mPhoto = new Photo("/storage/emulated/0/Pictures/TripBook/IMG_20150309_093228.jpg");
-////            mPhoto = new Photo("/storage/emulated/0/Pictures/TripBook/IMG_20150310_134840.jpg");
-//        return mPhoto;
-//    }
-//
-//    public void setDisplayImageFilePath(String displayImageFilePath) {
-//        this.mThumbNail = displayImageFilePath;
-//    }
-//    public void setPhoto(Photo photo) {
-//        this.mPhoto = photo;
-//    }
-
     public String[] getImages() {
         return new String[]{"file:///storage/emulated/0/Pictures/TripBook/IMG_20150310_080409.jpg",
                 "file:///storage/emulated/0/Pictures/TripBook/IMG_20150310_134840.jpg",

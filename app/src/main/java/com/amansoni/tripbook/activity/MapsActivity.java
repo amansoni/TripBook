@@ -2,6 +2,7 @@ package com.amansoni.tripbook.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -206,6 +207,16 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
             intent.putExtra("PLACE", nearby.get(marker));
             startActivity(intent);
             return true;
+        } else if (tripPlace != null && tripPlace.containsKey(marker)) {
+            String placesKey = getResources().getString(R.string.google_places_key);
+            double lng = marker.getPosition().latitude;
+            double lat = marker.getPosition().longitude;
+
+            String type = URLEncoder.encode("train_station|bus_station");
+            String placesRequest = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" +
+                    lat + "," + lng + "&radius=500&key=" + placesKey;
+            PlacesReadFeed process = new PlacesReadFeed();
+            process.execute(placesRequest);
         } else {
             Log.i(TAG, "Not the item marker so not fetching places");
         }
