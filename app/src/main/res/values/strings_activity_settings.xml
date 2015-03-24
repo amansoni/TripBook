@@ -6,6 +6,8 @@
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 
+    <string name="pref_title_social_facebook">Enable Facebook Integration</string>
+    <string name="pref_title_social_facebook_text">Link TripBook to Facebook. Requires Facebook app installed on this device</string>
     <string name="pref_title_social_recommendations">Enable Google+ login</string>
     <string name="pref_description_social_recommendations">Link TripBook to Google+ profile for social sharing
     </string>

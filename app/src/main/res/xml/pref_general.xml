@@ -7,6 +7,13 @@
         android:summary="@string/pref_description_social_recommendations"
         android:defaultValue="true" />
 
+    <CheckBoxPreference
+        android:id="@+id/facebook_enabled"
+        android:key="facebook_enabled"
+        android:title="@string/pref_title_social_facebook"
+        android:summary="@string/pref_title_social_facebook_text"
+        android:defaultValue="true" />
+
     <!-- NOTE: EditTextPreference accepts EditText attributes. -->
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
     <EditTextPreference

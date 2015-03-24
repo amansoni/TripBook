@@ -21,13 +21,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.amansoni.tripbook.activity.FacebookActivity;
 import com.amansoni.tripbook.activity.LocationLookup;
 import com.amansoni.tripbook.activity.MapsActivity;
 import com.amansoni.tripbook.activity.SettingsActivity;
+import com.amansoni.tripbook.fragment.GalleryFragment;
 import com.amansoni.tripbook.fragment.ListItemFragment;
 import com.amansoni.tripbook.fragment.NavigationDrawerFragment;
-import com.amansoni.tripbook.fragment.GalleryFragment;
 import com.amansoni.tripbook.model.TripBookItem;
 import com.amansoni.tripbook.model.TripBookItemData;
 
@@ -44,12 +43,11 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+    private Uri fileUri;
 
     public static Context getContext() {
         return mContext;
     }
-
-    private Uri fileUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +64,7 @@ public class MainActivity extends ActionBarActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
     }
 
-    public void takePhotoActivity(){
+    public void takePhotoActivity() {
         // create Intent to take a picture and return control to the calling application
         Intent photoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -132,27 +130,25 @@ public class MainActivity extends ActionBarActivity
                     }
                     break;
                 case 2:
-                    Intent facebookIntent = new Intent(this, FacebookActivity.class);
-                    startActivity(facebookIntent);
-//                    mTitle = getString(R.string.title_social);
-//                    itemType = TripBookItem.TYPE_FRIENDS;
+//                    Intent facebookIntent = new Intent(this, FacebookActivity.class);
+//                    startActivity(facebookIntent);
+                    mTitle = getString(R.string.title_social);
+                    itemType = TripBookItem.TYPE_FRIENDS;
                     break;
                 case 3:
                     mTitle = getString(R.string.title_starred);
                     itemType = TripBookItem.TYPE_STARRED;
                     break;
             }
-            if (position != 2) {
-                // set the list to display
-                Fragment viewNow = ListItemFragment.newInstance(itemType);
+            // set the list to display
+            Fragment viewNow = ListItemFragment.newInstance(itemType);
 //                args.putString(TripBookItem.ITEM_TYPE, itemType);
 //                viewNow.setArguments(args);
-                // update the main content by replacing fragments
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, viewNow)
-                        .commit();
-            }
+            // update the main content by replacing fragments
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, viewNow)
+                    .commit();
         }
     }
 

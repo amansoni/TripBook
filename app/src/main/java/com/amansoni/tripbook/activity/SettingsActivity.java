@@ -253,6 +253,15 @@ public class SettingsActivity extends PreferenceActivity {
                 return true;
             }
         });
+        findPreference("facebook_enabled").setOnPreferenceChangeListener( new Preference.OnPreferenceChangeListener(){
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                Log.d(TAG, "Starting activity FacebookActivity");
+                Intent intent = new Intent(SettingsActivity.this, FacebookActivity.class);
+                SettingsActivity.this.startActivity(intent);
+                return true;
+            }
+        });
 //        bindPreferenceSummaryToValue(findPreference("google_plus_enabled"));
         bindPreferenceSummaryToValue(findPreference("example_text"));
         bindPreferenceSummaryToValue(findPreference("example_list"));

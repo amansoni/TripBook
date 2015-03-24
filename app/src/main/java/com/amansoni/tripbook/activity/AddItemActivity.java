@@ -321,12 +321,14 @@ public class AddItemActivity extends ActionBarActivity {
             return false;
         }
         long startDate = Date.parse(mStartDatePicker.getText().toString());
-        long endDate = Date.parse(mEndDatePicker.getText().toString());
-        if (endDate < startDate) {
-            String message = getResources().getString(R.string.enddate_before_startdate);
-            mEndDatePicker.setError(message, getResources().getDrawable(R.drawable.ic_action_error));
-            mEndDatePicker.requestFocus();
-            return false;
+        if (mEndDatePicker.getText().toString().length() > 0) {
+            long endDate = Date.parse(mEndDatePicker.getText().toString());
+            if (endDate < startDate) {
+                String message = getResources().getString(R.string.enddate_before_startdate);
+                mEndDatePicker.setError(message, getResources().getDrawable(R.drawable.ic_action_error));
+                mEndDatePicker.requestFocus();
+                return false;
+            }
         }
         return true;
     }
