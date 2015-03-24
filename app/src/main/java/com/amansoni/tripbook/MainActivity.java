@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -83,6 +84,7 @@ public class MainActivity extends ActionBarActivity
 
                 Intent intent = new Intent(this, LocationLookup.class);
                 intent.putExtra(LocationLookup.IMAGE_URI, fileUri.getPath());
+                Log.d("Photo", "File saved to" + fileUri.getPath());
                 startActivity(intent);
 
             } else if (resultCode == RESULT_CANCELED) {

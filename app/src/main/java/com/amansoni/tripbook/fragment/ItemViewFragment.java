@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -25,12 +24,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.amansoni.tripbook.activity.AddItemActivity;
 import com.amansoni.tripbook.R;
+import com.amansoni.tripbook.activity.AddItemActivity;
 import com.amansoni.tripbook.model.TripBookCommon;
 import com.amansoni.tripbook.model.TripBookItem;
 import com.amansoni.tripbook.model.TripBookItemData;
-import com.amansoni.tripbook.provider.Images;
 import com.amansoni.tripbook.util.FloatingActionButton;
 import com.amansoni.tripbook.util.ImageWrapper;
 import com.amansoni.tripbook.util.Photo;
@@ -69,7 +67,8 @@ public class ItemViewFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActionBar().hide();
+        if (getActionBar() != null)
+            getActionBar().hide();
 
         long itemId = getArguments().getLong(TripBookItem.ITEM_ID);
         mTripBookItem = new TripBookItemData(getActivity()).getItem(itemId);
@@ -135,13 +134,16 @@ public class ItemViewFragment extends BaseFragment {
 
         mListImages = (RecyclerView) v.findViewById(R.id.item_view_list_images);
 //TODO        setUpRecyclerView(mListImages, TripBookItem.TYPE_GALLERY);
-        setUpRecyclerView(mListImages, TripBookItem.TYPE_PLACE);
+        setUpRecyclerView(mListImages, TripBookItem.TYPE_GALLERY);
 
         mListFriends = (RecyclerView) v.findViewById(R.id.item_view_list_friends);
         setUpRecyclerView(mListFriends, TripBookItem.TYPE_FRIENDS);
 
         mListPlaces = (RecyclerView) v.findViewById(R.id.item_view_list_places);
-        setUpRecyclerView(mListPlaces, TripBookItem.TYPE_PLACE);
+        if (mTripBookItem.getItemType().equals(TripBookItem.TYPE_TRIP))
+            setUpRecyclerView(mListPlaces, TripBookItem.TYPE_PLACE);
+        else
+            setUpRecyclerView(mListPlaces, TripBookItem.TYPE_TRIP);
 
 //        mTitleField.addTextChangedListener(new TextWatcher() {
 //            public void onTextChanged(CharSequence c, int start, int before, int count) {
@@ -365,6 +367,7 @@ public class ItemViewFragment extends BaseFragment {
                 if (itemId == 0)
                     tripBookItems = dataSet.getAllRows();
                 else {
+                    Log.d(TAG, "Getting linked items for " + itemId + " type" + dataSet.getItemType());
                     dataSet.setLinkedItemId(itemId);
                     tripBookItems = dataSet.getAllRows();
                 }

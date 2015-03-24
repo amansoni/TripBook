@@ -176,6 +176,7 @@ public class TripBookItemData {
             while (!cursor.isAfterLast()) {
                 TripBookItem TripBookItem = cursorToTripBookItem(cursor);
                 mList.add(TripBookItem);
+                Log.d(TAG, "Added linked item" + TripBookItem.toString());
                 cursor.moveToNext();
             }
             // make sure to close the cursor

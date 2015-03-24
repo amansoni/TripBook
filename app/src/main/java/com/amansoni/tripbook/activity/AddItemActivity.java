@@ -314,7 +314,7 @@ public class AddItemActivity extends ActionBarActivity {
             mStartDatePicker.requestFocus();
             return false;
         }
-        if (mEndDatePicker.getText().toString().length() == 0) {
+        if (mItemType.equals(TripBookItem.TYPE_TRIP) && mEndDatePicker.getText().toString().length() == 0) {
             String message = getResources().getString(R.string.error_field_required);
             mEndDatePicker.setError(message, getResources().getDrawable(R.drawable.ic_action_error));
             mEndDatePicker.requestFocus();
