@@ -153,7 +153,10 @@ public class TripBookItemData {
 
             Cursor cursor = null;
             if (mItemType != null) {
-                if (mLinkedItemId == 0) {
+                if (mItemType.equals(TripBookItem.TYPE_STARRED)){
+                    cursor = database.query(DatabaseHelper.TABLE_NAME_ITEM,
+                            allColumns, DatabaseHelper.COLUMN_ITEM_STARRED + " = ?", new String[]{"1"}, null, null, null);
+                } else if (mLinkedItemId == 0) {
                     cursor = database.query(DatabaseHelper.TABLE_NAME_ITEM,
                             allColumns, DatabaseHelper.COLUMN_ITEM_TYPE + " = ?", new String[]{mItemType}, null, null, null);
                 } else {
