@@ -52,6 +52,7 @@ public class HorizontalListFragment extends Fragment {
             Log.d(TAG, "Now showing" + mItemType);
             mItemId = args.getLong("itemId");
             mEditable = args.getBoolean("editable");
+            Log.d(TAG, "OnCreate itemId " + mItemType + " itemType " + mItemType + " do edit" + mEditable);
         }
     }
 
@@ -81,33 +82,6 @@ public class HorizontalListFragment extends Fragment {
         mAdapter = new HorizontalListAdapter(getActivity(), tripBookItemData, mItemId, mEditable, R.color.list_text_selected, R.color.list_text_unselected);
         mRecyclerView.setAdapter(mAdapter);
         registerForContextMenu(container);
-
-//        ImageButton mAddButton = (ImageButton)view.findViewById(R.id.add_button);
-//        mAddButton.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if(event.getAction() == MotionEvent.ACTION_DOWN){
-//                    new AddItemDialogFragment().show(getFragmentManager(), "addnew");
-//                    return true;
-//                }
-//                return true; // consume the event
-//            }
-//        });
-
-//        mRecyclerView.addOnItemTouchListener(
-//                new RecyclerItemClickListener((Context) getActivity(),mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(View view, int position) {
-//                        Toast.makeText(view.getContext(), "click" + view.getClass(), Toast.LENGTH_SHORT).show();
-//                    }
-//                    @Override
-//                    public void onItemLongClick(View view, int position) {
-//                        // do whatever
-//                        Toast.makeText(view.getContext(), "long click"+ view.getClass(), Toast.LENGTH_SHORT).show();
-//                    }
-//
-//                })
-//        );
 
         return view;
     }
@@ -183,6 +157,7 @@ public class HorizontalListFragment extends Fragment {
                     selectedItems = new ArrayList<>();
                     tripBookItems = dataSet.getAllRows();
                 } else {
+                    dataSet.setLinkedItemId(itemId);
                     selectedItems = dataSet.getAllRows();
                     tripBookItems = new TripBookItemData(activity, dataSet.getItemType()).getAllRows();
                 }
