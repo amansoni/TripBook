@@ -293,7 +293,7 @@ public class AddItemActivity extends ActionBarActivity {
         TripBookItem tripBookItem;
         if (mTripbookItem == null) {
             tripBookItem = new TripBookItem(mTripName.getText().toString(), mItemType);
-            if (mImageFilePath.length() > 0)
+            if (mImageFilePath !=null && mImageFilePath.length() > 0)
                 tripBookItem.setThumbnail(mImageFilePath);
         }
         else
