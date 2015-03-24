@@ -11,4 +11,10 @@
         android:title="@string/element_share"
         app:showAsAction="withText|ifRoom" />
 
+    <item
+        android:id="@+id/action_item_star"
+        android:icon="@drawable/ic_action_important_dark"
+        android:title="@string/element_share"
+        app:showAsAction="withText|ifRoom" />
+
 </menu>

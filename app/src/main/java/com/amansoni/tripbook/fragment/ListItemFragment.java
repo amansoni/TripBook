@@ -42,10 +42,9 @@ import java.util.ArrayList;
 
 public class ListItemFragment extends BaseFragment {
     private static final String TAG = "ListItemFragment";
+    android.support.v4.widget.SwipeRefreshLayout mSwipeRefreshLayout;
     private ArrayList<TripBookItem> mTripBookItems;
     private boolean mSubtitleVisible;
-    android.support.v4.widget.SwipeRefreshLayout mSwipeRefreshLayout;
-
     private String mItemType = TripBookItem.TYPE_TRIP;
     private RecyclerView mRecyclerView;
     private MultiSelector mMultiSelector = new MultiSelector();
@@ -91,6 +90,27 @@ public class ListItemFragment extends BaseFragment {
                 mMultiSelector.clearSelections();
                 return true;
             }
+
+            if (menuItem.getItemId() == R.id.action_item_star) {
+                // Need to finish the action mode before doing the following,
+                // not after. No idea why, but it crashes.
+                actionMode.finish();
+                for (int i = mTripBookItems.size(); i >= 0; i--) {
+                    if (mMultiSelector.isSelected(i, 0)) {
+                        TripBookItem tripBookItem = mTripBookItems.get(i);
+                        tripBookItem.setStarred(!tripBookItem.isStarred());
+                        tripBookItem.update(getActivity());
+                        if (mItemType.equals(TripBookItem.TYPE_STARRED)) {
+                            mRecyclerView.getAdapter().notifyItemRemoved(i);
+                            mRecyclerView.getAdapter().notifyDataSetChanged();
+                        } else
+                            mRecyclerView.getAdapter().notifyItemChanged(i);
+                    }
+                }
+                mMultiSelector.clearSelections();
+                return true;
+            }
+
             return false;
         }
     };
@@ -247,6 +267,7 @@ public class ListItemFragment extends BaseFragment {
 
         return v;
     }
+
     void refreshItems() {
         // Load items
         TripBookItemData tripBookItemData = new TripBookItemData(getActivity());
@@ -373,6 +394,9 @@ public class ListItemFragment extends BaseFragment {
         public void bindItem(TripBookItem tripBookItem) {
             mTripBookItem = tripBookItem;
             mTitleTextView.setText(tripBookItem.getTitle());
+            if (mTripBookItem.isStarred())
+                mTitleTextView.setText("*" + tripBookItem.getTitle());
+
             String s;
             if (tripBookItem.getEndDate() != null && tripBookItem.getEndDate().length() > 0)
                 s = "From: " + tripBookItem.getCreatedAt() + " to " + tripBookItem.getEndDate();
@@ -380,7 +404,7 @@ public class ListItemFragment extends BaseFragment {
                 if (tripBookItem.getCreatedAt() != null && tripBookItem.getCreatedAt().length() > 0)
                     s = "Date: " + tripBookItem.getCreatedAt();
                 else
-                    s = "(unplanned)";
+                    s = "";
             }
             mDateStartTextView.setText(s);
             mImageView.setImageBitmap(ImageResizer.decodeSampledBitmapFromFile(tripBookItem.getThumbnail(), 250, 250));

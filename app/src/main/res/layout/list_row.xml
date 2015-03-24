@@ -19,6 +19,15 @@
         android:layout_toRightOf="@+id/list_row_imageView"
         android:textColor="@color/ActionBarPrimary"/>
 
+    <ImageView
+        android:id="@+id/list_row_star"
+        android:layout_toRightOf="@+id/list_row_title"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="5dp"
+        android:src="@drawable/ic_action_important"/>
+
     <TextView
         android:id="@+id/list_row_date_start"
         android:layout_marginLeft="5dp"
