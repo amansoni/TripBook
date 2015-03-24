@@ -31,6 +31,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -44,6 +45,8 @@ import android.widget.Toast;
 
 import com.amansoni.tripbook.fragment.HorizontalListFragment;
 import com.amansoni.tripbook.R;
+import com.amansoni.tripbook.map.GooglePlace;
+import com.amansoni.tripbook.model.TbGeolocation;
 import com.amansoni.tripbook.model.TripBookCommon;
 import com.amansoni.tripbook.model.TripBookItem;
 import com.amansoni.tripbook.model.TripBookItemData;
@@ -72,6 +75,7 @@ public class AddItemActivity extends ActionBarActivity {
     protected EditText mNotes;
     protected TextView mCurrentDate;
     protected boolean isDirty = false;
+    protected boolean isImport = false;
     private TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void afterTextChanged(Editable s) {
@@ -111,7 +115,9 @@ public class AddItemActivity extends ActionBarActivity {
                     final Uri imageUri = imageReturnedIntent.getData();
                     mImageFilePath = ImageWrapper.getRealPathFromURI(this, imageUri);
                     ImageWrapper.loadImageFromFile(this, mMainImage, mImageFilePath, 400);
-                    mTripbookItem.setThumbnail(mImageFilePath);
+                    if (mTripbookItem !=null) {
+                        mTripbookItem.setThumbnail(mImageFilePath);
+                    }
 //                        final InputStream imageStream = getContentResolver().openInputStream(imageUri);
 //                        final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
 //                        mMainImage.setImageBitmap(selectedImage);
@@ -171,6 +177,16 @@ public class AddItemActivity extends ActionBarActivity {
                 mEndDatePicker.setText(mTripbookItem.getEndDate());
                 mNotes.setText(mTripbookItem.getDescription());
                 ImageWrapper.loadImageFromFile(this, mMainImage, mTripbookItem.getThumbnail(), 400);
+            } else { // check if we need to import a place
+                GooglePlace place = (GooglePlace) getIntent().getExtras().getSerializable("PLACE");
+                if (place != null) {
+                    Log.d(TAG, "Now importing place " + place.toString());
+                    isImport = true;
+                    mTripbookItem = new TripBookItem(place.getName(), TripBookItem.TYPE_PLACE);
+                    mTripName.setText(mTripbookItem.getTitle());
+                    mNotes.setText(place.getFormatted_address());
+                    mTripbookItem.setLocation(new TbGeolocation(place.getGeometry().getLocation().getLng(), place.getGeometry().getLocation().getLat()));
+                }
             }
             if (getIntent().getExtras().containsKey("itemType")) {
                 mItemType = getIntent().getExtras().getString("itemType");
@@ -203,7 +219,7 @@ public class AddItemActivity extends ActionBarActivity {
 
     private void replaceListFragment(HorizontalListFragment fragment, int horizontalList, String itemType) {
         Bundle listArgs = new Bundle();
-        if (mTripbookItem != null)
+        if (!isImport && mTripbookItem != null)
             listArgs.putLong("itemId", mTripbookItem.getId());
         listArgs.putString("itemType", itemType);
         listArgs.putBoolean("editable", true);
@@ -265,7 +281,7 @@ public class AddItemActivity extends ActionBarActivity {
         if (item.getItemId() == R.id.action_item_save) {
             if (validate()) {
                 saveItem();
-                showToast("Trip saved");
+                showToast(mItemType + " saved");
                 finish();
             }
             return true;
@@ -275,8 +291,11 @@ public class AddItemActivity extends ActionBarActivity {
 
     private void saveItem() {
         TripBookItem tripBookItem;
-        if (mTripbookItem == null)
+        if (mTripbookItem == null) {
             tripBookItem = new TripBookItem(mTripName.getText().toString(), mItemType);
+            if (mImageFilePath.length() > 0)
+                tripBookItem.setThumbnail(mImageFilePath);
+        }
         else
             tripBookItem = mTripbookItem;
 
@@ -284,7 +303,7 @@ public class AddItemActivity extends ActionBarActivity {
         tripBookItem.setEndDate(mEndDatePicker.getText().toString());
         tripBookItem.setDescription(mNotes.getText().toString());
 
-        if (mTripbookItem == null) {
+        if (mTripbookItem == null || isImport) {
             tripBookItem = new TripBookItemData(this).add(tripBookItem);
         } else {
             tripBookItem.setLinks(new ArrayList<TripBookCommon>());
