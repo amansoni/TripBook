@@ -194,7 +194,7 @@ public class AddItemActivity extends ActionBarActivity {
             replaceListFragment(fragmentImages, R.id.trip_view_gallery, TripBookItem.TYPE_GALLERY);
         } else if (mItemType.equals(TripBookItem.TYPE_FRIENDS)) {
             replaceListFragment(fragmentPlace, R.id.trip_view_places, TripBookItem.TYPE_TRIP);
-            replaceListFragment(fragmentPlace, R.id.trip_view_friends, TripBookItem.TYPE_PLACE);
+            replaceListFragment(fragmentFriends, R.id.trip_view_friends, TripBookItem.TYPE_PLACE);
             replaceListFragment(fragmentImages, R.id.trip_view_gallery, TripBookItem.TYPE_GALLERY);
         }
 
