@@ -188,6 +188,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
     @Override
     public boolean onMarkerClick(Marker marker) {
         if (nearby == null || nearby.size() == 0) {
+            nearby = new HashMap<>();
             String placesKey = getResources().getString(R.string.google_places_key);
             double lat = marker.getPosition().latitude;
             double lng = marker.getPosition().longitude;
@@ -267,7 +268,6 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
 
         @Override
         protected void onPostExecute(GooglePlaceList places) {
-            nearby = new HashMap<>();
             for (GooglePlace place : places.getResults()) {
                 String name = place.getName();
                 List<String> types = place.getTypes();

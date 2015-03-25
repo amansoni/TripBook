@@ -359,18 +359,22 @@ public class GalleryFragment extends Fragment implements AdapterView.OnItemClick
         }
 
         private void getCameraImages() {
-            String folder = getResources().getString(R.string.image_path);
-            folder = folder + "%";
-            String where = MediaStore.Images.Media.DATA + " LIKE ?";
-            String[] whereArgs = new String[]{folder};
+//            String folder = getResources().getString(R.string.image_path);
+//            folder = folder + "%";
+//            String where = MediaStore.Images.Media.DATA + " LIKE ?";
+//            String[] whereArgs = new String[]{folder};
 
+            String where = MediaStore.Images.Media.DATA;
+            String[] whereArgs = new String[]{};
+
+            final String orderBy = MediaStore.Images.Media.DATE_ADDED;
             final String[] projection = {MediaStore.Images.Media.DATA};
             final Cursor cursor = mContext.getContentResolver().
                     query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     projection,
-                    where,
-                    whereArgs,
-                    null);
+                    null,
+                    null,
+                    orderBy + " DESC LIMIT 50");
             imageFiles = new ArrayList<>(cursor.getCount());
             if (cursor.moveToFirst()) {
                 final int dataColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);

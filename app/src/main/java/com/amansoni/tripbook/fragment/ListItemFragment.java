@@ -146,7 +146,7 @@ public class ListItemFragment extends BaseFragment {
                 // get the linked place information
                 TripBookItemData linkedItemData = new TripBookItemData(getActivity());
                 linkedItemData.setItemType(TripBookItem.TYPE_PLACE);
-                linkedItemData.setItemId(tripBookItem.getId());
+                linkedItemData.setLinkedItemId(tripBookItem.getId());
                 ArrayList<TripBookItem> places = linkedItemData.getAllRows();
                 if (places.size() > 0) {
                     extraText = extraText + "\nPlaces to visit";

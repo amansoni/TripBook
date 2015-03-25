@@ -28,6 +28,7 @@
         android:elevation="@dimen/elevation_high"
         app:color="@color/floating_button"
         android:src="@android:drawable/ic_input_add"
-        android:tint="@android:color/white" />
+        android:tint="@android:color/white"
+        android:visibility="gone"/>
 
 </FrameLayout>
